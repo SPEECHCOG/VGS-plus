@@ -80,6 +80,11 @@ class Trainer:
             if self.use_libri_loss:
                 libri_loader_iterator = iter(self.libri_train_loader)
             for i, batch in enumerate(self.train_loader):
+                # Khazar
+                print ('kh: now it is inside train loader loop')
+                print('i = ' + str(i))
+                print(' ........... one batch is of size ...........')
+                print(len(batch))
                 if self.use_libri_loss:
                     libri_batch = next(libri_loader_iterator)
                 data_end_time = time.time()
