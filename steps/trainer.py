@@ -74,17 +74,19 @@ class Trainer:
         flag = True
         step_per_epoch = int(self.train_data_length/self.args.batch_size)
         data_start_time = time.time()
-        print ('khazar: start time is is is ' + str(time.time()))
+        
         while flag:
             logger.info('it is training now')
             if self.use_libri_loss:
                 libri_loader_iterator = iter(self.libri_train_loader)
+            print ('khazar: train data length is ' + str(self.train_data_length))
             for i, batch in enumerate(self.train_loader):
                 # Khazar
-                print ('kh: now it is inside train loader loop')
-                print('i = ' + str(i))
-                print(' ........... one batch is of size ...........')
-                print(len(batch))
+                print ('kh: train for one batch starts here')
+                print('i start = ' + str(i))
+                print('printing num_updates')
+                print(self.progress['num_updates'])
+               
                 if self.use_libri_loss:
                     libri_batch = next(libri_loader_iterator)
                 data_end_time = time.time()
@@ -162,9 +164,15 @@ class Trainer:
                     self.validate_and_save(libri=self.use_libri_loss, places=self.args.places)
                     print ('kh: memory allocated at end of validation')
                     print(torch.cuda.memory_allocated() / 1024 ** 3)
+                    
                 self.progress['num_updates'] += 1
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
                 data_start_time = time.time()
+                
+                print ('kh: train for one batch ends here')
+                print('i end = ' + str(i))
+                print ('kh: num update is')
+                print(self.progress['num_updates'])
 
     def validate_and_save(self, libri=False, places=False):
         self.dual_encoder.eval()
