@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.vscode/
+logs/
+*.err
+*.out
+slurm*
+*.caffemodel
+*.ipynb
+testing-*
