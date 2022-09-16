@@ -6,7 +6,7 @@ practical steps:
 
 1) Training the FaST-VGS and FaST-VGS+ original models and replicating Peng's results on SC data for recall and ABX error.
 
-2) Training the two original models without using w2v2 pretrained wights and with random initialization.
+2) Training the two original models without using w2v2 pretrained weights and with random initialization.
 
 3) Monitoring loss values (SSL and VGS terms), separately during training as well as recall and ABX scores.
 
