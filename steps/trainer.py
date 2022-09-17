@@ -169,10 +169,10 @@ class Trainer:
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
                 data_start_time = time.time()
                 
-                print ('kh: train for one batch ends here')
-                print('i end = ' + str(i))
-                print ('kh: num update is')
-                print(self.progress['num_updates'])
+                # print ('kh: train for one batch ends here')
+                # print('i end = ' + str(i))
+                # print ('kh: num update is')
+                # print(self.progress['num_updates'])
 
     def validate_and_save(self, libri=False, places=False):
         self.dual_encoder.eval()
