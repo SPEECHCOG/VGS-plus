@@ -350,8 +350,13 @@ class Trainer:
                 audio_feats, audio_cls, extended_audio_attention_mask, visual_feats, visual_cls = self.dual_encoder(audio_feats = batch['audio'].to(self.device), attention_mask = batch['audio_attention_mask'].to(self.device), visual_feats = batch['visual_feats'].to(self.device), visual_pos = batch['boxes'].to(self.device), test = True)
                 audio_cls_total.append(audio_cls)
                 # visual_cls_total.append(visual_cls)
-                audio_feats_total.append(audio_feats.detach()) # still on cude after .detach(), just removed from graph, so no gradient
-                extended_audio_attention_mask_total.append(extended_audio_attention_mask.detach())
+                
+                # Khazar : I commented below line for appending to "audio_feat_total" and "extended_audio_attention_mask_total"
+                # khazar: start
+                #audio_feats_total.append(audio_feats.detach()) # still on cude after .detach(), just removed from graph, so no gradient
+                #extended_audio_attention_mask_total.append(extended_audio_attention_mask.detach())
+                # Khazar: end
+                
                 # visual_feats_total.append(visual_feats.detach())
                 detached_visual_feats = visual_feats.detach()
                 audio_img_id_total.append(batch['img_id'])
@@ -364,44 +369,32 @@ class Trainer:
                     #print(' j = ' + str(j))
                     if img_id not in img_id_to_img_feats:
                         img_id_to_img_feats[img_id] = detached_visual_feats[j]
-                        img_feats_list.append(detached_visual_feats[j])
+                        # khazar: I commented below line
+                        #img_feats_list.append(detached_visual_feats[j])
                         img_cls_list.append(visual_cls[j].detach())
                         img_img_id_list.append(img_id)
-                if i>= 150:
+                if i>= 500:
                     break
-            # audio_cls_total = torch.cat(audio_cls_total)
-            # img_cls_list = torch.stack(img_cls_list)
-            # img_feats_list = torch.stack(img_feats_list)
-            # # Kh: GPU gives a memory error at below line
-            # audio_feats_total = torch.cat(audio_feats_total)
-            # extended_audio_attention_mask_total = torch.cat(extended_audio_attention_mask_total)
-            # # Kh: I commented above lines and chnaged in to below
-            # # Kh: I changed torch to np
             
-            # Kh: start
-            print ('kh: memory allocated before cat')
+            print ('khazar: memory allocated before cat')
             print(torch.cuda.memory_allocated() / 1024 ** 3)
             
             audio_cls_total = torch.cat(audio_cls_total)
             
             img_cls_list = torch.stack(img_cls_list)
             
-            img_feats_list = torch.stack(img_feats_list)
             
+            # khazar: I commented below lines
             
-            audio_feats_total = torch.cat(audio_feats_total)
-            extended_audio_attention_mask_total = torch.cat(extended_audio_attention_mask_total)
+            # Kh: start
+            
+            # img_feats_list = torch.stack(img_feats_list)
+            # audio_feats_total = torch.cat(audio_feats_total)
+            # extended_audio_attention_mask_total = torch.cat(extended_audio_attention_mask_total)
            
-
-            #audio_cls_total = torch.Tensor(audio_cls_total)
-            #img_cls_list = torch.Tensor(img_cls_list)
-            #img_feats_list = torch.Tensor(img_feats_list)
-            # audio_feats_total = torch.Tensor(audio_feats_total)
-            # extended_audio_attention_mask_total = torch.Tensor(extended_audio_attention_mask_total)
-            # extended_audio_attention_mask_total = torch.Tensor(extended_audio_attention_mask_total)   
-            
             # Kh : end
-            print ('kh: memory allocated end of cat')
+            
+            print ('khazar: memory allocated end of cat')
             print(torch.cuda.memory_allocated() / 1024 ** 3)
             
             audio_img_id_total = np.concatenate(audio_img_id_total)
@@ -424,6 +417,7 @@ class Trainer:
             print ("..........  coarse_to_fine_retrieve is.....................")
             print(self.args.coarse_to_fine_retrieve)
             print (" .................................")
+            # khazar: I commented below lines  which calculated fine retrieval
         #     if self.args.coarse_to_fine_retrieve:
         #         print('....now it came inside fine retrieval ')
         #         visual_indices, audio_indices = coarse_retrieve_one_to_many(coarse_cross_relationship_score_matrix.transpose(0,1), topk=self.args.topk) # transpose to have [audio_len, visual_len]
