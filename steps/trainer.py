@@ -82,10 +82,10 @@ class Trainer:
             print ('khazar: train data length is ' + str(self.train_data_length))
             for i, batch in enumerate(self.train_loader):
                 # Khazar
-                print ('kh: train for one batch starts here')
-                print('i start = ' + str(i))
-                print('printing num_updates')
-                print(self.progress['num_updates'])
+                # print ('kh: train for one batch starts here')
+                # print('i start = ' + str(i))
+                # print('printing num_updates')
+                # print(self.progress['num_updates'])
                
                 if self.use_libri_loss:
                     libri_batch = next(libri_loader_iterator)
@@ -373,8 +373,8 @@ class Trainer:
                         #img_feats_list.append(detached_visual_feats[j])
                         img_cls_list.append(visual_cls[j].detach())
                         img_img_id_list.append(img_id)
-                if i>= 500:
-                    break
+                # if i>= 1000:
+                #     break
             
             print ('khazar: memory allocated before cat')
             print(torch.cuda.memory_allocated() / 1024 ** 3)
