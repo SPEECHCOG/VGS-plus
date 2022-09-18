@@ -6,6 +6,7 @@ data_root=$1
 raw_audio_base_path=$2
 fb_w2v2_weights_fn=$3
 exp_dir=$4
+libri_fn_root=$5
 
 python \
 ../run_spokencoco.py \
@@ -13,10 +14,11 @@ python \
 --raw_audio_base_path ${raw_audio_base_path} \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
+--libri_fn_root ${libri_fn_root} \
 --batch_size 8 \
---val_batch_size 100 \
---val_cross_batch_size 8000 \
---n_epochs 20 \
+--val_batch_size 8 \
+--val_cross_batch_size 8 \
+--n_epochs 1 \
 --n_print_steps 1 \
 --n_val_steps 2 \
 --lr 0.0001 \
@@ -24,9 +26,11 @@ python \
 --normalize \
 --xtrm_layers 2 \
 --trm_layers 6 \
---fine_matching_weight 1.0 \
---coarse_matching_weight 0.1 \
+--fine_matching_weight 0.0 \
+--coarse_matching_weight 1.0 \
+--libri_w2v2_weight 0.0 \
 --caption_w2v2_weight 1.0 \
 --coarse_to_fine_retrieve \
 --feature_grad_mult 0. \
 --layer_use 7
+
