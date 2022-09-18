@@ -19,7 +19,7 @@ python \
 --val_cross_batch_size 16 \
 --n_epochs 20 \
 --n_print_steps 100 \
---n_val_steps  100 \
+--n_val_steps  10000 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --xtrm_layers 2 \
