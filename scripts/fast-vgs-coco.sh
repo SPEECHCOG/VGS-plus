@@ -1,6 +1,6 @@
 #!/bin/sh
 source activate fastvgs
-export CUDA_VISIBLE_DEVICES=0
+export CUDA_VISIBLE_DEVICES=0,1
 
 data_root=$1
 raw_audio_base_path=$2
@@ -14,9 +14,9 @@ python \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
 --num_workers 8 \
---batch_size 28 \
---val_batch_size 28 \
---val_cross_batch_size 8 \
+--batch_size 16 \
+--val_batch_size 16 \
+--val_cross_batch_size 16 \
 --n_epochs 20 \
 --n_print_steps 100 \
 --n_val_steps  100 \
