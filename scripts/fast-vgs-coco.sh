@@ -1,6 +1,6 @@
 #!/bin/sh
 source activate fastvgs
-export CUDA_VISIBLE_DEVICES=0,1
+export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 data_root=$1
 raw_audio_base_path=$2
