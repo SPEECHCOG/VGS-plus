@@ -22,8 +22,8 @@ python \
 --n_val_steps  10000 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
---xtrm_layers 2 \
---trm_layers 2 \
+--xtrm_layers 1 \
+--trm_layers 3 \
 --fine_matching_weight 0 \
 --coarse_matching_weight 1 \
 --libri_w2v2_weight 0.0
