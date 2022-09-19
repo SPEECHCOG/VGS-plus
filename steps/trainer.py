@@ -51,9 +51,9 @@ class Trainer:
         self.train_loader, self.valid_loader, self.valid_loader2, self.train_sampler, self.libri_train_loader, self.libri_valid_loader, self.libri_train_sampler, self.train_data_length = self._setup_dataloader()
         self.total_num_updates = int(math.floor(self.train_data_length / self.args.batch_size))*self.args.n_epochs
         self.optimizer = self._setup_optimizer()
-        # if torch.cuda.device_count() > 1:
-        #     self.dual_encoder = nn.DataParallel(self.dual_encoder)
-        #     self.cross_encoder = nn.DataParallel(self.cross_encoder)
+        if torch.cuda.device_count() > 1:
+            self.dual_encoder = nn.DataParallel(self.dual_encoder)
+            self.cross_encoder = nn.DataParallel(self.cross_encoder)
         self.scheduler = self._setup_scheduler()
         self.criterion = fast_vgs.Margin_InfoNCE_loss
         logger.info(f"batch size: {self.args.batch_size}")
