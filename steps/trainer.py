@@ -536,7 +536,13 @@ class Trainer:
             optim_states = None
 
         if self.args.fb_w2v2_weights_fn and self.progress['num_updates'] <= 1 and not self.args.validate and self.args.trained_weights_dir == None:
-            dual_encoder.conv1_trm1_trm3.carefully_load_state_dict(torch.load(self.args.fb_w2v2_weights_fn)['model'])
+            
+            b = torch.load(self.args.fb_w2v2_weights_fn)['model']
+            #khazar: I added below lines due to an error like: 'DataParallel' object has no attribute 'carefully_load_state_dict'
+            if isinstance(b, torch.nn.DataParallel):
+                print("b is a dataparallel object")
+                b = the_model.module
+            dual_encoder.conv1_trm1_trm3.carefully_load_state_dict(b)
 
         if self.args.feature_grad_mult <= 0.:
             for name, p in dual_encoder.named_parameters():
