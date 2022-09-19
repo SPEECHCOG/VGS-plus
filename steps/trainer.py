@@ -541,7 +541,7 @@ class Trainer:
             #khazar: I added below lines due to an error like: 'DataParallel' object has no attribute 'carefully_load_state_dict'
             if isinstance(b, torch.nn.DataParallel):
                 print("b is a dataparallel object")
-                b = the_model.module
+                b = b.module
             dual_encoder.conv1_trm1_trm3.carefully_load_state_dict(b)
 
         if self.args.feature_grad_mult <= 0.:
