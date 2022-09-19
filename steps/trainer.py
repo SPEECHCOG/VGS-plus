@@ -538,6 +538,7 @@ class Trainer:
         if self.args.fb_w2v2_weights_fn and self.progress['num_updates'] <= 1 and not self.args.validate and self.args.trained_weights_dir == None:
             
             b = torch.load(self.args.fb_w2v2_weights_fn)['model']
+            b = b.module
             #khazar: I added below lines due to an error like: 'DataParallel' object has no attribute 'carefully_load_state_dict'
             # if isinstance(b, torch.nn.DataParallel):
             #     print("b is a dataparallel object")
