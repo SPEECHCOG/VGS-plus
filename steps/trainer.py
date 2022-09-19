@@ -144,6 +144,8 @@ class Trainer:
                     print ('kh: memory allocated at training time')
                     print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
                     print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
                     
                     log_out = {}
                     log_out['epoch'] = f"{self.progress['epoch']}/{self.args.n_epochs}"
@@ -165,10 +167,14 @@ class Trainer:
                     print ('kh: memory allocated at start of validation')
                     print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
                     print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
                     self.validate_and_save(libri=self.use_libri_loss, places=self.args.places)
                     print ('kh: memory allocated at end of validation')
                     print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
                     print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
                     
                 self.progress['num_updates'] += 1
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
