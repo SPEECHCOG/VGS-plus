@@ -501,11 +501,6 @@ class Trainer:
         dual_encoder = fast_vgs.DualEncoder(self.args)
         cross_encoder = fast_vgs.CrossEncoder(self.args)
         
-        # khazar: adding these lines due to an error
-        dual_encoder.to(self.device)
-        cross_encoder.to(self.device)
-        
-        
         # Khazar: change print_model = True if you want to print the whole model and not only the model parameters
         print_model_info(dual_encoder , print_model = False)
         print_model_info(cross_encoder, print_model = False)
