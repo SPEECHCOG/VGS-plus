@@ -202,6 +202,8 @@ class DualEncoder(nn.Module):
         
         self.conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
         self.conv2 = ResDavenet()
+        
+            
         self.audio_cls_token_proj_coarse = nn.Sequential(nn.Linear(self.args.hidden_size, self.args.hidden_size*2), nn.GELU(), nn.Linear(self.args.hidden_size*2, self.args.hidden_size))
         self.audio_cls_token_proj_pre = nn.Sequential(nn.Linear(self.args.hidden_size, self.args.hidden_size*2), nn.GELU(), nn.Linear(self.args.hidden_size*2, self.args.hidden_size))
         self.trm2 = BertLayer(args)
@@ -212,7 +214,13 @@ class DualEncoder(nn.Module):
         self.trm = nn.ModuleList([BertLayer(args) for _ in range(args.trm_layers)])
         self.visual_cls_token_proj_coarse = nn.Sequential(nn.Linear(self.args.hidden_size, self.args.hidden_size*2), nn.GELU(), nn.Linear(self.args.hidden_size*2, self.args.hidden_size))
 
-        self.apply(self.init_weights)
+        self.apply(self.init_weights)     
+        
+        # khazar : I added bwlow line for testing multiple gpus
+        if torch.cuda.device_count() > 3:
+            self.conv1_trm1_trm3 = nn.DataParallel(self.conv1_trm1_trm3)
+            self.conv2 = nn.DataParallel(self.conv2)
+            self.self.visn_fc = nn.DataParallel(self.self.visn_fc)
 
     def init_weights(self, module):
         """ Initialize the weights """
