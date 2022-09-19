@@ -53,7 +53,7 @@ class Trainer:
         self.optimizer = self._setup_optimizer()
         #if torch.cuda.device_count() > 1:
         self.dual_encoder = nn.DataParallel(self.dual_encoder)
-        self.cross_encoder = nn.DataParallel(self.cross_encoder)
+        #self.cross_encoder = nn.DataParallel(self.cross_encoder)
         self.scheduler = self._setup_scheduler()
         self.criterion = fast_vgs.Margin_InfoNCE_loss
         logger.info(f"batch size: {self.args.batch_size}")
