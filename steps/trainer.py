@@ -16,6 +16,7 @@ from logging import getLogger
 import logging
 
 import numpy
+
 logger = getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 logging.basicConfig()
@@ -50,9 +51,9 @@ class Trainer:
         self.train_loader, self.valid_loader, self.valid_loader2, self.train_sampler, self.libri_train_loader, self.libri_valid_loader, self.libri_train_sampler, self.train_data_length = self._setup_dataloader()
         self.total_num_updates = int(math.floor(self.train_data_length / self.args.batch_size))*self.args.n_epochs
         self.optimizer = self._setup_optimizer()
-        if torch.cuda.device_count() > 1:
-            self.dual_encoder = nn.DataParallel(self.dual_encoder)
-            self.cross_encoder = nn.DataParallel(self.cross_encoder)
+        # if torch.cuda.device_count() > 1:
+        #     self.dual_encoder = nn.DataParallel(self.dual_encoder)
+        #     self.cross_encoder = nn.DataParallel(self.cross_encoder)
         self.scheduler = self._setup_scheduler()
         self.criterion = fast_vgs.Margin_InfoNCE_loss
         logger.info(f"batch size: {self.args.batch_size}")
@@ -94,6 +95,7 @@ class Trainer:
                 self.cross_encoder.train()
                 if self.progress['num_updates'] > self.total_num_updates:
                     flag = False
+                    os.system(nvidia-smi)
                     self.validate_and_save()
                     self.writer.close()
                     break
@@ -140,7 +142,8 @@ class Trainer:
                 if self.progress['num_updates'] % self.args.n_print_steps == 0:
                     # khazar
                     print ('kh: memory allocated at training time')
-                    print(torch.cuda.memory_allocated() / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
                     
                     log_out = {}
                     log_out['epoch'] = f"{self.progress['epoch']}/{self.args.n_epochs}"
@@ -160,10 +163,12 @@ class Trainer:
                 if self.progress['num_updates'] % self.args.n_val_steps == 0:
                     #khazar
                     print ('kh: memory allocated at start of validation')
-                    print(torch.cuda.memory_allocated() / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
                     self.validate_and_save(libri=self.use_libri_loss, places=self.args.places)
                     print ('kh: memory allocated at end of validation')
-                    print(torch.cuda.memory_allocated() / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+                    print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
                     
                 self.progress['num_updates'] += 1
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
@@ -373,8 +378,8 @@ class Trainer:
                         #img_feats_list.append(detached_visual_feats[j])
                         img_cls_list.append(visual_cls[j].detach())
                         img_img_id_list.append(img_id)
-                # if i>= 1000:
-                #     break
+                if i>= 200:
+                    break
             
             print ('khazar: memory allocated before cat')
             print(torch.cuda.memory_allocated() / 1024 ** 3)
