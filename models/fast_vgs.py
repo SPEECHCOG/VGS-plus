@@ -219,8 +219,8 @@ class DualEncoder(nn.Module):
         # khazar : I added bwlow line for testing multiple gpus
         if torch.cuda.device_count() > 3:
             #self.conv1_trm1_trm3 = nn.DataParallel(self.conv1_trm1_trm3)
-            self.conv2 = nn.DataParallel(self.conv2)
-            #self.visn_fc = nn.DataParallel(self.visn_fc)
+            #self.conv2 = nn.DataParallel(self.conv2)
+            self.visn_fc = nn.DataParallel(self.visn_fc)
 
     def init_weights(self, module):
         """ Initialize the weights """
