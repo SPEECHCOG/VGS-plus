@@ -40,7 +40,7 @@ class Trainer:
         self.start_time = time.time()
         self.args = args
         self.args.coarse_to_fine_retrieve = False
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cuda:0,1,2,3" if torch.cuda.is_available() else "cpu")
         logger.info(f"number of devices: {torch.cuda.device_count()}")
         self.writer = SummaryWriter(self.args.exp_dir)
         self.seed_everything(seed=self.args.seed)
