@@ -40,7 +40,7 @@ class Trainer:
         self.start_time = time.time()
         self.args = args
         self.args.coarse_to_fine_retrieve = False
-        self.device = torch.device("cuda:0,1,2,3" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info(f"number of devices: {torch.cuda.device_count()}")
         self.writer = SummaryWriter(self.args.exp_dir)
         self.seed_everything(seed=self.args.seed)
@@ -51,9 +51,9 @@ class Trainer:
         self.train_loader, self.valid_loader, self.valid_loader2, self.train_sampler, self.libri_train_loader, self.libri_valid_loader, self.libri_train_sampler, self.train_data_length = self._setup_dataloader()
         self.total_num_updates = int(math.floor(self.train_data_length / self.args.batch_size))*self.args.n_epochs
         self.optimizer = self._setup_optimizer()
-        if torch.cuda.device_count() > 1:
-            self.dual_encoder = nn.DataParallel(self.dual_encoder, device_ids=[0,1,2,3])
-            self.cross_encoder = nn.DataParallel(self.cross_encoder)
+        #if torch.cuda.device_count() > 1:
+        self.dual_encoder = nn.DataParallel(self.dual_encoder)
+        self.cross_encoder = nn.DataParallel(self.cross_encoder)
         self.scheduler = self._setup_scheduler()
         self.criterion = fast_vgs.Margin_InfoNCE_loss
         logger.info(f"batch size: {self.args.batch_size}")
