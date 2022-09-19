@@ -52,7 +52,7 @@ class Trainer:
         self.total_num_updates = int(math.floor(self.train_data_length / self.args.batch_size))*self.args.n_epochs
         self.optimizer = self._setup_optimizer()
         if torch.cuda.device_count() > 1:
-            self.dual_encoder = nn.DataParallel(self.dual_encoder)
+            self.dual_encoder = nn.DataParallel(self.dual_encoder, device_ids=[0,1,2,3])
             self.cross_encoder = nn.DataParallel(self.cross_encoder)
         self.scheduler = self._setup_scheduler()
         self.criterion = fast_vgs.Margin_InfoNCE_loss
@@ -539,9 +539,9 @@ class Trainer:
             
             b = torch.load(self.args.fb_w2v2_weights_fn)['model']
             #khazar: I added below lines due to an error like: 'DataParallel' object has no attribute 'carefully_load_state_dict'
-            if isinstance(b, torch.nn.DataParallel):
-                print("b is a dataparallel object")
-                b = b.module
+            # if isinstance(b, torch.nn.DataParallel):
+            #     print("b is a dataparallel object")
+            #     b = b.module
             dual_encoder.conv1_trm1_trm3.carefully_load_state_dict(b)
 
         if self.args.feature_grad_mult <= 0.:
