@@ -468,7 +468,7 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
                 min_masks=2,
                 no_overlap=self.no_mask_overlap,
                 min_space=self.mask_min_space,
-                #require_same_masks=True if self.args.trim_mask else False
+                require_same_masks=True if self.args.trim_mask else False 
             )
             mask_indices = torch.from_numpy(mask_indices).to(x.device)
             x[mask_indices] = self.mask_emb.to(x) # to x to avoid fp16 problem
@@ -485,7 +485,7 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
                 self.mask_channel_other,
                 no_overlap=self.no_mask_channel_overlap,
                 min_space=self.mask_channel_min_space,
-                #require_same_masks=True if self.args.trim_mask else False
+                require_same_masks=True if self.args.trim_mask else False
             )
             mask_channel_indices = (
                 torch.from_numpy(mask_channel_indices)
