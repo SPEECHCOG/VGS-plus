@@ -236,12 +236,33 @@ class DualEncoder(nn.Module):
     
 
     def forward_image(self, visual_feats, visual_pos, visual_attention_mask):
+        # khazar: printing tensors (also shows the device)
+        
+        # visual_feats ...> tensor[N,36,2048 ]
+        # visual_pos ...> tensor[N,36,4 ]
         visual_feats = (visual_feats, visual_pos)
+        # visual_feats ...> tuple of size 2 (Tensor, Tensor) 
+        
         visual_feats = self.visn_fc(visual_feats)
-        visual_feats = torch.cat([self.visual_cls_token.repeat(visual_feats.shape[0],1,1), visual_feats], dim=1)
+        # khazar: above block appplied FF and norm layer on each Tensor of tuple
+        # so 2048 ...> 768 and 4 ...> 768
+        # and averages them as output
+        # visual_feats ...> tensor[N, 36, 768]
+     
+        # visual_cls_token ...> nn.parameter.Parameter (1,1, 768)
+        # visual_cls_token.repeat(visual_feats.shape[0],1,1) ...> (N,1,768)
+        visual_feats = torch.cat([self.visual_cls_token.repeat(visual_feats.shape[0],1,1), visual_feats], dim=1)      
+        # visual_feats ...> tensor[N, 37, 768]
+        
         for layer_module in self.trm:
             visual_feats = layer_module(visual_feats, None)
+            
+        # visual_feats ...> tensor[N, 37, 768]
+        
         cls_token_coarse = self.visual_cls_token_proj_coarse(visual_feats[:,0])
+        
+        # cls_token_coarse ...> tensor[N,768]
+        
         return visual_feats, cls_token_coarse
 
     def forward_audio(self, audio_feats, audio_attention_mask, test=False):
