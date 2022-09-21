@@ -75,7 +75,7 @@ class Trainer:
         flag = True
         step_per_epoch = int(self.train_data_length/self.args.batch_size)
         data_start_time = time.time()
-        khazar
+        #khazar
         print ('kh: memory allocated at training time')
         print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
         print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
