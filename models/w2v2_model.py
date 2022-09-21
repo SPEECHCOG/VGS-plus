@@ -21,6 +21,7 @@ from typing import List, Tuple
 from fairseq import utils
 
 from fairseq.models import BaseFairseqModel
+
 from fairseq.modules import (
     Fp32GroupNorm,
     Fp32LayerNorm,
@@ -561,7 +562,7 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
 
         if self.n_negatives == 0 and self.cross_sample_negatives == 0:
             return y.new(0)
-
+        
         bsz, tsz, fsz = y.shape
         y = y.view(-1, fsz)  # BTC => (BxT)C
 
@@ -678,7 +679,11 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
 
         features = self.dropout_input(features)
         unmasked_features = self.dropout_features(unmasked_features)
-
+        
+        # print(features.shape) # torch.Size([2, 399, 768])     
+        # print("....... args.trim mask.........")
+        # print(self.args.trim_mask) #false
+        
         num_vars = None
         code_ppl = None
         prob_ppl = None
@@ -686,6 +691,7 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
         
         # this have never being used in w2v2, the inputs are not quantized
         if self.input_quantizer:
+            print('........ input_quant......................') # not here
             q = self.input_quantizer(features, produce_targets=False)
             features = q["x"]
             num_vars = q["num_vars"]
@@ -695,18 +701,33 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
             features = self.project_inp(features)
 
         if mask:
+            # print("####################### Kh: printing features 2 ###################################")
+            # print(features.shape) # torch.Size([2, 399, 768])
+            # print("################################## Kh: printing features 2 ########################")
             x, mask_indices = self.apply_mask(features, padding_mask) # x will be masked, note that mask is some learned embedding (768 dim), not zero!
+            # print("####################### kh: printing mask_indices ###################################")
+            # print(mask_indices.shape) # torch.Size([2, 399, 768])
+            # print("################################## Kh: printing features 2 ########################")
             if mask_indices is not None:
                 if self.args.trim_mask:
+                    # print("############### kh: check for condition ###############")
                     y = unmasked_features[mask_indices].view(unmasked_features.size(0), -1, unmasked_features.size(-1))
                 else:
+                    test = unmasked_features[mask_indices]
+                    print("............................... printing test.................") # torch.Size([245, 512])
+                    print(test.shape)
                     y = unmasked_features[mask_indices].view(-1, unmasked_features.size(-1))
+                    
             else:
                 y = unmasked_features
         else:
             x = features
             y = unmasked_features
             mask_indices = None
+            
+        # print("######################## Kh ##################################")
+        # print(y.shape)
+        # print("######################## Kh ##################################")    
         # ############################################
         x = torch.cat([self.cls_token.repeat(x.shape[0],1,1), x], dim=1)
         if padding_mask is not None:
@@ -729,6 +750,9 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
             return {"cls_token": cls_token, "layer_feats": layer_feats, "padding_mask": padding_mask}
 
         if self.quantizer and mask:
+            # print("########################## kh ################################")
+            # print(y.shape)
+            # print("########################### kh ###############################")
             q = self.quantizer(y, produce_targets=False, mask_indices=None)
             y = q["x"] # always only contains masked target
             num_vars = q["num_vars"]
@@ -736,7 +760,9 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
             prob_ppl = q["prob_perplexity"]
             curr_temp = q["temp"]
             y = self.project_q(y)
+            # print("########################## kh ################################")
             # print(y.shape)
+            # print("########################## kh ################################")
 
             if self.negatives_from_everywhere:
                 raise NotImplementedError
