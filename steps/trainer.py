@@ -141,11 +141,11 @@ class Trainer:
                 # logging
                 if self.progress['num_updates'] % self.args.n_print_steps == 0:
                     # khazar
-                    print ('kh: memory allocated at training time')
-                    print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-                    print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
-                    print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
-                    print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
+                    # print ('kh: memory allocated at training time')
+                    # print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
                     
                     log_out = {}
                     log_out['epoch'] = f"{self.progress['epoch']}/{self.args.n_epochs}"
@@ -165,16 +165,16 @@ class Trainer:
                 if self.progress['num_updates'] % self.args.n_val_steps == 0:
                     #khazar
                     print ('kh: memory allocated at start of validation')
-                    print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-                    print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
-                    print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
-                    print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
                     self.validate_and_save(libri=self.use_libri_loss, places=self.args.places)
                     print ('kh: memory allocated at end of validation')
-                    print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-                    print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
-                    print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
-                    print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+                    # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
                     
                 self.progress['num_updates'] += 1
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
@@ -384,7 +384,7 @@ class Trainer:
                         #img_feats_list.append(detached_visual_feats[j])
                         img_cls_list.append(visual_cls[j].detach())
                         img_img_id_list.append(img_id)
-                if i>= 200:
+                if i>= 800:
                     break
             
             print ('khazar: memory allocated before cat')
