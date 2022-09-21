@@ -163,14 +163,14 @@ class Trainer:
                     
                 # validation and save models
                 if self.progress['num_updates'] % self.args.n_val_steps == 0:
-                    #khazar
-                    print ('kh: memory allocated at start of validation')
+                    # khazar
+                    # print ('kh: memory allocated at start of validation')
                     # print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
                     # print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
                     # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
                     # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
                     self.validate_and_save(libri=self.use_libri_loss, places=self.args.places)
-                    print ('kh: memory allocated at end of validation')
+                    # print ('kh: memory allocated at end of validation')
                     # print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
                     # print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
                     # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
@@ -384,16 +384,23 @@ class Trainer:
                         #img_feats_list.append(detached_visual_feats[j])
                         img_cls_list.append(visual_cls[j].detach())
                         img_img_id_list.append(img_id)
-                if i>= 800:
-                    break
+                # if i>= 800:
+                #     break
             
             print ('khazar: memory allocated before cat')
-            print(torch.cuda.memory_allocated() / 1024 ** 3)
+            print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+            print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+            print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+            print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
             
-            audio_cls_total = torch.cat(audio_cls_total)
+            audio_cls_total = torch.cat(audio_cls_total, device=1)           
+            img_cls_list = torch.stack(img_cls_list, device=1)
             
-            img_cls_list = torch.stack(img_cls_list)
-            
+            print ('khazar: memory allocated before cat')
+            print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+            print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+            print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+            print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
             
             # khazar: I commented below lines
             
