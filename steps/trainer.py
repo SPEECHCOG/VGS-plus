@@ -400,7 +400,7 @@ class Trainer:
             img_cls_list = torch.stack(img_cls_list)
             img_cls_list = img_cls_list.cuda(device=1)
             
-            print ('khazar: memory allocated before cat')
+            print ('khazar: memory allocated after cat')
             print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
             print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
             print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
@@ -415,10 +415,6 @@ class Trainer:
             # extended_audio_attention_mask_total = torch.cat(extended_audio_attention_mask_total)
            
             # Kh : end
-            
-            print ('khazar: memory allocated end of cat')
-            print(torch.cuda.memory_allocated() / 1024 ** 3)
-            
             audio_img_id_total = np.concatenate(audio_img_id_total)
             img_img_id_list = np.array(img_img_id_list)
 
