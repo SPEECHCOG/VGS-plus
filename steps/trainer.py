@@ -79,8 +79,8 @@ class Trainer:
         print ('kh: memory allocated at training time')
         print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
         print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
-        print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
-        print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
+        # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+        # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
         while flag:
             logger.info('it is training now')
             if self.use_libri_loss:
@@ -395,8 +395,8 @@ class Trainer:
             print ('khazar: memory allocated before cat')
             print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
             print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
-            print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
-            print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
+            # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+            # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
             
             
             audio_cls_total = torch.cat(audio_cls_total)  
@@ -408,8 +408,8 @@ class Trainer:
             print ('khazar: memory allocated after cat')
             print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
             print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
-            print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
-            print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
+            # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
+            # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
             
             # khazar: I commented below lines
             
