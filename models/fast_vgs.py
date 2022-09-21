@@ -276,6 +276,7 @@ class DualEncoder(nn.Module):
                 trm13_out = self.conv1_trm1_trm3(audio_feats, padding_mask=audio_attention_mask, mask=False, features_only=True, tgt_layer=self.args.layer_use)
                 losses = {}
             else:
+                #khazar : changing mask = True to mask = False
                 trm13_out = self.conv1_trm1_trm3(audio_feats, padding_mask=audio_attention_mask, mask=True)
                 losses = w2v2_loss(self.conv1_trm1_trm3, trm13_out, self.args, suffix="caption")
         non_padding_mask = ~trm13_out['padding_mask']
