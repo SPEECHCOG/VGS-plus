@@ -346,7 +346,7 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
             "--return_code_index", action="store_true", default=False, help="return the code index"
         )
         parser.add_argument(
-            "--trim_mask", action="store_true", default=False
+            "--trim_mask", action="store_true", default=True
         )
 
     def __init__(self, args):
