@@ -393,8 +393,12 @@ class Trainer:
             print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
             print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
             
-            audio_cls_total = torch.cat(audio_cls_total, device=1)           
-            img_cls_list = torch.stack(img_cls_list, device=1)
+            
+            audio_cls_total = torch.cat(audio_cls_total)  
+            audio_cls_total = audio_cls_total.cuda(device=1)
+            
+            img_cls_list = torch.stack(img_cls_list)
+            img_cls_list = img_cls_list.cuda(device=1)
             
             print ('khazar: memory allocated before cat')
             print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
