@@ -87,11 +87,6 @@ class Trainer:
                 libri_loader_iterator = iter(self.libri_train_loader)
             print ('khazar: train data length is ' + str(self.train_data_length))
             for i, batch in enumerate(self.train_loader):
-                # Khazar
-                # print ('kh: train for one batch starts here')
-                # print('i start = ' + str(i))
-                # print('printing num_updates')
-                # print(self.progress['num_updates'])
                
                 if self.use_libri_loss:
                     libri_batch = next(libri_loader_iterator)
@@ -100,7 +95,6 @@ class Trainer:
                 self.cross_encoder.train()
                 if self.progress['num_updates'] > self.total_num_updates:
                     flag = False
-                    os.system(nvidia-smi)
                     self.validate_and_save()
                     self.writer.close()
                     break
@@ -145,12 +139,6 @@ class Trainer:
 
                 # logging
                 if self.progress['num_updates'] % self.args.n_print_steps == 0:
-                    # khazar
-                    # print ('kh: memory allocated at training time')
-                    # print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-                    # print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
-                    # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
-                    # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
                     
                     log_out = {}
                     log_out['epoch'] = f"{self.progress['epoch']}/{self.args.n_epochs}"
@@ -168,29 +156,17 @@ class Trainer:
                     
                 # validation and save models
                 if self.progress['num_updates'] % self.args.n_val_steps == 0:
-                    # khazar
-                    # print ('kh: memory allocated at start of validation')
-                    # print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-                    # print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
-                    # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
-                    # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
-                    self.validate_and_save(libri=self.use_libri_loss, places=self.args.places)
-                    # print ('kh: memory allocated at end of validation')
-                    # print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-                    # print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
-                    # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
-                    # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
+                    
+                    self.validate_and_save(libri=self.use_libri_loss, places=self.args.places, n_save_ind = self.progress['num_updates'])
+                    
                     
                 self.progress['num_updates'] += 1
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
                 data_start_time = time.time()
                 
-                # print ('kh: train for one batch ends here')
-                # print('i end = ' + str(i))
-                # print ('kh: num update is')
-                # print(self.progress['num_updates'])
 
-    def validate_and_save(self, libri=False, places=False):
+    def validate_and_save(self, libri=False, places=False , n_save_ind = 0):
+        # khazar: I added "n_save_ind" argument to save intermediate models 
         self.dual_encoder.eval()
         self.cross_encoder.eval()
         if places:
@@ -210,19 +186,22 @@ class Trainer:
             torch.save(
                 {
                     "dual_encoder": self.dual_encoder.module.state_dict() if torch.cuda.device_count() > 1 else self.dual_encoder.state_dict(),
-                    "cross_encoder": self.cross_encoder.module.state_dict() if torch.cuda.device_count() > 1 else self.cross_encoder.state_dict(),
+                    # khazar: I commented this to reduce bundle file size
+                    #"cross_encoder": self.cross_encoder.module.state_dict() if torch.cuda.device_count() > 1 else self.cross_encoder.state_dict(),
                     "optimizer":  self.optimizer.state_dict(),
                     "indices": self.train_sampler.state_dict(),
                     "libri_indices": self.libri_train_sampler.state_dict() if self.libri_train_sampler is not None else None
                 },save_path
             )
             logger.info(f"save *best* models at {save_path} at global step {self.progress['num_updates']}")
+        # Khazar: here it saves the model in each call    
         save_progress(self)
-        save_path = os.path.join(self.args.exp_dir,"bundle.pth")
+        save_path = os.path.join(self.args.exp_dir, str(n_save_ind) + "_bundle.pth")
         torch.save(
             {
                 "dual_encoder": self.dual_encoder.module.state_dict() if torch.cuda.device_count() > 1 else self.dual_encoder.state_dict(),
-                "cross_encoder": self.cross_encoder.module.state_dict() if torch.cuda.device_count() > 1 else self.cross_encoder.state_dict(),
+                # khazar: I commented this to reduce bundle file size
+                #"cross_encoder": self.cross_encoder.module.state_dict() if torch.cuda.device_count() > 1 else self.cross_encoder.state_dict(),
                 "optimizer":  self.optimizer.state_dict(),
                 "indices": self.train_sampler.state_dict(),
                 "libri_indices": self.libri_train_sampler.state_dict() if self.libri_train_sampler is not None else None
@@ -389,8 +368,8 @@ class Trainer:
                         #img_feats_list.append(detached_visual_feats[j])
                         img_cls_list.append(visual_cls[j].detach())
                         img_img_id_list.append(img_id)
-                # if i>= 100:
-                #     break
+                if i>= 100:
+                    break
             
             print ('khazar: memory allocated before cat')
             print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
@@ -430,7 +409,8 @@ class Trainer:
             self.writer.add_scalar("acc_coarse", avg_acc_coarse, self.progress['num_updates'])
             self.writer.add_scalar("acc_r1_coarse", avg_acc_r1_coarse, self.progress['num_updates'])
             print ('kh: memory at the end of coarse')
-            print(torch.cuda.memory_allocated() / 1024 ** 3)
+            print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+            print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
             logger.info("Coarse Retrieval Accuracy:")
             logger.info('Audio R@100 {A_r100:.3f} Image R@100 {I_r100:.3f} Average R@100 {r100_ave:.3f} over {N:d} validation pairs'.format(A_r100=recalls['A_r100'], I_r100=recalls['I_r100'], r100_ave=(recalls['A_r100']+recalls['I_r100'])/2, N=N_examples))
             logger.info('Audio R@10 {A_r10:.3f} Image R@10 {I_r10:.3f} Average R@10 {r10_ave:.3f} over {N:d} validation pairs'.format(A_r10=recalls['A_r10'], I_r10=recalls['I_r10'], r10_ave=(recalls['A_r10']+recalls['I_r10'])/2, N=N_examples))
@@ -665,6 +645,9 @@ class Trainer:
         torch.backends.cudnn.benchmark = True
         torch.backends.cudnn.deterministic = True
 
+    def save_intermediate_scores(self, recall):
+        pass
+        
 # test = [['COCO_val2014_000000333745'], ['COCO_val2014_000000333746'], ['COCO_val2014_000000333747']]
 # for i, value_i in enumerate(test):
 #     print(i)
