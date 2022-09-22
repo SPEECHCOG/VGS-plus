@@ -19,12 +19,12 @@ python \
 --val_batch_size 32 \
 --val_cross_batch_size 8 \
 --n_epochs 20 \
---n_print_steps 100 \
---n_val_steps 1000 \
+--n_print_steps 1000 \
+--n_val_steps 3701 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --normalize \
---xtrm_layers 3 \
+--xtrm_layers 1 \
 --trm_layers 6 \
 --fine_matching_weight 0.0 \
 --coarse_matching_weight 1.0 \
