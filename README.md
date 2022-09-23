@@ -4,13 +4,13 @@ current plan
 
 practical steps:
 
-1) Training the FaST-VGS and FaST-VGS+ original models and replicating Peng's results on SC data for recall and ABX error.(model 1, model2)
+1) Training the FaST-VGS and FaST-VGS+ original models and replicating Peng's results on SC data for recall and ABX error.(model 3, model4)
 
-2) Adding a function for saving intermediate recall and loss values during training.
+2) Adding a function for saving intermediate recall and loss values during training...> not needed, tensorboard saves evrything.
 
 3) Adding a function to save model weights based on a user-defined step argument (n_save_model) to be used later for other evaluation metrics. 
 
-4) Training the two original models without using w2v2 pretrained weights and with random initialization. (model 3, model 4)
+4) Training the two original models without using w2v2 pretrained weights and with random initialization. (model 5, model 6)
 
 5) Testing different coefficients for w2v2 loss and vgs loss. (model 5, model 6)
 
