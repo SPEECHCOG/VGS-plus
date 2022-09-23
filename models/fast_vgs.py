@@ -202,8 +202,6 @@ class DualEncoder(nn.Module):
         
         self.conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
         self.conv2 = ResDavenet()
-        
-            
         self.audio_cls_token_proj_coarse = nn.Sequential(nn.Linear(self.args.hidden_size, self.args.hidden_size*2), nn.GELU(), nn.Linear(self.args.hidden_size*2, self.args.hidden_size))
         self.audio_cls_token_proj_pre = nn.Sequential(nn.Linear(self.args.hidden_size, self.args.hidden_size*2), nn.GELU(), nn.Linear(self.args.hidden_size*2, self.args.hidden_size))
         self.trm2 = BertLayer(args)
@@ -214,13 +212,7 @@ class DualEncoder(nn.Module):
         self.trm = nn.ModuleList([BertLayer(args) for _ in range(args.trm_layers)])
         self.visual_cls_token_proj_coarse = nn.Sequential(nn.Linear(self.args.hidden_size, self.args.hidden_size*2), nn.GELU(), nn.Linear(self.args.hidden_size*2, self.args.hidden_size))
 
-        self.apply(self.init_weights)     
-        
-        # khazar : I added bwlow line for testing multiple gpus
-        # if torch.cuda.device_count() > 3:
-        #     #self.conv1_trm1_trm3 = nn.DataParallel(self.conv1_trm1_trm3)
-        #     #self.conv2 = nn.DataParallel(self.conv2)
-        #     self.visn_fc = nn.DataParallel(self.visn_fc)
+        self.apply(self.init_weights)
 
     def init_weights(self, module):
         """ Initialize the weights """
@@ -236,33 +228,12 @@ class DualEncoder(nn.Module):
     
 
     def forward_image(self, visual_feats, visual_pos, visual_attention_mask):
-        # khazar: printing tensors (also shows the device)
-        
-        # visual_feats ...> tensor[N,36,2048 ]
-        # visual_pos ...> tensor[N,36,4 ]
         visual_feats = (visual_feats, visual_pos)
-        # visual_feats ...> tuple of size 2 (Tensor, Tensor) 
-        
         visual_feats = self.visn_fc(visual_feats)
-        # khazar: above block appplied FF and norm layer on each Tensor of tuple
-        # so 2048 ...> 768 and 4 ...> 768
-        # and averages them as output
-        # visual_feats ...> tensor[N, 36, 768]
-     
-        # visual_cls_token ...> nn.parameter.Parameter (1,1, 768)
-        # visual_cls_token.repeat(visual_feats.shape[0],1,1) ...> (N,1,768)
-        visual_feats = torch.cat([self.visual_cls_token.repeat(visual_feats.shape[0],1,1), visual_feats], dim=1)      
-        # visual_feats ...> tensor[N, 37, 768]
-        
+        visual_feats = torch.cat([self.visual_cls_token.repeat(visual_feats.shape[0],1,1), visual_feats], dim=1)
         for layer_module in self.trm:
             visual_feats = layer_module(visual_feats, None)
-            
-        # visual_feats ...> tensor[N, 37, 768]
-        
         cls_token_coarse = self.visual_cls_token_proj_coarse(visual_feats[:,0])
-        
-        # cls_token_coarse ...> tensor[N,768]
-        
         return visual_feats, cls_token_coarse
 
     def forward_audio(self, audio_feats, audio_attention_mask, test=False):
@@ -276,7 +247,6 @@ class DualEncoder(nn.Module):
                 trm13_out = self.conv1_trm1_trm3(audio_feats, padding_mask=audio_attention_mask, mask=False, features_only=True, tgt_layer=self.args.layer_use)
                 losses = {}
             else:
-                #khazar : changing mask = True to mask = False
                 trm13_out = self.conv1_trm1_trm3(audio_feats, padding_mask=audio_attention_mask, mask=True)
                 losses = w2v2_loss(self.conv1_trm1_trm3, trm13_out, self.args, suffix="caption")
         non_padding_mask = ~trm13_out['padding_mask']
@@ -315,7 +285,7 @@ class DualEncoder(nn.Module):
         visual_attention_mask=None, # this is not used, cause we always use all 36 features
         test = False,
         inter = -1,
-        forward_libri = False,
+        forward_libri = False
     ):
         if forward_libri:
             libri_loss = self.forward_libri(audio_feats, attention_mask)
