@@ -21,7 +21,6 @@ from typing import List, Tuple
 from fairseq import utils
 
 from fairseq.models import BaseFairseqModel
-
 from fairseq.modules import (
     Fp32GroupNorm,
     Fp32LayerNorm,
@@ -346,7 +345,7 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
             "--return_code_index", action="store_true", default=False, help="return the code index"
         )
         parser.add_argument(
-            "--trim_mask", action="store_true", default=True
+            "--trim_mask", action="store_true", default=False
         )
 
     def __init__(self, args):
@@ -469,7 +468,7 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
                 min_masks=2,
                 no_overlap=self.no_mask_overlap,
                 min_space=self.mask_min_space,
-                require_same_masks=True if self.args.trim_mask else False 
+                require_same_masks=True if self.args.trim_mask else False
             )
             mask_indices = torch.from_numpy(mask_indices).to(x.device)
             x[mask_indices] = self.mask_emb.to(x) # to x to avoid fp16 problem
@@ -500,69 +499,78 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
     
     
 
-    def sample_negatives(self, y, num):
-
+    def sample_negatives(self, y, mask_indices):
+        # num is y.shape[1], i.e. T_pred
+        # now it's different for each instance
         if self.n_negatives == 0 and self.cross_sample_negatives == 0:
             return y.new(0)
 
-        bsz, tsz, fsz = y.shape
-        y = y.view(-1, fsz)  # BTC => (BxT)C
-
-        cross_high = tsz * bsz
-        high = tsz
+        bt, fsz = y.shape
+        T_preds = mask_indices.sum(1).cpu()
+        cross_high = bt
+        # high = tsz
         with torch.no_grad():
-            assert high > 1, f"{bsz,tsz,fsz}"
 
             if self.n_negatives > 0:
-                tszs = (
-                    buffered_arange(num)
-                    .unsqueeze(-1)
-                    .expand(-1, self.n_negatives)
-                    .flatten()
-                )
-
-                neg_idxs = torch.randint(
-                    low=0, high=high - 1, size=(bsz, self.n_negatives * num)
-                )
-                neg_idxs[neg_idxs >= tszs] += 1
+                neg_idxs = []
+                for i, T_pred in enumerate(T_preds):
+                    assert T_pred > 1, f"{T_pred}"
+                    neg_idx = torch.randint(
+                        low=0, high=T_pred - 1, size=(1,self.n_negatives * T_pred)
+                    ).squeeze()
+                    tszs = (
+                        buffered_arange(T_pred)
+                        .unsqueeze(-1)
+                        .expand(-1, self.n_negatives)
+                        .flatten()
+                    )
+                    neg_idx[neg_idx >= tszs] += 1
+                    neg_idxs.append(neg_idx)
 
             if self.cross_sample_negatives > 0:
-                tszs = (
-                    buffered_arange(num)
-                    .unsqueeze(-1)
-                    .expand(-1, self.cross_sample_negatives)
-                    .flatten()
-                )
-
-                cross_neg_idxs = torch.randint(
-                    low=0,
-                    high=cross_high - 1,
-                    size=(bsz, self.cross_sample_negatives * num),
-                )
-                cross_neg_idxs[cross_neg_idxs >= tszs] += 1
+                cross_neg_idxs = []
+                for i, T_pred in enumerate(T_preds):
+                    assert T_pred > 1, f"{T_pred}"
+                    cross_neg_idx = torch.randint(
+                        low=0, high=cross_high - 1, size=(self.n_negatives * T_pred,)
+                    )
+                    tszs = (
+                        buffered_arange(T_pred)
+                        .unsqueeze(-1)
+                        .expand(-1, self.cross_sample_negatives)
+                        .flatten()
+                    )
+                    cross_neg_idx[cross_neg_idx >= tszs] += 1
+                    cross_neg_idxs.append(cross_neg_idx)
 
         if self.n_negatives > 0:
-            for i in range(1, bsz):
-                neg_idxs[i] += i * high
+            accum = 0
+            for i in range(1, len(T_preds)):
+                accum += T_preds[i-1]
+                # print(neg_idx)
+                # print("\n")
+                # print(T_preds[i-1])
+                
+                neg_idxs[i] += accum
         else:
             neg_idxs = cross_neg_idxs
 
         if self.cross_sample_negatives > 0 and self.n_negatives > 0:
             neg_idxs = torch.cat([neg_idxs, cross_neg_idxs], dim=1)
-
-        negs = y[neg_idxs.view(-1)]
-        negs = negs.view(
-            bsz, num, self.n_negatives + self.cross_sample_negatives, fsz
-        ).permute(
-            2, 0, 1, 3
-        )  # to NxBxTxC
+        neg_idxs = torch.cat(neg_idxs).view(-1)
+        negs = y[neg_idxs] # [T_pred1*n_negatives+T_pred2*n_negatives+...+T_predB*n_negatives, fsz]
+        # negs = negs.view(
+        #     bsz, num, self.n_negatives + self.cross_sample_negatives, fsz
+        # ).permute(
+        #     2, 0, 1, 3
+        # )  # to NxBxTxC
         return negs, neg_idxs
 
     def sample_negatives_trim_mask(self, y, num):
 
         if self.n_negatives == 0 and self.cross_sample_negatives == 0:
             return y.new(0)
-        
+
         bsz, tsz, fsz = y.shape
         y = y.view(-1, fsz)  # BTC => (BxT)C
 
@@ -616,22 +624,29 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
         )  # to NxBxTxC
         return negs, neg_idxs
 
-    def compute_preds(self, x, y, negatives):
-        # negatives: NxBxTxC
-        # y is target: BxTxC
-        # x is prediction: BxTxC
-        neg_is_pos = (y == negatives).all(-1)
-        y = y.unsqueeze(0)
-        targets = torch.cat([y, negatives], dim=0) # (N+1)xBxTxC
+    def compute_preds(self, x, y, negatives, mask_indices):
+        # negatives: [T_pred1*negs+T_pred2*negs+...+T_predB*negs, D] 
+        # y is target: [T_pred1+T_pred2+...+T_predB, D] 
+        # x is prediction: [T_pred1+T_pred2+...+T_predB, D]
+        accum = 0
+        all_logits = []
+        for i, mask_idx in enumerate(mask_indices):
+            T_pred = mask_idx.long().sum()
+            cur_x = x[accum:accum+T_pred, :]
+            cur_y = y[accum:accum+T_pred, :]
+            cur_negatives = negatives[accum*self.n_negatives:(accum+T_pred)*self.n_negatives, :].view(T_pred, self.n_negatives, -1).transpose(0,1)
+            neg_is_pos = (cur_y == cur_negatives).all(-1)
+            cur_y = cur_y.unsqueeze(0)
+            targets = torch.cat([cur_y, cur_negatives], dim=0) # (N+1)xT_predxC
 
-        logits = torch.cosine_similarity(x.float(), targets.float(), dim=-1).type_as(x) # this gives [N+1, B, T]
+            logits = torch.cosine_similarity(cur_x.float(), targets.float(), dim=-1).type_as(cur_x) # this gives [N+1, T_pred]
 
-        logits /= self.logit_temp
+            logits /= self.logit_temp
 
-        if neg_is_pos.any():
-            logits[1:][neg_is_pos] = float("-inf")
-
-        return logits
+            if neg_is_pos.any():
+                logits[1:][neg_is_pos] = float("-inf")
+            all_logits.append(logits)
+        return torch.cat(all_logits,dim=-1) # [N+1, T_pred1+T_pred2+...+T_predB]
 
     def compute_preds_trim_mask(self, x, y, negatives):
         # negatives: NxBxTxC
@@ -679,8 +694,8 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
 
         features = self.dropout_input(features)
         unmasked_features = self.dropout_features(unmasked_features)
-        
-        # print(features.shape) # torch.Size([2, 399, 768])     
+
+        # print(features.shape) 
         # print("....... args.trim mask.........")
         # print(self.args.trim_mask) #false
         
@@ -691,7 +706,6 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
         
         # this have never being used in w2v2, the inputs are not quantized
         if self.input_quantizer:
-            print('........ input_quant......................') # not here
             q = self.input_quantizer(features, produce_targets=False)
             features = q["x"]
             num_vars = q["num_vars"]
@@ -701,34 +715,31 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
             features = self.project_inp(features)
 
         if mask:
-            # print("####################### Kh: printing features 2 ###################################")
-            # print(features.shape) # torch.Size([2, 399, 768])
-            # print("################################## Kh: printing features 2 ########################")
+            # print("####################### Kh: printing features in if mask ###################################")
+            # print(features.shape) # 
+            # print("################################## Kh: printing features in if mask ########################")
             x, mask_indices = self.apply_mask(features, padding_mask) # x will be masked, note that mask is some learned embedding (768 dim), not zero!
             # print("####################### kh: printing mask_indices ###################################")
-            # print(mask_indices.shape) # torch.Size([2, 399, 768])
+            # print(mask_indices.shape) 
             # print("################################## Kh: printing features 2 ########################")
             if mask_indices is not None:
                 if self.args.trim_mask:
-                    # print("############### kh: check for condition ###############")
+                    # print("############### kh: check for condition trim_mask ###############")
                     y = unmasked_features[mask_indices].view(unmasked_features.size(0), -1, unmasked_features.size(-1))
                 else:
-                    test = unmasked_features[mask_indices]
-                    print("............................... printing test.................") # torch.Size([245, 512])
-                    print(test.shape)
                     y = unmasked_features[mask_indices].view(-1, unmasked_features.size(-1))
-                    
             else:
                 y = unmasked_features
         else:
             x = features
             y = unmasked_features
             mask_indices = None
-            
-        # print("######################## Kh ##################################")
-        # print(y.shape)
-        # print("######################## Kh ##################################")    
         # ############################################
+        
+        # print("######################## Kh y shape ##################################")
+        # print(y.shape)
+        # print("######################## Kh y shape ##################################")  
+        
         x = torch.cat([self.cls_token.repeat(x.shape[0],1,1), x], dim=1)
         if padding_mask is not None:
             cls_token_padding_mask = torch.zeros((padding_mask.shape[0],1)).to(padding_mask)
@@ -750,9 +761,6 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
             return {"cls_token": cls_token, "layer_feats": layer_feats, "padding_mask": padding_mask}
 
         if self.quantizer and mask:
-            # print("########################## kh ################################")
-            # print(y.shape)
-            # print("########################### kh ###############################")
             q = self.quantizer(y, produce_targets=False, mask_indices=None)
             y = q["x"] # always only contains masked target
             num_vars = q["num_vars"]
@@ -760,9 +768,7 @@ class Wav2Vec2Model_cls(BaseFairseqModel):
             prob_ppl = q["prob_perplexity"]
             curr_temp = q["temp"]
             y = self.project_q(y)
-            # print("########################## kh ################################")
             # print(y.shape)
-            # print("########################## kh ################################")
 
             if self.negatives_from_everywhere:
                 raise NotImplementedError
