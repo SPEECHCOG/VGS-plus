@@ -78,9 +78,7 @@ class Trainer:
         #khazar
         print ('kh: memory allocated at training time')
         print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-        #print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
-        # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
-        # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
+
         while flag:
             logger.info('it is training now')
             if self.use_libri_loss:
