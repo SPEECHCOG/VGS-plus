@@ -78,7 +78,7 @@ class Trainer:
         #khazar
         print ('kh: memory allocated at training time')
         print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-        print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+        #print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
         # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
         # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
         while flag:
@@ -410,7 +410,7 @@ class Trainer:
             self.writer.add_scalar("acc_r1_coarse", avg_acc_r1_coarse, self.progress['num_updates'])
             print ('kh: memory at the end of coarse')
             print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-            print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+            #print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
             logger.info("Coarse Retrieval Accuracy:")
             logger.info('Audio R@100 {A_r100:.3f} Image R@100 {I_r100:.3f} Average R@100 {r100_ave:.3f} over {N:d} validation pairs'.format(A_r100=recalls['A_r100'], I_r100=recalls['I_r100'], r100_ave=(recalls['A_r100']+recalls['I_r100'])/2, N=N_examples))
             logger.info('Audio R@10 {A_r10:.3f} Image R@10 {I_r10:.3f} Average R@10 {r10_ave:.3f} over {N:d} validation pairs'.format(A_r10=recalls['A_r10'], I_r10=recalls['I_r10'], r10_ave=(recalls['A_r10']+recalls['I_r10'])/2, N=N_examples))
@@ -526,7 +526,11 @@ class Trainer:
             indices = None
             libri_indices = None
             optim_states = None
-
+        print('khazar: here is w2v2 weight condition')
+        print(self.args.fb_w2v2_weights_fn)
+        self.args.fb_w2v2_weights_fn = None
+        print('khazar: here is w2v2 weight condition')
+        print(self.args.fb_w2v2_weights_fn)
         if self.args.fb_w2v2_weights_fn and self.progress['num_updates'] <= 1 and not self.args.validate and self.args.trained_weights_dir == None:
             
             b = torch.load(self.args.fb_w2v2_weights_fn)['model']
