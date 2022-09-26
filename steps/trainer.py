@@ -194,7 +194,8 @@ class Trainer:
             logger.info(f"save *best* models at {save_path} at global step {self.progress['num_updates']}")
         # Khazar: here it saves the model in each call    
         save_progress(self)
-        save_path = os.path.join(self.args.exp_dir, str(n_save_ind) + "_bundle.pth")
+        #save_path = os.path.join(self.args.exp_dir, str(n_save_ind) + "_bundle.pth")
+        save_path = os.path.join(self.args.exp_dir,"bundle.pth")
         torch.save(
             {
                 "dual_encoder": self.dual_encoder.module.state_dict() if torch.cuda.device_count() > 1 else self.dual_encoder.state_dict(),
@@ -371,20 +372,20 @@ class Trainer:
             
             print ('khazar: memory allocated before cat')
             print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-            print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+            # print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
             # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
             # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
             
             
             audio_cls_total = torch.cat(audio_cls_total)  
-            audio_cls_total = audio_cls_total.cuda(device=1)
+            #audio_cls_total = audio_cls_total.cuda(device=1)
             
             img_cls_list = torch.stack(img_cls_list)
-            img_cls_list = img_cls_list.cuda(device=1)
+            #img_cls_list = img_cls_list.cuda(device=1)
             
             print ('khazar: memory allocated after cat')
             print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-            print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
+            # print(torch.cuda.memory_allocated(device=1) / 1024 ** 3)
             # print(torch.cuda.memory_allocated(device=2) / 1024 ** 3)
             # print(torch.cuda.memory_allocated(device=3) / 1024 ** 3)
             
