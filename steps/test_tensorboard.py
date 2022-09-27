@@ -18,6 +18,7 @@ model5 = torch.load('/worktmp2/hxkhkh/current/FaST/experiments/model5/exp/96000_
 event3 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model3/exp/events.out.tfevents.1663923398.nag06.tcsc-local.5309.0')
 event4 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model4/exp/events.out.tfevents.1663929583.nag03.tcsc-local.15677.0')
 event5 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model5/exp/events.out.tfevents.1664002919.nag12.tcsc-local.193615.0')
+event5new = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model5/exp/events.out.tfevents.1664278096.nag12.tcsc-local.184314.0')
 event6 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model6/exp/events.out.tfevents.1664140341.nag06.tcsc-local.4384.0')
 event6new = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model6/exp/events.out.tfevents.1664274714.nag06.tcsc-local.24897.0' )
 
@@ -30,6 +31,31 @@ event6new = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model6/e
 # tags : 
 # 'acc_r10'
 # 'coarse_matching_loss'
+# 'caption_w2v2_loss'
+# 'weighted_loss'
+
+event6new.Reload()
+df_loss_vgs = pd.DataFrame(event6new.Scalars('coarse_matching_loss'))
+df_loss_w2v2 = pd.DataFrame(event6new.Scalars('caption_w2v2_loss'))
+df_loss_total = pd.DataFrame(event6new.Scalars('weighted_loss'))
+
+loss_vgs = df_loss_vgs[::50]
+loss_w2v2 = df_loss_w2v2[::50]
+loss_total = df_loss_total[::50]
+
+y_vgs = loss_vgs['value']
+y_w2v2 = loss_w2v2['value']
+y_total = loss_total['value']
+
+plt.figure()
+plt.plot(y_vgs, label = 'loss vgs')
+plt.plot(y_w2v2, label = 'loss w2v2')
+plt.plot(y_total, label = 'loss total')
+
+plt.grid()
+plt.legend()
+plt.savefig('figures/loss-model6new.png', format = 'png')
+
 ################################   model 2   ##################################
 # event5_r10 = event5.Scalars('acc_r10')
 # tags = accreload.Tags()
@@ -46,9 +72,17 @@ x4 = df4['step']
 y4 = df4['value']
 
 accreload = event5.Reload()
-df5 = pd.DataFrame(event5.Scalars('acc_r10'))
-x5 = df5['step']
-y5 = df5['value']
+df5old = pd.DataFrame(event5.Scalars('acc_r10'))
+x5old = df5old['step']
+y5old = df5old['value']
+
+accreload = event5new.Reload()
+df5new = pd.DataFrame(event5new.Scalars('acc_r10'))
+x5new = df5new['step']
+y5new = df5new['value']
+
+x5 = pd.concat([x5old,x5new])
+y5 = pd.concat([y5old,y5new])
 
 
 accreload = event6.Reload()
