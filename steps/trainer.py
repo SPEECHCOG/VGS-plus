@@ -194,8 +194,8 @@ class Trainer:
             logger.info(f"save *best* models at {save_path} at global step {self.progress['num_updates']}")
         # Khazar: here it saves the model in each call    
         save_progress(self)
-        #save_path = os.path.join(self.args.exp_dir, str(n_save_ind) + "_bundle.pth")
-        save_path = os.path.join(self.args.exp_dir,"bundle.pth")
+        save_path = os.path.join(self.args.exp_dir, str(n_save_ind) + "_bundle.pth")
+        #save_path = os.path.join(self.args.exp_dir,"bundle.pth")
         torch.save(
             {
                 "dual_encoder": self.dual_encoder.module.state_dict() if torch.cuda.device_count() > 1 else self.dual_encoder.state_dict(),
