@@ -80,7 +80,7 @@ class Trainer:
         print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
 
         while flag:
-            logger.info('it is training now')
+            logger.info('epoch starts here .... ')
             if self.use_libri_loss:
                 libri_loader_iterator = iter(self.libri_train_loader)
             print ('khazar: train data length is ' + str(self.train_data_length))
