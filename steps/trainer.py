@@ -513,8 +513,9 @@ class Trainer:
             optim_states = None
             # logger.info("loaded parameters and data indices from epoch %d, global step %d" % (self.progress['epoch'], self.progress['num_updates']))
             logger.info("Perform Validation")
+        # khazar: change below to best_bundle for resume    
         elif self.progress['num_updates'] > 1:
-            bundle = torch.load(os.path.join(self.args.exp_dir, "best_bundle.pth"))
+            bundle = torch.load(os.path.join(self.args.exp_dir, "bundle.pth"))
             dual_encoder.carefully_load_state_dict(bundle['dual_encoder'])
             #cross_encoder.carefully_load_state_dict(bundle['cross_encoder'])
             indices = bundle['indices']
