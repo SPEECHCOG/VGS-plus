@@ -79,8 +79,11 @@ class Trainer:
         print ('start of training method')
         print ('kh: memory allocated at training time')
         print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+        
+        # khazar: I added below lines (for automated resuming)
         flag_resume = False
         recall_previous = 0.001
+        
         while flag:
             logger.info('epoch starts here .... ')
             if self.use_libri_loss:
@@ -95,7 +98,7 @@ class Trainer:
                 self.cross_encoder.train()
                 if self.progress['num_updates'] > self.total_num_updates:
                     flag = False
-                    self.validate_and_save()
+                    r10, r5, r1 = self.validate_and_save()
                     self.writer.close()
                     break
                 
@@ -157,36 +160,87 @@ class Trainer:
                 # validation and save models
                 if self.progress['num_updates'] % self.args.n_val_steps == 0:
                     
-                    self.validate_and_save(libri=self.use_libri_loss, places=self.args.places, n_save_ind = self.progress['num_updates'])
+                    r10, r5, r1 = self.validate_and_save(libri=self.use_libri_loss, places=self.args.places, n_save_ind = self.progress['num_updates'])
                     
-                    # khazar: I added below lines
-                    # print('khazar: printing end of one validation')
-                    # print('khazar: printing recall10')
-                    # print(self.meters['r10_ave'])
-                    # recall_current = self.meters['r10_ave']
-                    # recall_delta = recall_current - recall_previous 
-                    # if recall_delta <= - 0.025:
-                    #     flag_resume = True
-                    # recall_previous = recall_current
+                    # khazar: I added below lines (for automated resuming)
+                    
+                    
+                    recall_current = r10
+                    recall_delta = recall_current - recall_previous 
+
+                    if recall_delta <= - 0.001:
+                        logger.info('.............. The condition for resume satisfied .............')
+                        print('.................... current recall is  = ' + str(recall_current))
+                        print('.................... previous recall is  = ' + str(recall_previous))
+                        print('.................... delta recall  = ' + str(recall_delta))
+                        
+                        flag_resume = True
+                    recall_previous = recall_current
                     
                     
                 self.progress['num_updates'] += 1
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
                 data_start_time = time.time()
                 
-                # if flag_resume:
-                #     self.custom_resume()
-                #     flag_resume = False
-                # khazar: here adding new function for resume
-                # print ('khazar: printing end of one step')
-    def custom_resume(self):
-        bundle = torch.load(os.path.join(self.args.exp_dir, "best_bundle.pth"))
-        dual_encoder.carefully_load_state_dict(bundle['dual_encoder'])
-        #cross_encoder.carefully_load_state_dict(bundle['cross_encoder'])
-        indices = bundle['indices']
-        libri_indices = bundle['libri_indices']
-        optim_states = bundle['optimizer']
-        logger.info(" ############ a resume happened here ###################")
+                # khazar: I added below lines (for automated resuming)
+                if flag_resume:
+                    torch.cuda.empty_cache()
+                    print ('..................... torch memory before resume ......................... ')
+                    print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+                    self.dual_encoder, self.cross_encoder, self.trainables, self.indices, self.libri_indices, self.optim_states = self._setup_models_at_resume()
+                    flag_resume = False
+                    logger.info('#################### one resume happened ###############')
+                    print ('..................... torch memory after resume ......................... ')
+                    print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+                
+                #print ('khazar: printing end of one step')
+     
+        # khazar: I added below method (for automated resuming) 
+    def _setup_models_at_resume(self):
+        dual_encoder = fast_vgs.DualEncoder(self.args)
+        cross_encoder = fast_vgs.CrossEncoder(self.args)
+        
+        # Khazar: change print_model = True if you want to print the whole model and not only the model parameters
+        print_model_info(dual_encoder , print_model = False)
+        print_model_info(cross_encoder, print_model = False)
+        if self.args.trained_weights_dir != None:
+            bundle = torch.load(os.path.join(self.args.trained_weights_dir, "best_bundle.pth"))
+            dual_encoder.carefully_load_state_dict(bundle['dual_encoder'])
+            #cross_encoder.carefully_load_state_dict(bundle['cross_encoder'])
+            indices = None
+            libri_indices = None
+            optim_states = None
+            logger.info(f"Load trained weights from {self.args.trained_weights_dir}")
+        else:
+            indices = None
+            libri_indices = None
+            optim_states = None
+            
+        # Khazar : for random initialization     
+        self.args.fb_w2v2_weights_fn = None
+        
+        if self.args.fb_w2v2_weights_fn and self.progress['num_updates'] <= 1 and not self.args.validate and self.args.trained_weights_dir == None:          
+            b = torch.load(self.args.fb_w2v2_weights_fn)['model']
+            # b = b.module
+            #khazar: I added below lines due to an error like: 'DataParallel' object has no attribute 'carefully_load_state_dict'
+            # if isinstance(b, torch.nn.DataParallel):
+            #     print("b is a dataparallel object")
+            #     b = b.module
+            dual_encoder.conv1_trm1_trm3.carefully_load_state_dict(b)
+
+        if self.args.feature_grad_mult <= 0.:
+            for name, p in dual_encoder.named_parameters():
+                if "feature_extractor" in name:
+                    p.requires_grad = False
+        trainables1 = [p for p in dual_encoder.parameters() if p.requires_grad]
+        trainables2 = [p for p in cross_encoder.parameters() if p.requires_grad]
+        trainables = trainables1 + trainables2
+
+        dual_encoder.to(self.device)
+        cross_encoder.to(self.device)
+
+        return dual_encoder, cross_encoder, trainables, indices, libri_indices, optim_states
+
         
     def validate_and_save(self, libri=False, places=False , n_save_ind = 0):
         # khazar: I added "n_save_ind" argument to save intermediate models 
@@ -232,6 +286,8 @@ class Trainer:
             },save_path
         )
         logger.info(f"save models, indices, acc and other statistics at {save_path} and {self.args.exp_dir}/progress.pkl at global step {self.progress['num_updates']}")
+        #khazar: I added this return below:
+        return r10, r5, r1
 
     def validate(self, valid_loader, unseen = False):
         start_val_time = time.time()
