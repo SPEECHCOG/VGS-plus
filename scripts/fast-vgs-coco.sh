@@ -13,8 +13,8 @@ python \
 --raw_audio_base_path ${raw_audio_base_path} \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
---num_workers 4 \
---batch_size 8 \
+--num_workers 16 \
+--batch_size 16 \
 --val_batch_size 8 \
 --val_cross_batch_size 8 \
 --n_epochs 50 \
