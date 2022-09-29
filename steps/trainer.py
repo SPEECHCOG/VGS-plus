@@ -188,6 +188,9 @@ class Trainer:
                     print ('..................... torch memory before resume ......................... ')
                     print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
                     self.dual_encoder, self.cross_encoder, self.trainables, self.indices, self.libri_indices, self.optim_states = self._setup_models_at_resume()
+                    if torch.cuda.device_count() > 1:
+                        self.dual_encoder = nn.DataParallel(self.dual_encoder)
+                        self.cross_encoder = nn.DataParallel(self.cross_encoder)
                     flag_resume = False
                     logger.info('#################### one resume happened ###############')
                     print ('..................... torch memory after resume ......................... ')
