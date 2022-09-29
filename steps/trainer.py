@@ -168,7 +168,7 @@ class Trainer:
                     recall_current = r10
                     recall_delta = recall_current - recall_previous 
 
-                    if recall_delta <= - 0.001:
+                    if recall_delta <= - 0.020:
                         logger.info('.............. The condition for resume satisfied .............')
                         print('.................... current recall is  = ' + str(recall_current))
                         print('.................... previous recall is  = ' + str(recall_previous))
@@ -451,8 +451,8 @@ class Trainer:
                         #img_feats_list.append(detached_visual_feats[j])
                         img_cls_list.append(visual_cls[j].detach())
                         img_img_id_list.append(img_id)
-                if i>= 100:
-                    break
+                # if i>= 100:
+                #     break
             
             print ('khazar: memory allocated before cat')
             print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
