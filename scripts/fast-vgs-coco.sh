@@ -13,13 +13,13 @@ python \
 --raw_audio_base_path ${raw_audio_base_path} \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
---num_workers 16 \
---batch_size 16 \
+--num_workers 32 \
+--batch_size 32 \
 --val_batch_size 8 \
 --val_cross_batch_size 8 \
 --n_epochs 50 \
---n_print_steps 100 \
---n_val_steps 100 \
+--n_print_steps 1000 \
+--n_val_steps 1000 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --xtrm_layers 1 \
