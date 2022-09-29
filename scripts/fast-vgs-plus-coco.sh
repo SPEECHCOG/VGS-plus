@@ -20,7 +20,7 @@ python \
 --val_cross_batch_size 8 \
 --n_epochs 50 \
 --n_print_steps 100 \
---n_val_steps 400 \
+--n_val_steps 100 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --normalize \
