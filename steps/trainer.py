@@ -76,9 +76,11 @@ class Trainer:
         step_per_epoch = int(self.train_data_length/self.args.batch_size)
         data_start_time = time.time()
         #khazar
+        print ('start of training method')
         print ('kh: memory allocated at training time')
         print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-
+        flag_resume = False
+        recall_previous = 0.001
         while flag:
             logger.info('epoch starts here .... ')
             if self.use_libri_loss:
@@ -150,19 +152,42 @@ class Trainer:
                     if np.isnan(self.meters['weighted_loss'].avg):
                         logger.info("training diverged...")
                         return
-                
+                    
                     
                 # validation and save models
                 if self.progress['num_updates'] % self.args.n_val_steps == 0:
                     
                     self.validate_and_save(libri=self.use_libri_loss, places=self.args.places, n_save_ind = self.progress['num_updates'])
                     
+                    # khazar: I added below lines
+                    # print('khazar: printing end of one validation')
+                    # print('khazar: printing recall10')
+                    # print(self.meters['r10_ave'])
+                    # recall_current = self.meters['r10_ave']
+                    # recall_delta = recall_current - recall_previous 
+                    # if recall_delta <= - 0.025:
+                    #     flag_resume = True
+                    # recall_previous = recall_current
+                    
                     
                 self.progress['num_updates'] += 1
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
                 data_start_time = time.time()
                 
-
+                # if flag_resume:
+                #     self.custom_resume()
+                #     flag_resume = False
+                # khazar: here adding new function for resume
+                # print ('khazar: printing end of one step')
+    def custom_resume(self):
+        bundle = torch.load(os.path.join(self.args.exp_dir, "best_bundle.pth"))
+        dual_encoder.carefully_load_state_dict(bundle['dual_encoder'])
+        #cross_encoder.carefully_load_state_dict(bundle['cross_encoder'])
+        indices = bundle['indices']
+        libri_indices = bundle['libri_indices']
+        optim_states = bundle['optimizer']
+        logger.info(" ############ a resume happened here ###################")
+        
     def validate_and_save(self, libri=False, places=False , n_save_ind = 0):
         # khazar: I added "n_save_ind" argument to save intermediate models 
         self.dual_encoder.eval()
@@ -367,8 +392,8 @@ class Trainer:
                         #img_feats_list.append(detached_visual_feats[j])
                         img_cls_list.append(visual_cls[j].detach())
                         img_img_id_list.append(img_id)
-                # if i>= 100:
-                #     break
+                if i>= 100:
+                    break
             
             print ('khazar: memory allocated before cat')
             print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
