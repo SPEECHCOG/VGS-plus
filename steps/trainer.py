@@ -168,7 +168,7 @@ class Trainer:
                     recall_current = r10
                     recall_delta = recall_current - recall_previous 
 
-                    if recall_delta <= - 0.020:
+                    if recall_delta <= - 0.025:
                         logger.info('.............. The condition for resume satisfied .............')
                         print('.................... current recall is  = ' + str(recall_current))
                         print('.................... previous recall is  = ' + str(recall_previous))
