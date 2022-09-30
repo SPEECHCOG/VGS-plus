@@ -22,7 +22,8 @@ event5_1 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model5/ex
 event6_0 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model6/exp/events.out.tfevents.1664140341.nag06.tcsc-local.4384.0')
 event6_1 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model6/exp/events.out.tfevents.1664274714.nag06.tcsc-local.24897.0' )
 event6_2 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model6/exp/events.out.tfevents.1664405058.nag14.tcsc-local.103335.0')
-
+event6_3 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model6/exp/events.out.tfevents.1664458197.nag03.tcsc-local.14499.0')
+event6_4 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model6/exp/events.out.tfevents.1664521091.nag03.tcsc-local.5612.0')
 
 ################################   model 1   ##################################
 #acc = EventAccumulator("/worktmp/khorrami/current/FaST/experiments/model1/exp/events.out.tfevents.1663792498.nag06.tcsc-local.5854.0")
@@ -80,8 +81,13 @@ df5_1 = pd.DataFrame(event5_1.Scalars('acc_r10'))
 x5_1 = df5_1['step']
 y5_1 = df5_1['value']
 
-x5 = pd.concat([x5_0,x5_1])
-y5 = pd.concat([y5_0,y5_1])
+jump = 4000 * (81-38)
+x5_0_polished = x5_0 [0:39]
+x5_1_polished = x5_1 -jump
+y5_0_polished = y5_0 [0:39]
+
+x5 = pd.concat([x5_0_polished,x5_1_polished])
+y5 = pd.concat([y5_0_polished,y5_1])
 
 
 accreload = event6_0.Reload()
@@ -94,13 +100,51 @@ df6_1 = pd.DataFrame(event6_1.Scalars('acc_r10'))
 x6_1 = df6_1['step']
 y6_1 = df6_1['value']
 
+
 accreload = event6_2.Reload()
 df6_2 = pd.DataFrame(event6_2.Scalars('acc_r10'))
 x6_2 = df6_2['step']
 y6_2 = df6_2['value']
 
-x6 = pd.concat([x6_0,x6_1,x6_2])
-y6 = pd.concat([y6_0,y6_1,y6_2])
+accreload = event6_3.Reload()
+df6_3 = pd.DataFrame(event6_3.Scalars('acc_r10'))
+x6_3 = df6_3['step']
+y6_3 = df6_3['value']
+
+
+
+accreload = event6_4.Reload()
+df6_4 = pd.DataFrame(event6_4.Scalars('acc_r10'))
+x6_4 = df6_4['step']
+y6_4 = df6_4['value']
+
+########## polishing 
+
+
+# jump1 = 4000 * (26-19)
+# x6_0_polished = x6_0 [0:20]
+
+
+#x6_1_polished = x6_1 -jump1
+
+# jump2 = 4000 * (16-7)
+# x6_1_secondpolished = x6_1_polished [0:8]
+# x6_2_polished = x6_2 - (jump1 + jump2)
+
+y6_0_polished = y6_0 [0:20]
+y6_1_polished = y6_1 [0:8]
+y6_2_polished = y6_2 [0:12]
+y6_3_polished = y6_3 [0:12]
+
+#jump3 = 4000 * (16-11)
+# x6_2_secondpolished = x6_2_polished [0:12]
+# x6_3_polished = x6_3 - (jump1 + jump2 + jump3)
+
+x6 = range(0,4000*53,4000)
+y6 = pd.concat([y6_0_polished,y6_1_polished,y6_2_polished, y6_3_polished, y6_4])
+
+# ploting
+
 plt.figure()
 plt.plot(x3,y3, label = 'model3, VGS-pretrained')
 plt.plot(x4,y4, label = 'model4, VGS+-pretrained')
@@ -108,6 +152,8 @@ plt.plot(x5,y5, label = 'model5, VGS-random')
 plt.plot(x6,y6, label = 'model6, VGS+-random')
 plt.grid()
 plt.legend()
+plt.ylabel("recall@10")
+plt.xlabel("n_steps")
 #plt.savefig('figures/recall10-models-all.png', format = 'png')
 
 
