@@ -90,7 +90,9 @@ class Trainer:
                 libri_loader_iterator = iter(self.libri_train_loader)
             print ('khazar: train data length is ' + str(self.train_data_length))
             for i, batch in enumerate(self.train_loader):
-               
+                # print ('......printing i and n ...............')
+                # print(i)
+                # print(self.progress['num_updates'])
                 if self.use_libri_loss:
                     libri_batch = next(libri_loader_iterator)
                 data_end_time = time.time()
@@ -709,10 +711,51 @@ class Trainer:
         pass
 
     def weight_loss(self, losses):
+        # Khazar :  I defined alpha and beta based on n_updates
+        # print (' kh.............. here it is printing n_updates .............')
+        # print(self.progress['num_updates'])
+        n = self.progress['num_updates']
+        
+        # linear change
+        # slope_alpha = (2*10**-6)
+        # slope_beta = -1 * slope_alpha
+        # alpha = (slope_alpha * n) + 0.0
+        # beta = (slope_beta * n) + 1.0
+        
+        # exponential change
+        # slope_alpha = 4*(10**-12)
+        # slope_beta = -1 * slope_alpha
+        # alpha = (slope_alpha * (n**2) ) + 0.0
+        # beta = (slope_beta * (n**2) ) + 1.0
+        
+        # model 7
+        if n == 400000:
+            self.args.coarse_matching_weight = 1
+            self.args.caption_w2v2_weigh = 0
+        
+        # model 8
+        # if n == 400000:
+        #     self.args.coarse_matching_weight = 0
+        #     self.args.caption_w2v2_weigh = 1
+            
+        # model 9
+        # if n== 200000:
+        #     self.args.coarse_matching_weight = 1
+        #     self.args.caption_w2v2_weigh = 0
+        # if n == 400000:
+        #     self.args.coarse_matching_weight = 0
+        #     self.args.caption_w2v2_weigh = 1
+            
+            
         #khazar: I removed 'fine_matching_loss' below line
         weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
+        # print (' kh.............. here it is printing losses, coarse.............')
+        # print(weighted_loss)
         if 'caption_w2v2_loss' in losses:
             weighted_loss += losses['caption_w2v2_loss'].mean() * self.args.caption_w2v2_weight
+            # print (' kh.............. here it is printing losses, w2v2.............')
+            # print(losses['caption_w2v2_loss'])
+            # print(losses['caption_w2v2_loss'].mean())
         if 'libri_w2v2_loss' in losses:
             weighted_loss += losses['libri_w2v2_loss'].mean() * self.args.libri_w2v2_weight
         if 'caption_hubert_loss' in losses:
