@@ -140,7 +140,7 @@ y6_3_polished = y6_3 [0:12]
 # x6_2_secondpolished = x6_2_polished [0:12]
 # x6_3_polished = x6_3 - (jump1 + jump2 + jump3)
 
-x6 = range(0,4000*53,4000)
+x6 = range(0,4000*63,4000)
 y6 = pd.concat([y6_0_polished,y6_1_polished,y6_2_polished, y6_3_polished, y6_4])
 
 # ploting
