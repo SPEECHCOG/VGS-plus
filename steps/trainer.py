@@ -156,7 +156,7 @@ class Trainer:
                         logger.info("training diverged...")
                         return
                     
-                    
+               
                 # validation and save models
                 if self.progress['num_updates'] % self.args.n_val_steps == 0:
                     
@@ -166,8 +166,7 @@ class Trainer:
                     
                     
                     recall_current = r10
-                    recall_delta = recall_current - recall_previous 
-
+                    recall_delta = recall_current - recall_previous  
                     if recall_delta <= - 0.025:
                         logger.info('.............. The condition for resume satisfied .............')
                         print('.................... current recall is  = ' + str(recall_current))
@@ -184,8 +183,8 @@ class Trainer:
                 
                 # khazar: I added below lines (for automated resuming)
                 if flag_resume:
-                    torch.cuda.empty_cache()
-                    print ('..................... torch memory before resume ......................... ')
+                    torch.cuda.empty_cache()#this does not change memory allocation here
+                    print ('..................... torch memory before resume and after empty cache ......................... ')
                     print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
                     self.dual_encoder, self.cross_encoder, self.trainables, self.indices, self.libri_indices, self.optim_states = self._setup_models_at_resume()
                     if torch.cuda.device_count() > 1:
@@ -193,12 +192,10 @@ class Trainer:
                         self.cross_encoder = nn.DataParallel(self.cross_encoder)
                     flag_resume = False
                     logger.info('#################### one resume happened ###############')
-                    print ('..................... torch memory after resume ......................... ')
-                    print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-                
-                #print ('khazar: printing end of one step')
+                    # khazar: here torch memory allocation increase (e.g., from 2.2 to 3)
+                    # It produces CUDA memory error at the next forward pass 
      
-        # khazar: I added below method (for automated resuming) 
+    # khazar: I added below method (for automated resuming) 
     def _setup_models_at_resume(self):
         dual_encoder = fast_vgs.DualEncoder(self.args)
         cross_encoder = fast_vgs.CrossEncoder(self.args)
