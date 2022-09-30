@@ -27,9 +27,9 @@ python \
 --xtrm_layers 1 \
 --trm_layers 6 \
 --fine_matching_weight 0.0 \
---coarse_matching_weight 0.001 \
+--coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
---caption_w2v2_weight 1.0 \
+--caption_w2v2_weight 0.001 \
 --coarse_to_fine_retrieve \
 --feature_grad_mult 0. \
 --layer_use 7
