@@ -19,17 +19,17 @@ python \
 --val_batch_size 32 \
 --val_cross_batch_size 8 \
 --n_epochs 50 \
---n_print_steps 100 \
---n_val_steps 100 \
+--n_print_steps 1000 \
+--n_val_steps 18505 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --normalize \
 --xtrm_layers 1 \
 --trm_layers 6 \
 --fine_matching_weight 0.0 \
---coarse_matching_weight 1.0 \
+--coarse_matching_weight 0.0 \
 --libri_w2v2_weight 0.0 \
---caption_w2v2_weight 3.0 \
+--caption_w2v2_weight 1.0 \
 --coarse_to_fine_retrieve \
 --feature_grad_mult 0. \
 --layer_use 7
