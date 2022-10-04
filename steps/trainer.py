@@ -771,11 +771,14 @@ class Trainer:
         # if n == 200000:
         #     self.args.coarse_matching_weight = 1
         #     self.args.caption_w2v2_weigh = 0.001
-
-        # model 11
-        if n == 200000:
+        # model 10
+        if n == 400000:
             self.args.coarse_matching_weight = 1
             self.args.caption_w2v2_weigh = 0.001
+        # model 11
+        # if n == 200000:
+        #     self.args.coarse_matching_weight = 1
+        #     self.args.caption_w2v2_weigh = 0.001
             
         # model 10
         # if n== 200000:

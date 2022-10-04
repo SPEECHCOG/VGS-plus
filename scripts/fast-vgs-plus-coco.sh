@@ -15,6 +15,7 @@ python \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
 --libri_fn_root ${libri_fn_root} \
+--resume \
 --batch_size 32 \
 --val_batch_size 32 \
 --val_cross_batch_size 8 \
@@ -27,7 +28,7 @@ python \
 --xtrm_layers 1 \
 --trm_layers 6 \
 --fine_matching_weight 0.0 \
---coarse_matching_weight 0.0 \
+--coarse_matching_weight 0.001 \
 --libri_w2v2_weight 0.0 \
 --caption_w2v2_weight 1.0 \
 --coarse_to_fine_retrieve \
