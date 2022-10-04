@@ -236,10 +236,10 @@ class DualEncoder(nn.Module):
         cls_token_coarse = self.visual_cls_token_proj_coarse(visual_feats[:,0])
         return visual_feats, cls_token_coarse
     
-    def forward_test(self, audio_feats, audio_attention_mask):
-        self.conv1_trm1_trm3.eval()
-        trm13_out = self.conv1_trm1_trm3(audio_feats, padding_mask=audio_attention_mask, mask=False, features_only=True, tgt_layer=self.args.layer_use)
-        return trm13_out['layer_feats']
+    # def forward_test(self, audio_feats, audio_attention_mask):
+    #     self.conv1_trm1_trm3.eval()
+    #     trm13_out = self.conv1_trm1_trm3(audio_feats, padding_mask=audio_attention_mask, mask=False, features_only=True, tgt_layer=self.args.layer_use)
+    #     return trm13_out['layer_feats']
     
     def forward_audio(self, audio_feats, audio_attention_mask, test=False):
         if test:
