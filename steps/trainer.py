@@ -47,8 +47,10 @@ class Trainer:
         self.meters = self._setup_meters()
         self.progress, self.total_progress = setup_progress(self)
         self.dual_encoder, self.cross_encoder, self.trainables, self.indices, self.libri_indices, self.optim_states = self._setup_models()
+        self.dual_encoder_test = _setup_models_for_test(self)
         self.use_libri_loss = self.args.libri_w2v2_weight != 0
         self.train_loader, self.valid_loader, self.valid_loader2, self.train_sampler, self.libri_train_loader, self.libri_valid_loader, self.libri_train_sampler, self.train_data_length = self._setup_dataloader()
+        self.test_loader, self.test_data_length = self._setup_testdataloader(arg.bundle_name)
         self.total_num_updates = int(math.floor(self.train_data_length / self.args.batch_size))*self.args.n_epochs
         self.optimizer = self._setup_optimizer()
         if torch.cuda.device_count() > 1:
@@ -166,17 +168,16 @@ class Trainer:
                     
                     # khazar: I added below lines (for automated resuming)
                     
-                    
-                    recall_current = r10
-                    recall_delta = recall_current - recall_previous  
-                    if recall_delta <= - 0.025:
-                        logger.info('.............. The condition for resume satisfied .............')
-                        print('.................... current recall is  = ' + str(recall_current))
-                        print('.................... previous recall is  = ' + str(recall_previous))
-                        print('.................... delta recall  = ' + str(recall_delta))
+                    # recall_current = r10
+                    # recall_delta = recall_current - recall_previous  
+                    # if recall_delta <= - 0.025:
+                    #     logger.info('.............. The condition for resume satisfied .............')
+                    #     print('.................... current recall is  = ' + str(recall_current))
+                    #     print('.................... previous recall is  = ' + str(recall_previous))
+                    #     print('.................... delta recall  = ' + str(recall_delta))
                         
-                        flag_resume = True
-                    recall_previous = recall_current
+                    #     flag_resume = True
+                    # recall_previous = recall_current
                     
                     
                 self.progress['num_updates'] += 1
@@ -184,16 +185,16 @@ class Trainer:
                 data_start_time = time.time()
                 
                 # khazar: I added below lines (for automated resuming)
-                if flag_resume:
-                    torch.cuda.empty_cache()#this does not change memory allocation here
-                    print ('..................... torch memory before resume and after empty cache ......................... ')
-                    print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-                    self.dual_encoder, self.cross_encoder, self.trainables, self.indices, self.libri_indices, self.optim_states = self._setup_models_at_resume()
-                    if torch.cuda.device_count() > 1:
-                        self.dual_encoder = nn.DataParallel(self.dual_encoder)
-                        self.cross_encoder = nn.DataParallel(self.cross_encoder)
-                    flag_resume = False
-                    logger.info('#################### one resume happened ###############')
+                # if flag_resume:
+                #     torch.cuda.empty_cache()#this does not change memory allocation here
+                #     print ('..................... torch memory before resume and after empty cache ......................... ')
+                #     print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
+                #     self.dual_encoder, self.cross_encoder, self.trainables, self.indices, self.libri_indices, self.optim_states = self._setup_models_at_resume()
+                #     if torch.cuda.device_count() > 1:
+                #         self.dual_encoder = nn.DataParallel(self.dual_encoder)
+                #         self.cross_encoder = nn.DataParallel(self.cross_encoder)
+                #     flag_resume = False
+                #     logger.info('#################### one resume happened ###############')
                     # khazar: here torch memory allocation increase (e.g., from 2.2 to 3)
                     # It produces CUDA memory error at the next forward pass 
      
@@ -243,6 +244,21 @@ class Trainer:
 
         return dual_encoder, cross_encoder, trainables, indices, libri_indices, optim_states
 
+    def test_and_save (self):
+        # khazar: I added "n_save_ind" argument to save intermediate models 
+        self.dual_encoder_test.eval()
+        ###############################################
+        start_val_time = time.time()
+        N_examples = self.valid_loader.dataset.__len__()
+        print(' here is the size of the test data .............................')
+        print(N_examples)
+        with torch.no_grad():
+            # get single modal representations
+            audio_feats_total = [] 
+            for i, batch in enumerate(self.test_loader):         
+                audio_feats = self.dual_encoder_test.forward_test (audio_feats = batch['audio'].to(self.device) , attention_mask = batch['audio_attention_mask'].to(self.device))
+                audio_feats_total.append(audio_feats.detach()) # still on cude after .detach(), just removed from graph, so no gradient
+        return audio_feats_total
         
     def validate_and_save(self, libri=False, places=False , n_save_ind = 0):
         # khazar: I added "n_save_ind" argument to save intermediate models 
@@ -570,11 +586,18 @@ class Trainer:
         for name in meter_names:
             meters[name] = AverageMeter()
         return meters
-    
+
+    def _setup_models_for_test(self):
+        dual_encoder_test = fast_vgs.DualEncoder(self.args)      
+        print_model_info(dual_encoder_test , print_model = True)
+        bundle = torch.load(os.path.join(self.args.exp_dir, "best_bundle.pth"))
+        dual_encoder_test.carefully_load_state_dict(bundle['dual_encoder'])
+        dual_encoder.to(self.device)
+        return dual_encoder_test
+   
     def _setup_models(self):
         dual_encoder = fast_vgs.DualEncoder(self.args)
-        cross_encoder = fast_vgs.CrossEncoder(self.args)
-        
+        cross_encoder = fast_vgs.CrossEncoder(self.args)     
         # Khazar: change print_model = True if you want to print the whole model and not only the model parameters
         print_model_info(dual_encoder , print_model = False)
         print_model_info(cross_encoder, print_model = False)
@@ -636,7 +659,13 @@ class Trainer:
         cross_encoder.to(self.device)
 
         return dual_encoder, cross_encoder, trainables, indices, libri_indices, optim_states
-
+    
+    def _setup_testdataloader(self):    
+        test_dataset = libri_dataset.LibriDataset(self.args, split="train")
+        test_bs = 64                 
+        test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=test_bs, shuffle=False, num_workers=self.args.num_workers, pin_memory=True, collate_fn = test_dataset.collate, drop_last=False)            
+        return test_loader, len(test_dataset)
+        
     def _setup_dataloader(self):
         if self.args.places:
             # raise NotImplementedError
@@ -743,7 +772,7 @@ class Trainer:
         #     self.args.coarse_matching_weight = 1
         #     self.args.caption_w2v2_weigh = 0.001
 
-        # model 10
+        # model 11
         if n == 200000:
             self.args.coarse_matching_weight = 1
             self.args.caption_w2v2_weigh = 0.001
