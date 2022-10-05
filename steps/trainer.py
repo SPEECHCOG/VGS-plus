@@ -796,9 +796,9 @@ class Trainer:
         #     self.args.caption_w2v2_weigh = 0.001
             
         # model 12a
-        if n == 400000:
-            self.args.coarse_matching_weight = 0.9
-            self.args.caption_w2v2_weigh = 0.1
+        # if n == 400000:
+        #     self.args.coarse_matching_weight = 0.9
+        #     self.args.caption_w2v2_weigh = 0.1
             
             
         #khazar: I removed 'fine_matching_loss' below line
