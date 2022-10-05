@@ -29,8 +29,13 @@ event6_4 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model6/ex
 event6_b = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model6b/events.out.tfevents.1664639635.r15g02.bullx.29406.0')
 event7 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model7/events.out.tfevents.1664570487.r13g07.bullx.19210.0')
 event8 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model8/events.out.tfevents.1664571213.r15g02.bullx.80668.0')
-event9 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model9/events.out.tfevents.1664696961.nag12.tcsc-local.46607.0')
+event9 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model9/') # add this later based on new narvi event
 event10 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model10/events.out.tfevents.1664742364.nag12.tcsc-local.167690.0') 
+#event10a = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model10a/events.out.tfevents.1664911572.nag12.tcsc-local.9983.0') 
+event10a = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model10a/events.out.tfevents.1664912566.nag12.tcsc-local.13095.0') 
+event11 = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model11/events.out.tfevents.1664832094.nag02.tcsc-local.6126.0') 
+event12a = EventAccumulator('/worktmp2/hxkhkh/current/FaST/experiments/model12a/events.out.tfevents.1664916858.nag02.tcsc-local.5330.0') 
+
 
 spath = '/worktmp2/hxkhkh/current/FaST/experiments/plots/'
 n_32 = 18505
@@ -272,6 +277,29 @@ y_caploss_6_4 = caploss_6_4['value'][::100]
 # caploss_6_4 = pd.DataFrame(event6_4.Scalars('caption_w2v2_loss'))
 # y_caploss_6_4 = caploss_6_4['value'][::100]
 
+x_recall_6 = np.concatenate([x_recall_6_0,x_recall_6_1,x_recall_6_2,x_recall_6_3,x_recall_6_4], axis=0)
+y_recall_6 = pd.concat([y_recall_6_0,y_recall_6_1,y_recall_6_2, y_recall_6_3, y_recall_6_4], axis=0)
+
+x_vgsloss_6 = np.concatenate([x_vgsloss_6_0,x_vgsloss_6_1,x_vgsloss_6_2,x_vgsloss_6_3,x_vgsloss_6_4], axis=0)
+y_vgsloss_6 = pd.concat([y_vgsloss_6_0,y_vgsloss_6_1,y_vgsloss_6_2, y_vgsloss_6_3, y_vgsloss_6_4], axis=0)
+
+x_caploss_6 = np.concatenate([x_caploss_6_0,x_caploss_6_1,x_caploss_6_2,x_caploss_6_3,x_caploss_6_4], axis=0)
+y_caploss_6 = pd.concat([y_caploss_6_0,y_caploss_6_1,y_caploss_6_2, y_caploss_6_3, y_caploss_6_4], axis=0)
+
+fig = plt.figure()
+fig.suptitle(' model 6-messy, VGS+ with random weights, batch size = 32')
+plt.subplot(1,2,1)
+plt.plot(x_recall_6,y_recall_6, label = 'recall@10')
+plt.grid()
+plt.legend()
+plt.subplot(1,2,2)
+plt.plot(x_vgsloss_6, y_vgsloss_6, label = 'loss vgs')
+plt.plot(x_caploss_6, y_caploss_6, label = 'loss caption')
+plt.grid()
+plt.legend()
+
+plt.savefig(spath + 'model6-messy.png', format = 'png')
+
 # polishing for recall
 
 x_recall_6_0_polished = x_recall_6_0 [0:20]
@@ -324,11 +352,13 @@ fig = plt.figure()
 fig.suptitle(' model 6-a, VGS+ with random weights, batch size = 32')
 plt.subplot(1,2,1)
 plt.plot(x_recall_6,y_recall_6, label = 'recall@10')
+plt.xlabel('epoch')
 plt.grid()
 plt.legend()
 plt.subplot(1,2,2)
-plt.plot(x_vgsloss_6_4, y_vgsloss_6_4, label = 'loss vgs')
-plt.plot(x_caploss_6_4, y_caploss_6_4, label = 'loss caption')
+plt.plot(x_vgsloss_6, y_vgsloss_6, label = 'loss vgs')
+plt.plot(x_caploss_6, y_caploss_6, label = 'loss caption')
+plt.xlabel('epoch')
 plt.grid()
 plt.legend()
 
@@ -356,11 +386,13 @@ fig = plt.figure()
 fig.suptitle(' model 6-b, VGS+ with random weights, batch size = 64')
 plt.subplot(1,2,1)
 plt.plot(x_recall_6_b,y_recall_6_b, label = 'recall@10')
+plt.xlabel('epoch')
 plt.grid()
 plt.legend()
 plt.subplot(1,2,2)
 plt.plot(x_vgsloss_6_b ,y_vgsloss_6_b, label = 'loss vgs')
 plt.plot(x_caploss_6_b, y_caploss_6_b, label = 'loss caption')
+plt.xlabel('epoch')
 plt.grid()
 plt.legend()
 
@@ -469,17 +501,78 @@ plt.savefig(spath + 'model9.png', format = 'png')
 
 event10.Reload()
 
-recall_10 = pd.DataFrame(event10.Scalars('acc_r10'))
-x_recall_10 = [ i/n_32 for i in  recall_10['step'] ]
-y_recall_10 = recall_10['value']
+recall_10_0 = pd.DataFrame(event10.Scalars('acc_r10'))
+x_recall_10_0 = [ i/n_32 for i in  recall_10_0['step'] ]
+y_recall_10_0 = recall_10_0['value']
 
-vgsloss_10 = pd.DataFrame(event10.Scalars('coarse_matching_loss'))
-x_vgsloss_10 = [ i/n_32 for i in vgsloss_10['step'][::100]]
-y_vgsloss_10 = vgsloss_10['value'][::100]
+vgsloss_10_0 = pd.DataFrame(event10.Scalars('coarse_matching_loss'))
+x_vgsloss_10_0 = [ i/n_32 for i in vgsloss_10_0['step'][::100]]
+y_vgsloss_10_0 = vgsloss_10_0['value'][::100]
 
-caploss_10 = pd.DataFrame(event10.Scalars('caption_w2v2_loss'))
-x_caploss_10 = [ i/n_32 for i in caploss_10['step'][::100]]
-y_caploss_10 = caploss_10['value'][::100]
+caploss_10_0 = pd.DataFrame(event10.Scalars('caption_w2v2_loss'))
+x_caploss_10_0 = [ i/n_32 for i in caploss_10_0['step'][::100]]
+y_caploss_10_0 = caploss_10_0['value'][::100]
+
+fig = plt.figure()
+fig.suptitle(' model 10_0')
+plt.subplot(1,2,1)
+plt.plot(x_recall_10_0,y_recall_10_0, label = 'recall@10')
+plt.xlabel('epoch')
+plt.grid()
+plt.legend()
+plt.subplot(1,2,2)
+plt.plot(x_vgsloss_10_0 ,y_vgsloss_10_0, label = 'loss vgs')
+plt.plot(x_caploss_10_0, y_caploss_10_0, label = 'loss caption')
+plt.xlabel('epoch')
+plt.grid()
+plt.legend()
+
+plt.savefig(spath + 'model10_0.png', format = 'png')
+
+
+################################################################ Model 10 a
+event10a.Reload()
+
+recall_10a = pd.DataFrame(event10a.Scalars('acc_r10'))
+x_recall_10a = [ i/n_32 for i in  recall_10a['step'] ]
+y_recall_10a = recall_10a['value']
+
+vgsloss_10a = pd.DataFrame(event10a.Scalars('coarse_matching_loss'))
+x_vgsloss_10a = [ i/n_32 for i in vgsloss_10a['step'][::100]]
+y_vgsloss_10a = vgsloss_10a['value'][::100]
+
+caploss_10a = pd.DataFrame(event10a.Scalars('caption_w2v2_loss'))
+x_caploss_10a = [ i/n_32 for i in caploss_10a['step'][::100]]
+y_caploss_10a = caploss_10a['value'][::100]
+
+
+fig = plt.figure()
+fig.suptitle(' model 10a')
+plt.subplot(1,2,1)
+plt.plot(x_recall_10a,y_recall_10a, label = 'recall@10')
+plt.xlabel('epoch')
+plt.grid()
+plt.legend()
+plt.subplot(1,2,2)
+plt.plot(x_vgsloss_10a ,y_vgsloss_10a, label = 'loss vgs')
+plt.plot(x_caploss_10a, y_caploss_10a, label = 'loss caption')
+plt.xlabel('epoch')
+plt.grid()
+plt.legend()
+
+plt.savefig(spath + 'model10a.png', format = 'png')
+
+##################################################################### Model 10
+
+x_recall_10 = np.concatenate([x_recall_10_0,x_recall_10a], axis=0)
+y_recall_10 = pd.concat([y_recall_10_0,y_recall_10a], axis=0)
+
+x_vgsloss_10 = np.concatenate([x_vgsloss_10_0,x_vgsloss_10a], axis=0)
+y_vgsloss_10 = pd.concat([y_vgsloss_10_0,y_vgsloss_10a], axis=0)
+
+x_caploss_10 = np.concatenate([x_caploss_10_0,x_caploss_10a], axis=0)
+y_caploss_10 = pd.concat([y_caploss_10_0,y_caploss_10a], axis=0)
+
 
 fig = plt.figure()
 fig.suptitle(' model 10')
@@ -494,6 +587,80 @@ plt.grid()
 plt.legend()
 
 plt.savefig(spath + 'model10.png', format = 'png')
+
+
+###############################################################################
+                            #    Model 11   #
+###############################################################################
+
+event11.Reload()
+
+recall_11 = pd.DataFrame(event11.Scalars('acc_r10'))
+x_recall_11 = [ i/n_32 for i in  recall_11['step'] ]
+y_recall_11 = recall_11['value']
+
+vgsloss_11 = pd.DataFrame(event11.Scalars('coarse_matching_loss'))
+x_vgsloss_11 = [ i/n_32 for i in vgsloss_11['step'][::100]]
+y_vgsloss_11 = vgsloss_11['value'][::100]
+
+caploss_11 = pd.DataFrame(event11.Scalars('caption_w2v2_loss'))
+x_caploss_11 = [ i/n_32 for i in caploss_11['step'][::100]]
+y_caploss_11= caploss_11['value'][::100]
+
+fig = plt.figure()
+fig.suptitle(' model 11')
+plt.subplot(1,2,1)
+plt.plot(x_recall_11,y_recall_11, label = 'recall@10')
+plt.xlabel('epoch')
+plt.xlabel('epoch')
+plt.grid()
+plt.legend()
+plt.subplot(1,2,2)
+plt.plot(x_vgsloss_11 ,y_vgsloss_11, label = 'loss vgs')
+plt.plot(x_caploss_11, y_caploss_11, label = 'loss caption')
+plt.xlabel('epoch')
+plt.xlabel('epoch')
+plt.grid()
+plt.legend()
+
+plt.savefig(spath + 'model11.png', format = 'png')
+
+
+###############################################################################
+                            #    Model 12a   #
+###############################################################################
+
+event12a.Reload()
+
+recall_12a = pd.DataFrame(event12a.Scalars('acc_r10'))
+x_recall_12a = [ i/n_32 for i in  recall_12a['step'] ]
+y_recall_12a = recall_12a['value']
+
+vgsloss_12a = pd.DataFrame(event12a.Scalars('coarse_matching_loss'))
+x_vgsloss_12a = [ i/n_32 for i in vgsloss_12a['step'][::100]]
+y_vgsloss_12a = vgsloss_12a['value'][::100]
+
+caploss_12a = pd.DataFrame(event12a.Scalars('caption_w2v2_loss'))
+x_caploss_12a = [ i/n_32 for i in caploss_12a['step'][::100]]
+y_caploss_12a= caploss_12a['value'][::100]
+
+fig = plt.figure()
+fig.suptitle(' model 12a')
+plt.subplot(1,2,1)
+plt.plot(x_recall_12a,y_recall_12a, label = 'recall@10')
+plt.xlabel('epoch')
+plt.xlabel('epoch')
+plt.grid()
+plt.legend()
+plt.subplot(1,2,2)
+plt.plot(x_vgsloss_12a ,y_vgsloss_12a, label = 'loss vgs')
+plt.plot(x_caploss_12a, y_caploss_12a, label = 'loss caption')
+plt.xlabel('epoch')
+plt.xlabel('epoch')
+plt.grid()
+plt.legend()
+
+plt.savefig(spath + 'model12a.png', format = 'png')
 ###############################################################################
                             #    plotting   #
 ###############################################################################
@@ -501,16 +668,18 @@ plt.savefig(spath + 'model10.png', format = 'png')
 # Recall@10 for all models 
 
 plt.figure()
-plt.plot(x_recall_3,y_recall_3, label = 'model3, VGS-pretrained')
-plt.plot(x_recall_4,y_recall_4, label = 'model4, VGS+-pretrained')
-plt.plot(x_recall_5,y_recall_5, label = 'model5, VGS-random')
-plt.plot(x_recall_6,y_recall_6, label = 'model6 (bs = 32), VGS+-random')
-plt.plot(x_recall_6_b,y_recall_6_b, label = 'model6 (bs = 64), VGS+-random')
+plt.plot(x_recall_3,y_recall_3, label = 'model3')
+plt.plot(x_recall_4,y_recall_4, label = 'model4')
+plt.plot(x_recall_5,y_recall_5, label = 'model5')
+plt.plot(x_recall_6,y_recall_6, label = 'model6a')
+plt.plot(x_recall_6_b,y_recall_6_b, label = 'model6b')
 plt.plot(x_recall_7,y_recall_7, label = 'model7 ')
 plt.plot(x_recall_8,y_recall_8, label = 'model8 ')
 plt.plot(x_recall_9,y_recall_9, label = 'model9 ')
 plt.plot(x_recall_9,y_recall_9, label = 'model9 ')
 plt.plot(x_recall_10,y_recall_10, label = 'model10 ')
+plt.plot(x_recall_11,y_recall_11, label = 'model11 ')
+plt.plot(x_recall_12a,y_recall_12a, label = 'model12a ')
 plt.grid()
 plt.legend()
 plt.ylabel("recall@10")
@@ -530,6 +699,8 @@ plt.plot(x_vgsloss_7, y_vgsloss_7, label = 'model7 ')
 plt.plot(x_vgsloss_8, y_vgsloss_8, label = 'model8 ')
 plt.plot(x_vgsloss_9, y_vgsloss_9, label = 'model9 ')
 plt.plot(x_vgsloss_10, y_vgsloss_10, label = 'model10 ')
+plt.plot(x_vgsloss_11, y_vgsloss_11, label = 'model11 ')
+plt.plot(x_vgsloss_12a, y_vgsloss_12a, label = 'model12a ')
 plt.grid()
 plt.legend()
 plt.ylabel("vgs loss")
@@ -546,6 +717,8 @@ plt.plot(x_caploss_7, y_caploss_7, label = 'model7 ')
 plt.plot(x_caploss_8, y_caploss_8, label = 'model8 ')
 plt.plot(x_caploss_9, y_caploss_9, label = 'model9 ')
 plt.plot(x_caploss_10, y_caploss_10, label = 'model10 ')
+plt.plot(x_caploss_11, y_caploss_11, label = 'model11 ')
+plt.plot(x_caploss_12a, y_caploss_12a, label = 'model12a ')
 plt.grid()
 plt.legend()
 plt.ylabel("caption loss")
