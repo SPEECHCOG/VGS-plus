@@ -45,42 +45,53 @@ for wav_file in wav_files_json:
     
     signal_peng,_ =  LoadAudio(wav_path + wav_file) 
     signals_peng.append(signal_peng)
-    
+
+
+
+audio_feats = torch.tensor(signals_peng[0:10])
+
+############################################################################## 
+                                # Model #
+##############################################################################    
 
 
 from models.w2v2_model import  Wav2Vec2Model_cls 
 import argparse
 
 from steps import trainer
+from steps.utils import *
+from steps.trainer_utils import *
 from models import fast_vgs, w2v2_model
 from datasets import spokencoco_dataset, libri_dataset
 
+# ............................adding all args
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--resume", action="store_true", dest="resume", help="load from exp_dir if True")
 parser.add_argument("--validate", action="store_true", default=False, help="temp, if call trainer_variants rather than trainer")
 parser.add_argument("--test", action="store_true", default=False, help="test the model on test set")
-
 trainer.Trainer.add_args(parser)
-
 w2v2_model.Wav2Vec2Model_cls.add_args(parser)
-
 fast_vgs.DualEncoder.add_args(parser)
-
 spokencoco_dataset.ImageCaptionDataset.add_args(parser)
-
 libri_dataset.LibriDataset.add_args(parser)
-
 args = parser.parse_args()
 
+args.layer_use = 4
+#..............................
+
+# defining the model
 conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
 conv1_trm1_trm3.eval()
-
-args.layer_use = 7
-#padding_mask=audio_attention_mask
-audio_feats = torch.tensor(signals_peng[0:10])
-trm13_out = conv1_trm1_trm3(audio_feats,  mask=False, features_only=True, tgt_layer=args.layer_use)
-
+print_model_info(conv1_trm1_trm3 , print_model = True)
+# loading pre-trained weight
 
 args.fb_w2v2_weights_fn = '/worktmp2/hxkhkh/current/FaST/model/wav2vec_small.pt'
-b = torch.load(args.fb_w2v2_weights_fn)['model']
-conv1_trm1_trm3.carefully_load_state_dict(b)
+bundle = torch.load(args.fb_w2v2_weights_fn)['model']
+conv1_trm1_trm3.carefully_load_state_dict(bundle)
+
+#....................................
+
+
+trm13_out = conv1_trm1_trm3(audio_feats,  mask=False, features_only=True, tgt_layer=args.layer_use)
+
+output = trm13_out['layer_feats']
