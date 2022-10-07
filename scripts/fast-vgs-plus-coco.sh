@@ -1,5 +1,5 @@
 #!/bin/sh
-source activate /scratch/project_2001315/khazar_envs/myenvs/fastvgs
+source activate fastvgs
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 data_root=$1
@@ -25,7 +25,7 @@ python \
 --warmup_fraction 0.1 \
 --normalize \
 --xtrm_layers 1 \
---trm_layers 6 \
+--trm_layers 3 \
 --fine_matching_weight 0.0 \
 --coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
