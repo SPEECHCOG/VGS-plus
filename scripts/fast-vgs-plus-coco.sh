@@ -15,17 +15,17 @@ python \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
 --libri_fn_root ${libri_fn_root} \
---batch_size 32 \
---val_batch_size 32 \
+--batch_size 64 \
+--val_batch_size 64 \
 --val_cross_batch_size 8 \
 --n_epochs 20 \
---n_print_steps 1000 \
---n_val_steps 18505 \
+--n_print_steps 500 \
+--n_val_steps 9252 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --normalize \
 --xtrm_layers 1 \
---trm_layers 2 \
+--trm_layers 6 \
 --fine_matching_weight 0.0 \
 --coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
