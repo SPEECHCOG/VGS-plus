@@ -1063,8 +1063,7 @@ class TransformerSentenceEncoderLayer(nn.Module):
         self,
         embedding_dim: float = 768,
         ffn_embedding_dim: float = 3072,
-        #khazar I changed 8 to 4 (originally 8)
-        num_attention_heads: float = 6,
+        num_attention_heads: float = 8,
         dropout: float = 0.1,
         attention_dropout: float = 0.1,
         activation_dropout: float = 0.1,
