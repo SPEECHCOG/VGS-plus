@@ -942,6 +942,8 @@ class ConvFeatureExtractionModel(nn.Module):
 
         for conv in self.conv_layers:
             x = conv(x)
+            # khazar: I added this line to print 
+            print(x.size())
 
         return x
 
@@ -1061,7 +1063,8 @@ class TransformerSentenceEncoderLayer(nn.Module):
         self,
         embedding_dim: float = 768,
         ffn_embedding_dim: float = 3072,
-        num_attention_heads: float = 8,
+        #khazar I changed 8 to 4 (originally 8)
+        num_attention_heads: float = 6,
         dropout: float = 0.1,
         attention_dropout: float = 0.1,
         activation_dropout: float = 0.1,
