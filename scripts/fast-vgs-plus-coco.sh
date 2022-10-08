@@ -33,6 +33,7 @@ python \
 --coarse_to_fine_retrieve \
 --trim_mask \
 --encoder_layers 6 \
+--encoder_attention_heads 8 \
 --feature_grad_mult 0.1 \
---layer_use 4
+--layer_use 5
 
