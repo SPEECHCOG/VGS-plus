@@ -121,6 +121,7 @@ args.feature_grad_mult = 0.1
 args.conv_feature_layers = '[(512, 10, 5)] + [(512, 3, 4)] * 4 + [(512,2,2)] + [(512,2,2)]'
 args.layer_use = 4
 args.encoder_layers = 6
+args.trim_mask = True
 conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
    
 model =  conv1_trm1_trm3

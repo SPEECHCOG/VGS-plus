@@ -31,7 +31,7 @@ python \
 --libri_w2v2_weight 0.0 \
 --caption_w2v2_weight 1.0 \
 --coarse_to_fine_retrieve \
---trim_mask True\
+--trim_mask \
 --encoder_layers 6 \
 --feature_grad_mult 0.1 \
 --layer_use 4
