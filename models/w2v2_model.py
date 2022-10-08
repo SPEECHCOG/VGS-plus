@@ -943,7 +943,7 @@ class ConvFeatureExtractionModel(nn.Module):
         for conv in self.conv_layers:
             x = conv(x)
             # khazar: I added this line to print 
-            print(x.size())
+            # print(x.size())
 
         return x
 
