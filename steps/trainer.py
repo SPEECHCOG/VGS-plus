@@ -758,9 +758,9 @@ class Trainer:
         # beta = (slope_beta * (n**2) ) + 1.0
         
         # model 10b
-        if n == 95000:
-            self.args.coarse_matching_weight = 1
-            self.args.caption_w2v2_weigh = 1
+        # if n == 95000:
+        #     self.args.coarse_matching_weight = 1
+        #     self.args.caption_w2v2_weigh = 1
             
             
         #khazar: I removed 'fine_matching_loss' below line
