@@ -757,53 +757,10 @@ class Trainer:
         # alpha = (slope_alpha * (n**2) ) + 0.0
         # beta = (slope_beta * (n**2) ) + 1.0
         
-        # model 7
-        # if n == 400000:
-        #     self.args.coarse_matching_weight = 1
-        #     self.args.caption_w2v2_weigh = 0.001
-        
-        # model 8
-        # if n == 400000:
-        #     self.args.coarse_matching_weight = 0.001
-        #     self.args.caption_w2v2_weigh = 1
-        
-        # model 9
-        # if n == 200000:
-        #     self.args.coarse_matching_weight = 1
-        #     self.args.caption_w2v2_weigh = 0.001
-        
-        # model 10
-        # if n== 200000:
-        #     self.args.coarse_matching_weight = 1
-        #     self.args.caption_w2v2_weigh = 0.001
-        # if n == 400000:
-        #     self.args.coarse_matching_weight = 0.001
-        #     self.args.caption_w2v2_weigh = 1
-            
-        # model 10a
-        # if n == 400000:
-        #     self.args.coarse_matching_weight = 1
-        #     self.args.caption_w2v2_weigh = 1
-        
-        # model 10aa
-        # if n == 400000:
-        #     self.args.coarse_matching_weight = 0.001
-        #     self.args.caption_w2v2_weigh = 1
-        
-        # model 10b (bs=64)
-        # if n == 200000:
-        #     self.args.coarse_matching_weight = 0.1
-        #     self.args.caption_w2v2_weigh = 0.9
-            
-        # model 11
-        # if n == 200000:
-        #     self.args.coarse_matching_weight = 1
-        #     self.args.caption_w2v2_weigh = 0.001
-            
-        # model 12a
-        # if n == 400000:
-        #     self.args.coarse_matching_weight = 0.9
-        #     self.args.caption_w2v2_weigh = 0.1
+        # model 10b
+        if n == 95000:
+            self.args.coarse_matching_weight = 1
+            self.args.caption_w2v2_weigh = 1
             
             
         #khazar: I removed 'fine_matching_loss' below line
