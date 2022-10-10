@@ -7,7 +7,7 @@ import json
 
 
 def LoadAudio( path):
-    audio_feat_len = 10.
+    audio_feat_len = 8
     x, sr = sf.read(path, dtype = 'float32')
     assert sr == 16000
     length_orig = len(x)
@@ -27,6 +27,24 @@ def LoadAudio( path):
     return x, audio_length
 
 
+#############################################################################
+#test_sc
+data_root = '/worktmp2/hxkhkh/current/FaST/data/coco_pyp/'
+audio_dataset_json_file = os.path.join(data_root, "SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
+audio_base_path = '/worktmp2/hxkhkh/current/FaST/data/coco_pyp/SpokenCOCO/wavs/'
+with open(audio_dataset_json_file, 'r') as fp:
+    data_json = json.load(fp)
+data = data_json['data']
+
+all_lengths = []
+for index in range(len(data)):
+    datum = data[index]
+    wavpath = os.path.join(audio_base_path, datum['caption']['wav']) 
+    signal_peng,l =  LoadAudio(wavpath)
+    all_lengths.append(l)
+    
+#############################################################################
+kh
 audio_dataset_json_file = '/worktmp2/hxkhkh/current/ZeroSpeech/data/abxLS/index.json'
 with open(audio_dataset_json_file, 'r') as fp:
     data_json = json.load(fp)
@@ -85,50 +103,48 @@ conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
 
 ###############################################
 # to see layers within the model
-conv_feature_extractor = conv1_trm1_trm3.feature_extractor
-model = conv1_trm1_trm3.feature_extractor.conv_layers[0]
-layer0 = getattr(model,'0')
-model = conv1_trm1_trm3.feature_extractor
-args.conv_feature_layers
+# conv_feature_extractor = conv1_trm1_trm3.feature_extractor
+# model = conv1_trm1_trm3.feature_extractor.conv_layers[0]
+# layer0 = getattr(model,'0')
+# model = conv1_trm1_trm3.feature_extractor
+# args.conv_feature_layers
 
-feature_enc_layers = eval(args.conv_feature_layers)
+# feature_enc_layers = eval(args.conv_feature_layers)
 ##############################################
-convfe  =  ConvFeatureExtractionModel (feature_enc_layers,dropout=0.0, mode=args.extractor_mode, conv_bias=args.conv_bias,)
-model = convfe
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu") # PyTorch v0.4.0
-model = model().to(device)
+# convfe  =  ConvFeatureExtractionModel (feature_enc_layers,dropout=0.0, mode=args.extractor_mode, conv_bias=args.conv_bias,)
+# model = convfe
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu") # PyTorch v0.4.0
+# model = model().to(device)
 
-from torchsummary import summary
-summary(model(), input_size=(1,1, 512))
+# from torchsummary import summary
+# summary(model(), input_size=(1,1, 512))
 ##############################################
 
 
 conv1_trm1_trm3.eval()
 print_model_info(conv1_trm1_trm3 , print_model = True)
 
-from torchvision import models
-from torchsummary import summary
-
 # loading pre-trained weight
 
 args.fb_w2v2_weights_fn = '/worktmp2/hxkhkh/current/FaST/model/wav2vec_small.pt'
 bundle = torch.load(args.fb_w2v2_weights_fn)['model']
 conv1_trm1_trm3.carefully_load_state_dict(bundle)
-
+kh
 #....................................
 #--conv_feature_layers , default = "[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]"
 args.feature_grad_mult = 0.1
 args.conv_feature_layers = '[(512, 10, 5)] + [(512, 3, 4)] * 4 + [(512,2,2)] + [(512,2,2)]'
 args.layer_use = 4
 args.encoder_layers = 6
-args.trim_mask = True
+args.trim_mask = False
 conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
-   
-model =  conv1_trm1_trm3
-model_trainable_parameters = filter(lambda p: p.requires_grad, model.parameters())
-params = sum([np.prod(p.size()) for p in model_trainable_parameters]) #93472512 ,95045376, 4m params
-for p in model.parameters(): 
-    print(p.requires_grad)
+
+model = conv1_trm1_trm3.feature_extractor.conv_layers[0]   
+# model =  conv1_trm1_trm3
+# model_trainable_parameters = filter(lambda p: p.requires_grad, model.parameters())
+# params = sum([np.prod(p.size()) for p in model_trainable_parameters]) #93472512 ,95045376, 4m params
+# for p in model.parameters(): 
+#     print(p.requires_grad)
     
 # params of conv layer ~ 4 m
 # params with 6 conv layers
