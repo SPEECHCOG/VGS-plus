@@ -81,8 +81,3 @@ else:
     my_trainer.train()
 
 
-
-# khazar :     
-import pickle
-with open('/worktmp/khorrami/current/FaST/exp/args.pkl', 'rb') as file:
-    pfile= pickle.load(file)

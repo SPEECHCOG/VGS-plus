@@ -106,7 +106,9 @@ class Trainer:
                     self.writer.close()
                     break
                 
-                cur_lr = np.mean(self.optimizer.get_lr())
+                #cur_lr = np.mean(self.optimizer.get_lr())
+                # khazar : I removed mean from here:
+                cur_lr = self.optimizer.get_lr()
 
                 self.writer.add_scalar("lr", cur_lr, self.progress['num_updates'])
                 cur_step = self.progress['num_updates'] % step_per_epoch
@@ -740,11 +742,10 @@ class Trainer:
         pass
 
     def weight_loss(self, losses):
-        # Khazar :  I defined alpha and beta based on n_updates
-        # print (' kh.............. here it is printing n_updates .............')
-        # print(self.progress['num_updates'])
+        
         n = self.progress['num_updates']
         
+
         # linear change
         # slope_alpha = (2*10**-6)
         # slope_beta = -1 * slope_alpha
@@ -761,14 +762,27 @@ class Trainer:
         # if n == 95000:
         #     self.args.coarse_matching_weight = 1
         #     self.args.caption_w2v2_weigh = 1
-            
+        
+        # model 19T3
+        N = self.total_num_updates
+        a = (2*numpy.pi) / (2 * N)
+        alpha = 0.1 + (0.4) * ((numpy.sin(a*n))**2)
+        
+        # model 19T4
+        # if self.progress['epoch'] <=8 or self.progress['epoch'] >16:
+        #     alpha = 0.1
+        # else:
+        #     alpha = 0.5
+        
             
         #khazar: I removed 'fine_matching_loss' below line
-        weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
+        weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight * alpha #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
+        
         # print (' kh.............. here it is printing losses, coarse.............')
         # print(weighted_loss)
         if 'caption_w2v2_loss' in losses:
-            weighted_loss += losses['caption_w2v2_loss'].mean() * self.args.caption_w2v2_weight
+            weighted_loss += losses['caption_w2v2_loss'].mean() * self.args.caption_w2v2_weight * (1-alpha)
+            
             # print (' kh.............. here it is printing losses, w2v2.............')
             # print(losses['caption_w2v2_loss'])
             # print(losses['caption_w2v2_loss'].mean())
@@ -792,11 +806,5 @@ class Trainer:
     def save_intermediate_scores(self, recall):
         pass
         
-# test = [['COCO_val2014_000000333745'], ['COCO_val2014_000000333746'], ['COCO_val2014_000000333747']]
-# for i, value_i in enumerate(test):
-#     print(i)
-#     print(value_i)
-#     for i, value_j in enumerate(value_i):
-#         print(i)
-#         print(value_j)
+
 
