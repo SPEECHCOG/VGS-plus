@@ -764,15 +764,15 @@ class Trainer:
         #     self.args.caption_w2v2_weigh = 1
         
         # model 19T3
-        # N = self.total_num_updates
-        # a = (2*numpy.pi) / (2 * N)
-        # alpha = 0.1 + (0.4) * ((numpy.sin(a*n))**2)
+        N = self.total_num_updates
+        a = (2*numpy.pi) / (2 * N)
+        alpha = 0.1 + (0.4) * ((numpy.sin(a*n))**2)
         
         # model 19T4
-        if self.progress['epoch'] <=8 or self.progress['epoch'] >16:
-            alpha = 0.1
-        else:
-            alpha = 0.5
+        # if self.progress['epoch'] <=8 or self.progress['epoch'] >16:
+        #     alpha = 0.1
+        # else:
+        #     alpha = 0.5
         
             
         #khazar: I removed 'fine_matching_loss' below line
