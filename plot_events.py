@@ -36,11 +36,21 @@ c_12 = 'tan'
 n_32 = 18505
 n_64 = 9252
 
+def find_average_train_load_timec(event):
+    train_time = pd.DataFrame(event.Scalars('train_time'))['value']
+    data_time = pd.DataFrame(event.Scalars('data_time'))['value']
+    return train_time.mean , data_time.mean
 def find_single_recall (event, n):
     recall = pd.DataFrame(event.Scalars('acc_r10'))
     x_recall = [ i/n for i in recall['step']]
     y_recall = recall['value']
     return x_recall, y_recall
+
+def find_single_lr (event, n):
+    lr = pd.DataFrame(event.Scalars('lr'))
+    x_lr = [ i/n for i in lr['step'][::100] ]
+    y_lr = lr['value'][::100]
+    return x_lr, y_lr
 
 def find_single_vgsloss (event, n):
     vgsloss = pd.DataFrame(event.Scalars('coarse_matching_loss'))
@@ -57,12 +67,14 @@ def find_single_caploss (event, n):
 def plot_single_event(event,n , name , title):
 
     x_recall, y_recall = find_single_recall (event, n)
+    x_lr, y_lr = find_single_lr (event, n)
     x_vgsloss, y_vgsloss = find_single_vgsloss (event, n)
     x_caploss, y_caploss = find_single_caploss (event, n)
     fig = plt.figure()
     fig.suptitle(title)
     plt.subplot(1,2,1)
     plt.plot(x_recall,y_recall, label = 'recall@10')
+    #plt.plot(x_lr,y_lr, label = 'lr')
     plt.xlabel('epoch')
     plt.grid()
     plt.legend()
@@ -114,3 +126,5 @@ plot_single_event(event_18bTrim , n_64 , 'model18bTrim' , 'VGS+lightlight(Trim-m
 event_19bTrim =  EventAccumulator(os.path.join(path_source, path_event_19bTrim))
 event_19bTrim.Reload()
 plot_single_event(event_19bTrim , n_64 , 'model19bTrim' , 'VGS+light (Trim-mask), model 19b' ) 
+
+###########################
