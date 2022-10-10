@@ -29,19 +29,22 @@ def LoadAudio( path):
 
 #############################################################################
 #test_sc
-data_root = '/worktmp2/hxkhkh/current/FaST/data/coco_pyp/'
+data_root = '../data/coco_pyp/'
 audio_dataset_json_file = os.path.join(data_root, "SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
-audio_base_path = '/worktmp2/hxkhkh/current/FaST/data/coco_pyp/SpokenCOCO/wavs/'
+audio_base_path = '../data/audio_SC/'
 with open(audio_dataset_json_file, 'r') as fp:
     data_json = json.load(fp)
 data = data_json['data']
 
 all_lengths = []
+all_files = []
 for index in range(len(data)):
     datum = data[index]
     wavpath = os.path.join(audio_base_path, datum['caption']['wav']) 
     signal_peng,l =  LoadAudio(wavpath)
-    all_lengths.append(l)
+    if l <= 21000:
+        all_lengths.append(l)
+        all_files.append(wavpath)
     
 #############################################################################
 kh
