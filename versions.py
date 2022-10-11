@@ -4,9 +4,9 @@ import os
 from matplotlib import pyplot as plt
 
 path_save = '/worktmp2/hxkhkh/current/FaST/experiments/versions/'
-N = 9252*24
+N = 24
 
-
+kh
 
 # model 19T1
 T = 2 * N
@@ -54,3 +54,4 @@ plt.ylabel('alpha  \n')
 plt.ylim(0,1)
 plt.savefig(os.path.join(path_save, name + '.png'), format='png')
 
+# model 19T4
