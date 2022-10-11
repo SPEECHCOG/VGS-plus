@@ -80,7 +80,7 @@ def plot_single_event(event,n , name , title):
     plt.legend()
     plt.subplot(1,2,2)
     plt.plot(x_vgsloss  , y_vgsloss, label = 'loss vgs')
-    plt.plot(x_caploss  , y_caploss, 'olivedrab' ,label = 'loss caption')
+    plt.plot(x_caploss  , y_caploss, label = 'loss caption')
     plt.xlabel('epoch')
     plt.grid()
     plt.legend()
@@ -89,7 +89,7 @@ def plot_single_event(event,n , name , title):
 
 
 ###############################################################################
-
+kh
 # event 6a
 event_6a =  EventAccumulator(os.path.join(path_source, path_event_6a))
 event_6a.Reload()
