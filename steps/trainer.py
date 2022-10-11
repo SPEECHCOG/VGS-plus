@@ -766,10 +766,10 @@ class Trainer:
         #     alpha = 0.5
         ############
         # model 19T5
-        alpha = 0.1 + (0.8/N) * n
+        # alpha = 0.1 + (0.8/N) * n
         ############        
         # model 19T6
-        # alpha = 0.9 - (0.8/N) * n
+        alpha = 0.9 - (0.8/N) * n
         ############    
         #khazar: I removed 'fine_matching_loss' below line
         weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight * alpha #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
