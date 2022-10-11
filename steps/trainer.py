@@ -752,12 +752,12 @@ class Trainer:
         # alpha = 0.1 + (0.8) * ((numpy.sin(a*n))**2)
         ############
         # model 19T2
-        # a = (2*numpy.pi) / N
-        # alpha = 0.1 + 0.8 * ((numpy.sin(a*n))**2)
+        a = (2*numpy.pi) / N
+        alpha = 0.1 + 0.8 * ((numpy.sin(a*n))**2)
         ############
         # model 19T3       
-        a = (2*numpy.pi) / (2 * N)
-        alpha = 0.1 + (0.4) * ((numpy.sin(a*n))**2)
+        # a = (2*numpy.pi) / (2 * N)
+        # alpha = 0.1 + (0.4) * ((numpy.sin(a*n))**2)
         ############
         # model 19T4
         # if self.progress['epoch'] <=8 or self.progress['epoch'] >16:
