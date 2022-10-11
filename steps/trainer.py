@@ -743,39 +743,34 @@ class Trainer:
 
     def weight_loss(self, losses):
         
-        #n = self.progress['num_updates']
-        
-        n= self.progress['epoch']
-
-        # linear change
-        # slope_alpha = (2*10**-6)
-        # slope_beta = -1 * slope_alpha
-        # alpha = (slope_alpha * n) + 0.0
-        # beta = (slope_beta * n) + 1.0
-        
-        # exponential change
-        # slope_alpha = 4*(10**-12)
-        # slope_beta = -1 * slope_alpha
-        # alpha = (slope_alpha * (n**2) ) + 0.0
-        # beta = (slope_beta * (n**2) ) + 1.0
-        
-        # model 10b
-        # if n == 95000:
-        #     self.args.coarse_matching_weight = 1
-        #     self.args.caption_w2v2_weigh = 1
-        
-        # model 19T3
+        #n = self.progress['num_updates']    
+        n = self.progress['epoch']
         N = self.args.n_epochs
-        a = (2*numpy.pi) / (2 * N)
-        alpha = 0.1 + (0.4) * ((numpy.sin(a*n))**2)
-        
+        ############
+        # model 19T1       
+        a = (numpy.pi) / (N)
+        alpha = 0.1 + (0.8) * ((numpy.sin(a*n))**2)
+        ############
+        # model 19T2
+        # a = (2*numpy.pi) / N
+        # alpha = 0.1 + 0.8 * ((numpy.sin(a*n))**2)
+        ############
+        # model 19T3       
+        # a = (2*numpy.pi) / (2 * N)
+        # alpha = 0.1 + (0.4) * ((numpy.sin(a*n))**2)
+        ############
         # model 19T4
         # if self.progress['epoch'] <=8 or self.progress['epoch'] >16:
         #     alpha = 0.1
         # else:
         #     alpha = 0.5
-        
-            
+        ############
+        # model 19T5
+        # alpha = 0.1 + (0.8/24) * n
+        ############        
+        # model 19T6
+        # alpha = 0.9 - (0.8/24) * n
+        ############    
         #khazar: I removed 'fine_matching_loss' below line
         weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight * alpha #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
         
