@@ -743,8 +743,9 @@ class Trainer:
 
     def weight_loss(self, losses):
         
-        n = self.progress['num_updates']
+        #n = self.progress['num_updates']
         
+        n= self.progress['epoch']
 
         # linear change
         # slope_alpha = (2*10**-6)
@@ -764,7 +765,7 @@ class Trainer:
         #     self.args.caption_w2v2_weigh = 1
         
         # model 19T3
-        N = self.total_num_updates
+        N = self.args.n_epochs
         a = (2*numpy.pi) / (2 * N)
         alpha = 0.1 + (0.4) * ((numpy.sin(a*n))**2)
         
