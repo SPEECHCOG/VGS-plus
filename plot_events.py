@@ -17,6 +17,7 @@ path_event_6bTrim = 'model6bTrim/events.out.tfevents.1665332229.r13g02.bullx.114
 path_event_10bTrim = 'model10bTrim/events.out.tfevents.1665346196.r03g01.bullx.1369259.0'
 path_event_18b = 'model18b/events.out.tfevents.1665249277.r03g02.bullx.465911.0'
 
+path_event_19bT4 = 'model19bT4/events.out.tfevents.1665440508.r14g01.bullx.2583427.0'
 # narvi
 
 path_event_18bTrim = 'model18bTrim/events.out.tfevents.1665232396.nag14.tcsc-local.10609.0'
