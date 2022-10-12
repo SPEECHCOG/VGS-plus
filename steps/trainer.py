@@ -748,8 +748,8 @@ class Trainer:
         N = self.args.n_epochs
         ############
         # model 19T1       
-        a = (numpy.pi) / (N)
-        alpha = 0.1 + (0.8) * ((numpy.sin(a*n))**2)
+        # a = (numpy.pi) / (N)
+        # alpha = 0.1 + (0.8) * ((numpy.sin(a*n))**2)
         ############
         # model 19T2
         # a = (2*numpy.pi) / N
@@ -764,6 +764,9 @@ class Trainer:
         #     alpha = 0.1
         # else:
         #     alpha = 0.5
+        ############
+        # model 19T4-narvi
+        alpha = 0.1
         ############
         # model 19T5
         # alpha = 0.1 + (0.8/N) * n
