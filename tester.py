@@ -29,25 +29,25 @@ def LoadAudio( path):
 
 #############################################################################
 #test_sc
-data_root = '../data/coco_pyp/'
-audio_dataset_json_file = os.path.join(data_root, "SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
-audio_base_path = '../data/audio_SC/'
-with open(audio_dataset_json_file, 'r') as fp:
-    data_json = json.load(fp)
-data = data_json['data']
+# data_root = '../data/coco_pyp/'
+# audio_dataset_json_file = os.path.join(data_root, "SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
+# audio_base_path = '../data/audio_SC/'
+# with open(audio_dataset_json_file, 'r') as fp:
+#     data_json = json.load(fp)
+# data = data_json['data']
 
-all_lengths = []
-all_files = []
-for index in range(len(data)):
-    datum = data[index]
-    wavpath = os.path.join(audio_base_path, datum['caption']['wav']) 
-    signal_peng,l =  LoadAudio(wavpath)
-    if l <= 21000:
-        all_lengths.append(l)
-        all_files.append(wavpath)
+# all_lengths = []
+# all_files = []
+# for index in range(len(data)):
+#     datum = data[index]
+#     wavpath = os.path.join(audio_base_path, datum['caption']['wav']) 
+#     signal_peng,l =  LoadAudio(wavpath)
+#     if l <= 21000:
+#         all_lengths.append(l)
+#         all_files.append(wavpath)
     
 #############################################################################
-kh
+
 audio_dataset_json_file = '/worktmp2/hxkhkh/current/ZeroSpeech/data/abxLS/index.json'
 with open(audio_dataset_json_file, 'r') as fp:
     data_json = json.load(fp)
@@ -139,7 +139,7 @@ args.feature_grad_mult = 0.1
 args.conv_feature_layers = '[(512, 10, 5)] + [(512, 3, 4)] * 4 + [(512,2,2)] + [(512,2,2)]'
 args.layer_use = 4
 args.encoder_layers = 6
-args.trim_mask = False
+args.trim_mask = True
 conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
 
 model = conv1_trm1_trm3.feature_extractor.conv_layers[0]   
