@@ -94,3 +94,43 @@ plt.xlabel('epochs')
 plt.ylabel('alpha  \n')
 plt.ylim(0,1)
 plt.savefig(os.path.join(path_save, name + '.png'), format='png')
+
+# model 19T7
+x = numpy.arange(0,N, 1)
+y = 0.1 * numpy.ones(24)
+plt.plot(x, y)
+plt.grid()
+name = 'model19T7'
+plt.title(name)
+plt.xlabel('epochs')
+plt.ylabel('alpha  \n')
+plt.ylim(0,1)
+plt.savefig(os.path.join(path_save, name + '.png'), format='png')
+
+
+# model 19T8
+x = numpy.arange(0,N, 1)
+y = 0.9 * numpy.ones(24)
+plt.plot(x, y)
+plt.grid()
+name = 'model19T8'
+plt.title(name)
+plt.xlabel('epochs')
+plt.ylabel('alpha  \n')
+plt.ylim(0,1)
+plt.savefig(os.path.join(path_save, name + '.png'), format='png')
+
+
+# model 19T9
+x = numpy.arange(0,N, 1)
+y = 0.9 * numpy.ones(24)
+y[::2]= 0.1
+plt.scatter(x, y)
+plt.plot(x,y, '--')
+plt.grid()
+name = 'model19T9'
+plt.title(name)
+plt.xlabel('epochs')
+plt.ylabel('alpha  \n')
+plt.ylim(0,1)
+plt.savefig(os.path.join(path_save, name + '.png'), format='png')
