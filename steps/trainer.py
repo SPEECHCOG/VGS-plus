@@ -765,15 +765,23 @@ class Trainer:
         # else:
         #     alpha = 0.5
         ############
-        # model 19T4-narvi
-        alpha = 0.1
-        ############
         # model 19T5
         # alpha = 0.1 + (0.8/N) * n
         ############        
         # model 19T6
-        # alpha = 0.9 - (0.8/N) * n
-        ############    
+        # alpha = 0.9 - (0.8/N) * n        
+        ############
+        # model 19T7 (19T4-narvi)
+        # alpha = 0.1
+        ############
+        # model 19T8 
+        alpha = 0.9
+        ############       
+        # model 19T9 
+        # y = 0.1 * numpy.ones(N)
+        # y[::2]= 0.9
+        # alpha = y [n]
+        ############         
         #khazar: I removed 'fine_matching_loss' below line
         weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight * alpha #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
         
