@@ -754,13 +754,13 @@ class Trainer:
         # alpha = 1
         ############
         # model 19base3
-        alpha = 0.5
+        # alpha = 0.5
         ############
         # model 19base4
-        # if self.progress['epoch'] <=12:
-        #     alpha = 0
-        # else:
-        #     alpha = 0.5
+        if self.progress['epoch'] <=12:
+            alpha = 0
+        else:
+            alpha = 0.5
         ############
         # model 19T1       
         # a = (numpy.pi) / (N)
