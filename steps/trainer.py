@@ -751,10 +751,10 @@ class Trainer:
         # alpha = 0
         ############
         # model 19base2
-        alpha = 1
+        # alpha = 1
         ############
         # model 19base3
-        #alpha = 0.5
+        alpha = 0.5
         ############
         # model 19base4
         # if self.progress['epoch'] <=12:
