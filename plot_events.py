@@ -14,14 +14,19 @@ path_save = '/worktmp2/hxkhkh/current/FaST/experiments/plots/'
 path_event_6a = 'model6a/events.out.tfevents.1665150679.r01g05.bullx.404982.0'
 path_event_6b = 'model6b/events.out.tfevents.1665144281.r13g01.bullx.830503.0'
 path_event_6bTrim = 'model6bTrim/events.out.tfevents.1665332229.r13g02.bullx.1144814.0'
+
 path_event_10bTrim = 'model10bTrim/events.out.tfevents.1665346196.r03g01.bullx.1369259.0'
 path_event_18b = 'model18b/events.out.tfevents.1665249277.r03g02.bullx.465911.0'
-
-path_event_19bT4 = 'model19bT4/events.out.tfevents.1665440508.r14g01.bullx.2583427.0'
-# narvi
-
 path_event_18bTrim = 'model18bTrim/events.out.tfevents.1665232396.nag14.tcsc-local.10609.0'
 path_event_19bTrim = 'model19bTrim/events.out.tfevents.1665252989.nag12.tcsc-local.154664.0'
+
+########################
+path_event_19bT3 = 'model19bT3/events.out.tfevents.1665591025.nag08.tcsc-local.25712.0'
+path_event_19bT4 = 'model19bT4/events.out.tfevents.1665440508.r14g01.bullx.2583427.0'
+path_event_19bT5 = 'model19bT5/events.out.tfevents.1665701070.r13g02.bullx.2734031.0'
+path_event_19bT6 = 'model19bT6/events.out.tfevents.1665693739.r18g04.bullx.2469046.0'
+path_event_19bT7 = 'model19bT7/events.out.tfevents.1665634174.nag14.tcsc-local.25605.0'
+path_event_19bT8 = 'model19bT8/events.out.tfevents.1665692696.nag12.tcsc-local.251956.0'
 
 
 c_3 = 'blue'
@@ -75,6 +80,8 @@ def plot_single_event(event,n , name , title):
     fig.suptitle(title)
     plt.subplot(1,2,1)
     plt.plot(x_recall,y_recall, label = 'recall@10')
+    y_baseline = 0.793 * np.ones(len(x_recall))
+    plt.plot(x_recall,y_baseline, 'gray',label = 'Peng & Harwath')
     #plt.plot(x_lr,y_lr, label = 'lr')
     plt.xlabel('epoch')
     plt.grid()
@@ -87,8 +94,87 @@ def plot_single_event(event,n , name , title):
     plt.legend()
 
     plt.savefig(os.path.join(path_save , name + '.png'), format = 'png')
+    return x_recall, y_recall
 
+def plot_double_events(event1,event2,label1,label2,c1,c2, n, pltname, title):
 
+    x1_recall, y1_recall = find_single_recall (event1, n)   
+    x1_vgsloss, y1_vgsloss = find_single_vgsloss (event1, n)
+    x1_caploss, y1_caploss = find_single_caploss (event1, n)
+    
+    x2_recall, y2_recall = find_single_recall (event2, n)   
+    x2_vgsloss, y2_vgsloss = find_single_vgsloss (event2, n)
+    x2_caploss, y2_caploss = find_single_caploss (event2, n)
+    
+    fig = plt.figure(figsize=(15,10))
+    fig.suptitle(title, fontsize=18)
+    plt.subplot(1,3,1)
+    plt.plot(x1_recall,y1_recall, c1, label = label1)
+    plt.plot(x2_recall,y2_recall, c2, label = label2)
+    #plt.plot(x_lr,y_lr, label = 'lr')
+    plt.xlabel('epoch',size=14)
+    plt.ylabel('recall@10',size=14)
+    plt.ylim(0,0.8)
+    plt.grid()
+    plt.legend(fontsize=14)
+    plt.subplot(1,3,2)
+    plt.plot(x1_vgsloss  , y1_vgsloss, c1, label = label1)
+    plt.plot(x2_vgsloss  , y2_vgsloss, c2, label = label2)
+    plt.xlabel('epoch',size=14)
+    plt.ylabel('loss-vgs',size=14)
+    plt.ylim(0,14)
+    plt.grid()
+    plt.legend(fontsize=14)
+    plt.subplot(1,3,3)
+    plt.plot(x1_caploss  , y1_caploss, c1, label = label1)
+    plt.plot(x2_caploss  , y2_caploss, c2, label = label2)
+    plt.xlabel('epoch',size=14)
+    plt.ylabel('loss-caption',size=14)
+    plt.ylim(0,14)
+    plt.grid()
+    plt.legend(fontsize=14)
+
+    plt.savefig(os.path.join(path_save , pltname + '.png'), format = 'png')
+    
+    def plot_several_events(event1,event2,event3,event4,levent5,event6,abel1,label2,label3,label4,label5,label6, n, pltname, title):
+
+        x1_recall, y1_recall = find_single_recall (event1, n)   
+        x1_vgsloss, y1_vgsloss = find_single_vgsloss (event1, n)
+        x1_caploss, y1_caploss = find_single_caploss (event1, n)
+        
+        x2_recall, y2_recall = find_single_recall (event2, n)   
+        x2_vgsloss, y2_vgsloss = find_single_vgsloss (event2, n)
+        x2_caploss, y2_caploss = find_single_caploss (event2, n)
+        
+        fig = plt.figure(figsize=(15,10))
+        fig.suptitle(title, fontsize=18)
+        plt.subplot(1,3,1)
+        plt.plot(x1_recall,y1_recall, c1, label = label1)
+        plt.plot(x2_recall,y2_recall, c2, label = label2)
+        #plt.plot(x_lr,y_lr, label = 'lr')
+        plt.xlabel('epoch',size=14)
+        plt.ylabel('recall@10',size=14)
+        plt.ylim(0,0.8)
+        plt.grid()
+        plt.legend(fontsize=14)
+        plt.subplot(1,3,2)
+        plt.plot(x1_vgsloss  , y1_vgsloss, c1, label = label1)
+        plt.plot(x2_vgsloss  , y2_vgsloss, c2, label = label2)
+        plt.xlabel('epoch',size=14)
+        plt.ylabel('loss-vgs',size=14)
+        plt.ylim(0,14)
+        plt.grid()
+        plt.legend(fontsize=14)
+        plt.subplot(1,3,3)
+        plt.plot(x1_caploss  , y1_caploss, c1, label = label1)
+        plt.plot(x2_caploss  , y2_caploss, c2, label = label2)
+        plt.xlabel('epoch',size=14)
+        plt.ylabel('loss-caption',size=14)
+        plt.ylim(0,14)
+        plt.grid()
+        plt.legend(fontsize=14)
+
+        plt.savefig(os.path.join(path_save , pltname + '.png'), format = 'png')
 ###############################################################################
 kh
 # event 6a
@@ -116,16 +202,69 @@ plot_single_event(event_10bTrim , n_64 , 'model10bTrim' , 'VGS+ (Trim-mask), mod
 # event 18b
 event_18b =  EventAccumulator(os.path.join(path_source, path_event_18b))
 event_18b.Reload()
-plot_single_event(event_18b , n_64 , 'model18b' , 'VGS+lightlight, model 18b' ) 
+plot_single_event(event_18b , n_64 , 'model18b' , 'VGS+light, model 18b' ) 
 
 # event 18bTrim
 event_18bTrim =  EventAccumulator(os.path.join(path_source, path_event_18bTrim))
 event_18bTrim.Reload()
-plot_single_event(event_18bTrim , n_64 , 'model18bTrim' , 'VGS+lightlight(Trim-mask), model 18b' ) 
+plot_single_event(event_18bTrim , n_64 , 'model18bTrim' , 'VGS+light(Trim-mask), model 18b' ) 
 
 # event 19bTrim
 event_19bTrim =  EventAccumulator(os.path.join(path_source, path_event_19bTrim))
 event_19bTrim.Reload()
-plot_single_event(event_19bTrim , n_64 , 'model19bTrim' , 'VGS+light (Trim-mask), model 19b' ) 
+x_recall, y_recall = plot_single_event(event_19bTrim , n_64 , 'model19bTrim' , 'VGS+light(Trim-mask), model 19b' ) 
 
 ###########################
+
+######### Model 3
+event_19bT3 =  EventAccumulator(os.path.join(path_source, path_event_19bT3))
+event_19bT3.Reload()
+x_recall, y_recall = plot_single_event(event_19bT3 , n_64 , 'm19bT3' , 'model 3, sinusoid function' ) 
+
+plot_double_events(event_19bTrim, event_19bT3,'baseline','3','gray','green', n_64, 'm19bT3_19','m193 versus baseline')
+
+######### Model 4
+event_19bT4 =  EventAccumulator(os.path.join(path_source, path_event_19bT4))
+event_19bT4.Reload()
+x_recall, y_recall = plot_single_event(event_19bT4 , n_64 , 'm19bT4' , 'model 4, step function' ) 
+
+plot_double_events(event_19bTrim, event_19bT4,'baseline','4','gray','green', n_64, 'm19bT4_19','m194 versus baseline')
+
+######### Model 5
+event_19bT5 =  EventAccumulator(os.path.join(path_source, path_event_19bT5))
+event_19bT5.Reload()
+x_recall, y_recall = plot_single_event(event_19bT5 , n_64 , 'm19bT5' , 'model 5, linear increasing' ) 
+
+plot_double_events(event_19bTrim, event_19bT5,'baseline','5','gray','green', n_64, 'm19bT5_19','m195 versus baseline')
+
+######### Model 6
+event_19bT6 =  EventAccumulator(os.path.join(path_source, path_event_19bT6))
+event_19bT6.Reload()
+x_recall, y_recall = plot_single_event(event_19bT6 , n_64 , 'm19bT6' , 'model 6, linear decreasing' ) 
+
+plot_double_events(event_19bTrim, event_19bT6,'baseline','6','gray','green', n_64, 'm19bT6_19','m196 versus baseline')
+
+######### Model 7
+event_19bT7 =  EventAccumulator(os.path.join(path_source, path_event_19bT7))
+event_19bT7.Reload()
+x_recall, y_recall = plot_single_event(event_19bT7 , n_64 , 'm19bT7' , 'model 7, alpha = 0.1' ) 
+
+plot_double_events(event_19bTrim, event_19bT7,'baseline','7','gray','green', n_64, 'm19bT7_19','m197 versus baseline')
+
+######### Model 8
+
+event_19bT8 =  EventAccumulator(os.path.join(path_source, path_event_19bT8))
+event_19bT8.Reload()
+x_recall, y_recall = plot_single_event(event_19bT8 , n_64 , 'm19bT8' , 'model 8,  alpha = 0.9' ) 
+
+plot_double_events(event_19bTrim, event_19bT8,'baseline','8','gray','green', n_64, 'm19bT8_19','m198 versus baseline')
+
+
+
+
+
+
+
+
+
+
