@@ -118,7 +118,10 @@ class ImageCaptionDataset(Dataset):
         collated['audio_length'] = torch.LongTensor(vals[3])
         collated['img_id'] = np.array(vals[4])
         collated['fn'] = vals[5]
-        collated['audio_attention_mask'] = torch.arange(len(collated['audio'][0])).unsqueeze(0) >= collated['audio_length'].unsqueeze(1)
+        collated['audio_attention_mask'] = torch.arange(len(collated['audio'][0])).unsqueeze(0) >= collated['audio_length'].unsqueeze(1) 
+        # kh mask = torch.arange(8).unsqueeze(0) >= torch.LongTensor(5).unsqueeze(1) 
+        # print(mask) : above test creats a random boolean tensor 5*8 
+        # print this to undestand what is happening here
 
         return collated
 
