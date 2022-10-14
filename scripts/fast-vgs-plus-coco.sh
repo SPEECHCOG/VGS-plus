@@ -1,5 +1,5 @@
 #!/bin/sh
-source activate /scratch/project_2001315/khazar_envs/myenvs/fastvgs
+source activate fastvgs
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 data_root=$1
