@@ -747,6 +747,21 @@ class Trainer:
         n = self.progress['epoch']
         N = self.args.n_epochs
         ############
+        # model 19base1
+        alpha = 0
+        ############
+        # model 19base2
+        #alpha = 1
+        ############
+        # model 19base3
+        #alpha = 0.5
+        ############
+        # model 19base4
+        # if self.progress['epoch'] <=12:
+        #     alpha = 0
+        # else:
+        #     alpha = 0.5
+        ############
         # model 19T1       
         # a = (numpy.pi) / (N)
         # alpha = 0.1 + (0.8) * ((numpy.sin(a*n))**2)
@@ -778,9 +793,9 @@ class Trainer:
         # alpha = 0.9
         ############       
         # model 19T9 
-        y = 0.1 * numpy.ones(N)
-        y[::2]= 0.9
-        alpha = y [n]
+        # y = 0.1 * numpy.ones(N)
+        # y[::2]= 0.9
+        # alpha = y [n]
         ############         
         #khazar: I removed 'fine_matching_loss' below line
         weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight * alpha #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
