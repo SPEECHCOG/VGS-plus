@@ -754,7 +754,7 @@ class Trainer:
         # alpha = 1
         ############
         # model 19base3
-        # alpha = 0.5
+        alpha = 0.5
         ############
         # model 19base4 
         # if self.progress['epoch'] <=12:
@@ -762,7 +762,7 @@ class Trainer:
         # else:
         #     alpha = 0.5
         # (later changed to use pretrained path)
-        alpha = 0.5
+        # alpha = 0.5
         ############
         # model 19T0
         # alpha = 0.001
