@@ -1,5 +1,5 @@
 #!/bin/sh
-source activate fastvgs
+source activate /scratch/project_2001315/khazar_envs/myenvs/fastvgs
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 data_root=$1
@@ -7,6 +7,7 @@ raw_audio_base_path=$2
 fb_w2v2_weights_fn=$3
 exp_dir=$4
 libri_fn_root=$5
+twd=$6
 
 python \
 ../run_spokencoco.py \
@@ -15,6 +16,7 @@ python \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
 --libri_fn_root ${libri_fn_root} \
+--trained_weights_dir ${twd} \
 --batch_size 64 \
 --val_batch_size 64 \
 --val_cross_batch_size 8 \
@@ -27,9 +29,9 @@ python \
 --xtrm_layers 1 \
 --trm_layers 3 \
 --fine_matching_weight 0.0 \
---coarse_matching_weight 1.0 \
+--coarse_matching_weight 2.0 \
 --libri_w2v2_weight 0.0 \
---caption_w2v2_weight 1.0 \
+--caption_w2v2_weight 2.0 \
 --coarse_to_fine_retrieve \
 --trim_mask \
 --encoder_layers 6 \
