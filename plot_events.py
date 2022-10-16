@@ -29,7 +29,9 @@ path_event_19bT6 = 'model19bT6/events.out.tfevents.1665693739.r18g04.bullx.24690
 path_event_19bT7 = 'model19bT7/events.out.tfevents.1665634174.nag14.tcsc-local.25605.0'
 path_event_19bT8 = 'model19bT8/events.out.tfevents.1665692696.nag12.tcsc-local.251956.0'
 
-
+path_event_19base1 = 'model19base1/events.out.tfevents.1665774972.r02g07.bullx.1098917.0'
+path_event_19base2 = 'model19base2/events.out.tfevents.1665775653.r01g04.bullx.2394627.0'
+path_event_19base3 = 'model19base3/events.out.tfevents.1665775653.r03g01.bullx.1285560.0'
 c_3 = 'blue'
 c_4 = 'darkorange'
 c_5 = 'green'
@@ -95,7 +97,7 @@ def plot_single_event(event,n , name , title):
     plt.legend()
 
     plt.savefig(os.path.join(path_save , name + '.png'), format = 'png')
-    return x_recall, y_recall
+    return x_caploss, y_caploss
 
 def plot_double_events(event1,event2, label1 , label2, c1,c2, n, pltname, title):
 
@@ -219,6 +221,18 @@ event_19bTrim.Reload()
 x_recall, y_recall = plot_single_event(event_19bTrim , n_64 , 'model19bTrim' , 'VGS+light(Trim-mask), model 19b' ) 
 
 ###########################
+######### Base models
+event_19base1 =  EventAccumulator(os.path.join(path_source, path_event_19base1))
+event_19base1.Reload()
+x_recall, y_recall = plot_single_event(event_19base1 , n_64 , 'model19base1' , '19base1... w2v2' ) 
+
+event_19base2 =  EventAccumulator(os.path.join(path_source, path_event_19base2))
+event_19base2.Reload()
+x_recall, y_recall = plot_single_event(event_19base2 , n_64 , 'model19base2' , '19base2... VGS' ) 
+
+event_19base3 =  EventAccumulator(os.path.join(path_source, path_event_19base3))
+event_19base3.Reload()
+x_recall, y_recall = plot_single_event(event_19base3 , n_64 , 'model19base3' , '19base3... VGS+' ) 
 
 ######### Model 3
 event_19bT3 =  EventAccumulator(os.path.join(path_source, path_event_19bT3))
