@@ -22,6 +22,7 @@ path_event_18bTrim = 'model18bTrim/events.out.tfevents.1665232396.nag14.tcsc-loc
 path_event_19bTrim = 'model19bTrim/events.out.tfevents.1665252989.nag12.tcsc-local.154664.0'
 
 ########################
+path_event_19bT0 = 'model19bT0/events.out.tfevents.1665844641.nag19.tcsc-local.230832.0'
 path_event_19bT3 = 'model19bT3/events.out.tfevents.1665591025.nag08.tcsc-local.25712.0'
 path_event_19bT4 = 'model19bT4/events.out.tfevents.1665440508.r14g01.bullx.2583427.0'
 path_event_19bT5 = 'model19bT5/events.out.tfevents.1665701070.r13g02.bullx.2734031.0'
@@ -29,9 +30,11 @@ path_event_19bT6 = 'model19bT6/events.out.tfevents.1665693739.r18g04.bullx.24690
 path_event_19bT7 = 'model19bT7/events.out.tfevents.1665634174.nag14.tcsc-local.25605.0'
 path_event_19bT8 = 'model19bT8/events.out.tfevents.1665692696.nag12.tcsc-local.251956.0'
 
+path_event_19base1F = 'model19base1F/events.out.tfevents.1665913494.nag12.tcsc-local.6464.0'
 path_event_19base1 = 'model19base1/events.out.tfevents.1665774972.r02g07.bullx.1098917.0'
 path_event_19base2 = 'model19base2/events.out.tfevents.1665775653.r01g04.bullx.2394627.0'
 path_event_19base3 = 'model19base3/events.out.tfevents.1665775653.r03g01.bullx.1285560.0'
+path_event_19base4 = 'model19base4/events.out.tfevents.1666016478.r03g04.bullx.1774863.0'
 c_3 = 'blue'
 c_4 = 'darkorange'
 c_5 = 'green'
@@ -224,7 +227,7 @@ x_recall, y_recall = plot_single_event(event_19bTrim , n_64 , 'model19bTrim' , '
 ######### Base models
 event_19base1 =  EventAccumulator(os.path.join(path_source, path_event_19base1))
 event_19base1.Reload()
-x_recall, y_recall = plot_single_event(event_19base1 , n_64 , 'model19base1' , '19base1... w2v2' ) 
+x_recall, y_recall = plot_single_event(event_19base1 , n_64 , 'model19base1' , '19base1... w2v2 (min caption_loss: 1.041)' ) 
 
 event_19base2 =  EventAccumulator(os.path.join(path_source, path_event_19base2))
 event_19base2.Reload()
@@ -232,42 +235,66 @@ x_recall, y_recall = plot_single_event(event_19base2 , n_64 , 'model19base2' , '
 
 event_19base3 =  EventAccumulator(os.path.join(path_source, path_event_19base3))
 event_19base3.Reload()
-x_recall, y_recall = plot_single_event(event_19base3 , n_64 , 'model19base3' , '19base3... VGS+' ) 
+x_recall, y_recall = plot_single_event(event_19base3 , n_64 , 'model19base3' , '19base3... VGS+ (min caption_loss: 1.309)' ) 
+
+event_19base4 =  EventAccumulator(os.path.join(path_source, path_event_19base4))
+event_19base4.Reload()
+x_recall, y_recall = plot_single_event(event_19base4 , n_64 , 'model19base4' , '19base4... VGS+-pretrained ' ) 
+
+
+event_19base1F =  EventAccumulator(os.path.join(path_source, path_event_19base1F))
+event_19base1F.Reload()
+x_recall, y_recall = plot_single_event(event_19base1F , n_64 , 'model19base1F' , '19base1F... w2v2 (min caption_loss: 2.81)' ) 
+
+
+plot_double_events(event_19base1, event_19base3, 'w2v2 ','VGS+ ','blue','green', n_64, 'm19b1b3','baseline1 (w2v2) versus baseline3 (VGS+)')
+plot_double_events(event_19base2, event_19base3, 'VGS ','VGS+ ','blue','green', n_64, 'm19b2b3','baseline2 (VGS) versus baseline3 (VGS+)')
+
+plot_double_events(event_19base1, event_19base1F, 'w2v2 Trim ','w2v2 not Trim ','blue','green', n_64, 'm19b1Tb1F','baseline1T (w2v2) versus baseline1-not Trim (w2v2)')
+
+plot_double_events(event_19base4, event_19base3, 'VGS+ Pre ','VGS+ Sim ','blue','green', n_64, 'm19b3b4','Pretrained versus simultanous training')
+
+######### Model 0
+event_19bT0 =  EventAccumulator(os.path.join(path_source, path_event_19bT0))
+event_19bT0.Reload()
+x_recall, y_recall = plot_single_event(event_19bT0 , n_64 , 'm19bT3' , 'model 0, sinusoid function' ) 
+
+plot_double_events(event_19base3, event_19bT0, 'baseline ','19bT0 ','gray','green', n_64, 'm19bT0_19','19bT0 (alpha = 0.001) versus baseline')
 
 ######### Model 3
 event_19bT3 =  EventAccumulator(os.path.join(path_source, path_event_19bT3))
 event_19bT3.Reload()
 x_recall, y_recall = plot_single_event(event_19bT3 , n_64 , 'm19bT3' , 'model 3, sinusoid function' ) 
 
-plot_double_events(event_19bTrim, event_19bT3, 'baseline ','19bT3 ','gray','green', n_64, 'm19bT3_19','19bT3 versus baseline')
+plot_double_events(event_19base3, event_19bT3, 'baseline ','19bT3 ','gray','green', n_64, 'm19bT3_19','19bT3 versus baseline')
 
 ######### Model 4
 event_19bT4 =  EventAccumulator(os.path.join(path_source, path_event_19bT4))
 event_19bT4.Reload()
 x_recall, y_recall = plot_single_event(event_19bT4 , n_64 , 'm19bT4' , 'model 4, step function' ) 
 
-plot_double_events(event_19bTrim, event_19bT4,'baseline ','19bT4 ','gray','green', n_64, 'm19bT4_19','19bT4 versus baseline')
+plot_double_events(event_19base3, event_19bT4,'baseline ','19bT4 ','gray','green', n_64, 'm19bT4_19','19bT4 versus baseline')
 
 ######### Model 5
 event_19bT5 =  EventAccumulator(os.path.join(path_source, path_event_19bT5))
 event_19bT5.Reload()
 x_recall, y_recall = plot_single_event(event_19bT5 , n_64 , 'm19bT5' , 'model 5, linear increasing' ) 
 
-plot_double_events(event_19bTrim, event_19bT5,'baseline ','19bT5 ','gray','green', n_64, 'm19bT5_19','19bT5 versus baseline')
+plot_double_events(event_19base3, event_19bT5,'baseline ','19bT5 ','gray','green', n_64, 'm19bT5_19','19bT5 versus baseline')
 
 ######### Model 6
 event_19bT6 =  EventAccumulator(os.path.join(path_source, path_event_19bT6))
 event_19bT6.Reload()
 x_recall, y_recall = plot_single_event(event_19bT6 , n_64 , 'm19bT6' , 'model 6, linear decreasing' ) 
 
-plot_double_events(event_19bTrim, event_19bT6,'baseline ','19bT6 ','gray','green', n_64, 'm19bT6_19','19bT6 versus baseline')
+plot_double_events(event_19base3, event_19bT6,'baseline ','19bT6 ','gray','green', n_64, 'm19bT6_19','19bT6 versus baseline')
 
 ######### Model 7
 event_19bT7 =  EventAccumulator(os.path.join(path_source, path_event_19bT7))
 event_19bT7.Reload()
 x_recall, y_recall = plot_single_event(event_19bT7 , n_64 , 'm19bT7' , 'model 7, alpha = 0.1' ) 
 
-plot_double_events(event_19bTrim, event_19bT7,'baseline ','19bT7 ','gray','green', n_64, 'm19bT7_19','19bT7 versus baseline')
+plot_double_events(event_19base3, event_19bT7,'baseline ','19bT7 ','gray','green', n_64, 'm19bT7_19','19bT7 versus baseline')
 
 ######### Model 8
 
@@ -275,7 +302,7 @@ event_19bT8 =  EventAccumulator(os.path.join(path_source, path_event_19bT8))
 event_19bT8.Reload()
 x_recall, y_recall = plot_single_event(event_19bT8 , n_64 , 'm19bT8' , 'model 8,  alpha = 0.9' ) 
 
-plot_double_events(event_19bTrim, event_19bT8,'baseline ','19bT8 ','gray','green', n_64, 'm19bT8_19','m198 versus baseline')
+plot_double_events(event_19base3, event_19bT8,'baseline ','19bT8 ','gray','green', n_64, 'm19bT8_19','m198 versus baseline')
 
 
 

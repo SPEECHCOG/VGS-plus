@@ -96,14 +96,16 @@ fast_vgs.DualEncoder.add_args(parser)
 spokencoco_dataset.ImageCaptionDataset.add_args(parser)
 libri_dataset.LibriDataset.add_args(parser)
 args = parser.parse_args()
-
-args.layer_use = 4
 #..............................
 
 # defining the model
+args.encoder_layers = 6
+args.layer_use = 5
+args.trim_mask = True
+
 conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
-
-
+conv1_trm1_trm3.eval()
+#dual_encoder = fast_vgs.DualEncoder(args)
 ###############################################
 # to see layers within the model
 # conv_feature_extractor = conv1_trm1_trm3.feature_extractor
@@ -123,26 +125,40 @@ conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
 # summary(model(), input_size=(1,1, 512))
 ##############################################
 
-
-conv1_trm1_trm3.eval()
-print_model_info(conv1_trm1_trm3 , print_model = True)
-
 # loading pre-trained weight
 
-args.fb_w2v2_weights_fn = '/worktmp2/hxkhkh/current/FaST/model/wav2vec_small.pt'
-bundle = torch.load(args.fb_w2v2_weights_fn)['model']
-conv1_trm1_trm3.carefully_load_state_dict(bundle)
+# conv1_trm1_trm3.eval()
+# print_model_info(conv1_trm1_trm3 , print_model = True)
+
+# args.fb_w2v2_weights_fn = '/worktmp2/hxkhkh/current/FaST/model/wav2vec_small.pt'
+# bundle = torch.load(args.fb_w2v2_weights_fn)['model']
+# conv1_trm1_trm3.carefully_load_state_dict(bundle)
+
+# test this for layer 5 of model base1 (T), model base1 (F), and model base3
+twd = '/worktmp2/hxkhkh/current/FaST/experiments/model19base3/best_bundle.pth'
+bundle = torch.load(twd)
+conv1_trm1_trm3.carefully_load_state_dict(bundle['dual_encoder'])
+
+# calling the w2v2 model on data
+trm13_out = conv1_trm1_trm3(audio_feats,  mask=False, features_only=True, tgt_layer=4)
+output_torch_tensor = trm13_out['layer_feats']
+np_arr = output_torch_tensor.cpu().detach().numpy()
 kh
+# for the output of conv feature extractor
+model = conv1_trm1_trm3.feature_extractor
+t = audio_feats.view(audio_feats.size(0),1, -1)
+model_out = model(t)
+
 #....................................
 #--conv_feature_layers , default = "[(512, 10, 5)] + [(512, 3, 2)] * 4 + [(512,2,2)] + [(512,2,2)]"
-args.feature_grad_mult = 0.1
-args.conv_feature_layers = '[(512, 10, 5)] + [(512, 3, 4)] * 4 + [(512,2,2)] + [(512,2,2)]'
-args.layer_use = 4
-args.encoder_layers = 6
-args.trim_mask = True
-conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
+# args.feature_grad_mult = 0.1
+# args.conv_feature_layers = '[(512, 10, 5)] + [(512, 3, 4)] * 4 + [(512,2,2)] + [(512,2,2)]'
+# args.layer_use = 4
+# args.encoder_layers = 6
+# args.trim_mask = True
+# conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
 
-model = conv1_trm1_trm3.feature_extractor.conv_layers[0]   
+# model = conv1_trm1_trm3.feature_extractor.conv_layers[0]   
 # model =  conv1_trm1_trm3
 # model_trainable_parameters = filter(lambda p: p.requires_grad, model.parameters())
 # params = sum([np.prod(p.size()) for p in model_trainable_parameters]) #93472512 ,95045376, 4m params
@@ -153,5 +169,3 @@ model = conv1_trm1_trm3.feature_extractor.conv_layers[0]
 # params with 6 conv layers
 # params with 4 conv layers
 
-trm13_out = conv1_trm1_trm3(audio_feats,  mask=False, features_only=True, tgt_layer=args.layer_use)
-output = trm13_out['layer_feats']
