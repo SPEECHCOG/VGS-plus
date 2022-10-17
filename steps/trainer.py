@@ -748,7 +748,7 @@ class Trainer:
         N = self.args.n_epochs
         ############
         # model 19base1
-        alpha = 0
+        # alpha = 0
         ############
         # model 19base2
         # alpha = 1
@@ -798,9 +798,9 @@ class Trainer:
         # alpha = 0.9
         ############       
         # model 19T9 
-        # y = 0.1 * numpy.ones(N)
-        # y[::2]= 0.9
-        # alpha = y [n]
+        y = 0.9 * numpy.ones(N)
+        y[::2]= 0.1
+        alpha = y [n-1] #because n starts from 1 not 0
         ############         
         #khazar: I removed 'fine_matching_loss' below line
         weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight * alpha #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
