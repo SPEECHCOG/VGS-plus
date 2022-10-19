@@ -143,6 +143,12 @@ conv1_trm1_trm3.carefully_load_state_dict(bundle['dual_encoder'])
 trm13_out = conv1_trm1_trm3(audio_feats,  mask=False, features_only=True, tgt_layer=4)
 output_torch_tensor = trm13_out['layer_feats']
 np_arr = output_torch_tensor.cpu().detach().numpy()
+save_folder = '/worktmp2/hxkhkh/current/ZeroSpeech/submission/testtemp/'
+fname = save_folder + 'testtemp.txt'
+npr = np_arr[0,:,:]
+# npr = numpy.array([[1,2,3],[4,5,6]]) # size(2,3) : 2 rows, 3 columns
+import numpy
+numpy.savetxt(fname, npr)
 kh
 # for the output of conv feature extractor
 model = conv1_trm1_trm3.feature_extractor
