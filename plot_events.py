@@ -58,24 +58,26 @@ def find_single_recall (event, n):
     y_recall = recall['value']
     return x_recall, y_recall
 
-def find_single_lr (event, n):
+def find_single_lr (event, n , interval):
     lr = pd.DataFrame(event.Scalars('lr'))
-    x_lr = [ i/n for i in lr['step'][::100] ]
-    y_lr = lr['value'][::100]
+    x_lr = [ i/n for i in lr['step'][::interval] ]
+    y_lr = lr['value'][::interval]
     return x_lr, y_lr
 
-def find_single_vgsloss (event, n):
+def find_single_vgsloss (event, n, interval):
     vgsloss = pd.DataFrame(event.Scalars('coarse_matching_loss'))
-    x_vgsloss = [ i/n for i in vgsloss['step'][::100] ]
-    y_vgsloss = vgsloss['value'][::100]
-    return x_vgsloss, y_vgsloss
+    x_vgsloss = [ i/n for i in vgsloss['step'][::interval] ]
+    y_vgsloss = vgsloss['value'][::interval]
+    y_vgsloss_list = y_vgsloss.to_list()
+    return x_vgsloss, y_vgsloss_list
  
-def find_single_caploss (event, n):
+def find_single_caploss (event, n , interval):
     caploss = pd.DataFrame(event.Scalars('caption_w2v2_loss'))
-    x_caploss = [ i/n for i in caploss['step'][::100] ]
-    y_caploss = caploss['value'][::100]
-    return x_caploss, y_caploss
-   
+    x_caploss = [ i/n for i in caploss['step'][::interval] ]
+    y_caploss = caploss['value'][::interval]
+    y_caploss_list = y_caploss.to_list()
+    return x_caploss, y_caploss_list
+
 def plot_single_event(event,n , name , title):
 
     x_recall, y_recall = find_single_recall (event, n)
@@ -105,12 +107,12 @@ def plot_single_event(event,n , name , title):
 def plot_double_events(event1,event2, label1 , label2, c1,c2, n, pltname, title):
 
     x1_recall, y1_recall = find_single_recall (event1, n)   
-    x1_vgsloss, y1_vgsloss = find_single_vgsloss (event1, n)
-    x1_caploss, y1_caploss = find_single_caploss (event1, n)
+    x1_vgsloss, y1_vgsloss = find_single_vgsloss (event1, n, 100)
+    x1_caploss, y1_caploss = find_single_caploss (event1, n, 100)
     
     x2_recall, y2_recall = find_single_recall (event2, n)   
-    x2_vgsloss, y2_vgsloss = find_single_vgsloss (event2, n)
-    x2_caploss, y2_caploss = find_single_caploss (event2, n)
+    x2_vgsloss, y2_vgsloss = find_single_vgsloss (event2, n, 100)
+    x2_caploss, y2_caploss = find_single_caploss (event2, n, 100)
     
     fig = plt.figure(figsize=(15,10))
     fig.suptitle(title, fontsize=22)
@@ -252,7 +254,7 @@ plot_double_events(event_19base2, event_19base3, 'VGS ','VGS+ ','blue','green', 
 
 plot_double_events(event_19base1, event_19base1F, 'w2v2 Trim ','w2v2 not Trim ','blue','green', n_64, 'm19b1Tb1F','baseline1T (w2v2) versus baseline1-not Trim (w2v2)')
 
-plot_double_events(event_19base4, event_19base3, 'VGS+ Pre ','VGS+ Sim ','blue','green', n_64, 'm19b3b4','Pretrained versus simultanous training')
+plot_double_events(event_19base4, event_19base3, 'VGS+ Pre ','VGS+ Sim ','blue','green', n_64, 'm19b3b4','Pretrained versus simultaneous training')
 
 ######### Model 0
 event_19bT0 =  EventAccumulator(os.path.join(path_source, path_event_19bT0))
@@ -305,10 +307,138 @@ x_recall, y_recall = plot_single_event(event_19bT8 , n_64 , 'm19bT8' , 'model 8,
 plot_double_events(event_19base3, event_19bT8,'baseline ','19bT8 ','gray','green', n_64, 'm19bT8_19','m198 versus baseline')
 
 
+#########
+#plotting deltas
+
+fig = plt.figure(figsize=(15,10))
+fig.suptitle("loss-deltas during training ", fontsize=22)
+
+interval = 5
+plt.subplot(2,3,1)
+x_caploss, y_caploss =  find_single_caploss (event_19base3, n_64 , interval)  
+x_vgsloss, y_vgsloss = find_single_vgsloss (event_19base3, n_64, interval )
+delta_y_caploss = ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
+delta_y_vgsloss = ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_vgsloss[:-1])
+plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
+plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
+plt.grid()
+plt.ylim(0,5)
+plt.title("alpha = 0.5")
+
+plt.subplot(2,3,2)
+x_caploss, y_caploss =  find_single_caploss (event_19bT3, n_64 , interval)  
+x_vgsloss, y_vgsloss = find_single_vgsloss (event_19bT3, n_64, interval )
+delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
+delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_caploss[:-1])
+plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
+plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
+plt.grid()
+plt.ylim(0,5)
+plt.title("alpha = sin")
+
+plt.subplot(2,3,3)
+x_caploss, y_caploss =  find_single_caploss (event_19bT5, n_64 , interval)  
+x_vgsloss, y_vgsloss = find_single_vgsloss (event_19bT5, n_64, interval )
+delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
+delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_caploss[:-1])
+plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
+plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
+plt.grid()
+plt.ylim(0,5)
+plt.title("alpha = increasing")
+
+plt.subplot(2,3,4)
+x_caploss, y_caploss =  find_single_caploss (event_19bT6, n_64 , interval)  
+x_vgsloss, y_vgsloss = find_single_vgsloss (event_19bT6, n_64, interval )
+delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
+delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_caploss[:-1])
+plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
+plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
+plt.grid()
+plt.ylim(0,5)
+plt.title("alpha = decreasing")
+
+plt.subplot(2,3,5)
+x_caploss, y_caploss =  find_single_caploss (event_19bT7, n_64 , interval)  
+x_vgsloss, y_vgsloss = find_single_vgsloss (event_19bT7, n_64, interval )
+delta_y_caploss = ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
+delta_y_vgsloss = ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_vgsloss[:-1])
+plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
+plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
+plt.grid()
+plt.ylim(0,5)
+plt.title("alpha = 0.1 ")
+
+plt.subplot(2,3,6)
+x_caploss, y_caploss =  find_single_caploss (event_19bT8, n_64 , interval)  
+x_vgsloss, y_vgsloss = find_single_vgsloss (event_19bT8, n_64, interval )
+delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
+delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_caploss[:-1])
+plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
+plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
+plt.grid()
+plt.ylim(0,5)
+plt.title("alpha = 0.9 ")
+
+plt.savefig(os.path.join(path_save , 'deltas-vgsloss' + '.png'), format = 'png')
+
+#######################################
+def smooth(data):
+    kernel_size = 10
+    kernel = np.ones(kernel_size) / kernel_size
+    data_convolved = np.convolve(data, kernel, mode='same')
+    return data_convolved
 
 
+interval = 100
+fig = plt.figure(figsize=(10,10))
+fig.suptitle("loss-deltas during training ", fontsize=22)
 
+plt.subplot(2,2,1)
+x_caploss, y_caploss =  find_single_caploss (event_19base3, n_64 , interval)  
+x_vgsloss, y_vgsloss = find_single_vgsloss (event_19base3, n_64, interval )
+delta_y_caploss = ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) #/ np.array(y_caploss[:-1])
+delta_y_vgsloss = ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) #/ np.array(y_vgsloss[:-1])
+plt.plot(x_caploss[1:], smooth (np.abs(delta_y_caploss)))
+#plt.plot(x_vgsloss[1:], smooth (np.abs(delta_y_vgsloss)))
+plt.grid()
+plt.ylim(0,1)
+plt.title("cap-loss simultaneous ")
 
+plt.subplot(2,2,2)
+x_caploss, y_caploss =  find_single_caploss (event_19base4, n_64 , interval)  
+x_vgsloss, y_vgsloss = find_single_vgsloss (event_19base4, n_64, interval )
+delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) #/ np.array(y_caploss[:-1])
+delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) #/ np.array(y_caploss[:-1])
+plt.plot(x_caploss[1:], smooth (np.abs(delta_y_caploss)))
+#plt.plot(x_vgsloss[1:], smooth (np.abs(delta_y_vgsloss)))
+plt.grid()
+plt.ylim(0,1)
+plt.title("cap-loss pretraining ")
+
+plt.subplot(2,2,3)
+x_caploss, y_caploss =  find_single_caploss (event_19base3, n_64 , interval)  
+x_vgsloss, y_vgsloss = find_single_vgsloss (event_19base3, n_64, interval )
+delta_y_caploss = ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) #/ np.array(y_caploss[:-1])
+delta_y_vgsloss = ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) #/ np.array(y_vgsloss[:-1])
+plt.plot(x_caploss[1:], smooth (np.abs(delta_y_caploss)))
+plt.plot(x_vgsloss[1:], smooth (np.abs(delta_y_vgsloss)))
+plt.grid()
+plt.ylim(0,5)
+plt.title("vgs-loss simultaneous ")
+
+plt.subplot(2,2,4)
+x_caploss, y_caploss =  find_single_caploss (event_19base4, n_64 , interval)  
+x_vgsloss, y_vgsloss = find_single_vgsloss (event_19base4, n_64, interval )
+delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) #/ np.array(y_caploss[:-1])
+delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) #/ np.array(y_caploss[:-1])
+plt.plot(x_caploss[1:], smooth (np.abs(delta_y_caploss)))
+plt.plot(x_vgsloss[1:], smooth (np.abs(delta_y_vgsloss)))
+plt.grid()
+plt.ylim(0,5)
+plt.title("vgs-loss pretraining ")
+
+plt.savefig(os.path.join(path_save , 'deltas-smooth-base3_4' + '.png'), format = 'png')
 
 
 

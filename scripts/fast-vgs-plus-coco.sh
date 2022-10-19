@@ -1,5 +1,5 @@
 #!/bin/sh
-source activate fastvgs
+source activate /scratch/project_2001315/khazar_envs/myenvs/fastvgs
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 data_root=$1
@@ -24,6 +24,7 @@ python \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --normalize \
+--audio_feat_len 2\
 --xtrm_layers 1 \
 --trm_layers 3 \
 --fine_matching_weight 0.0 \
@@ -33,6 +34,7 @@ python \
 --coarse_to_fine_retrieve \
 --encoder_layers 6 \
 --encoder_attention_heads 8 \
+--trim_mask \
 --feature_grad_mult 0.1 \
 --layer_use 5
 
