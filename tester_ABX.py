@@ -26,31 +26,43 @@ save_path = '/worktmp2/hxkhkh/current/ZeroSpeech/submission/phonetic/'
 
 # Paths for model weights (traind weights dir)
 
-twd = '/worktmp2/hxkhkh/current/FaST/experiments/model19base1F/best_bundle.pth'
+twd = '/worktmp2/hxkhkh/current/FaST/experiments/model19base1S/27756_bundle.pth'
 
 #############################################################################
 
+# def LoadAudio( path):
+#     audio_feat_len = 2
+#     x, sr = sf.read(path, dtype = 'float32')
+#     assert sr == 16000
+#     length_orig = len(x)
+#     if length_orig > 16000 * audio_feat_len:
+#         audio_length = int(16000 * audio_feat_len)
+#         x = x[:audio_length]
+#         x_norm = (x - np.mean(x)) / np.std(x)
+#         #x = torch.FloatTensor(x_norm) 
+#         x = x_norm
+#     else:
+#         audio_length = length_orig
+#         new_x = np.zeros(int(16000 * audio_feat_len)) #khazar: I change torch to np
+#         x_norm = (x - np.mean(x)) / np.std(x)
+#         #new_x[:audio_length] = torch.FloatTensor(x_norm)
+#         new_x[:audio_length] = x_norm
+#         x = new_x
+#     return x, audio_length
+
 def LoadAudio( path):
-    audio_feat_len = 10
+    audio_feat_len = 5
     x, sr = sf.read(path, dtype = 'float32')
     assert sr == 16000
     length_orig = len(x)
     if length_orig > 16000 * audio_feat_len:
         audio_length = int(16000 * audio_feat_len)
         x = x[:audio_length]
-        x_norm = (x - np.mean(x)) / np.std(x)
-        #x = torch.FloatTensor(x_norm) 
-        x = x_norm
     else:
         audio_length = length_orig
-        new_x = np.zeros(int(16000 * audio_feat_len)) #khazar: I change torch to np
-        x_norm = (x - np.mean(x)) / np.std(x)
-        #new_x[:audio_length] = torch.FloatTensor(x_norm)
-        new_x[:audio_length] = x_norm
-        x = new_x
-    return x, audio_length
-
-
+    x_norm = (x - np.mean(x)) / np.std(x)
+      
+    return x_norm, audio_length
 #############################################################################
 #############################################################################
 # loading data
@@ -61,14 +73,14 @@ with open(audio_dataset_json_file, 'r') as fp:
 test_clean = data_json['subsets']['dev_other']
 wav_files_json = test_clean['items']['wav_list']['files_list']
 
-signals_peng = []
-for wav_file in wav_files_json:
+# signals_peng = []
+# for wav_file in wav_files_json:
     
-    signal_peng,_ =  LoadAudio(wav_path + wav_file) 
-    signals_peng.append(signal_peng)
+#     signal_peng,l =  LoadAudio(wav_path + wav_file) 
+#     signals_peng.append(signal_peng)
 
-audio_signals = torch.tensor(signals_peng ,dtype=torch.float)
-audio_signals = audio_signals.to(device)
+# audio_signals = torch.tensor(signals_peng ,dtype=torch.float)
+# audio_signals = audio_signals.to(device)
 #############################################################################
 # loading Model
 
@@ -111,14 +123,15 @@ conv1_trm1_trm3.eval()
 with torch.no_grad():
     for counter, wav_file in enumerate(wav_files_json):
         print(counter)
-        audio_signal = audio_signals [counter]
-        audio_signal = audio_signal.to(device)
+        signal_peng,l =  LoadAudio(wav_path + wav_file) 
+        
+        audio_signal = torch.tensor(signal_peng ,dtype=torch.float).to(device)
         input_signal = audio_signal.view(1, -1)
         trm13_out = conv1_trm1_trm3(input_signal,  mask=False, features_only=True, tgt_layer=4)
         trm13_out_features = trm13_out['layer_feats']
         output_tensor = trm13_out_features[0]
         output_np_arr = output_tensor.cpu().detach().numpy()
-        
+        print(len(output_np_arr))
         numpy.savetxt(save_path + wav_file [0:-4] + '.txt', output_np_arr )
         
         torch.cuda.empty_cache()
