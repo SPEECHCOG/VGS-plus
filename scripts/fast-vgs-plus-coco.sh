@@ -1,5 +1,5 @@
 #!/bin/sh
-source activate /scratch/project_2001315/khazar_envs/myenvs/fastvgs
+source activate fastvgs
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 data_root=$1
@@ -15,11 +15,12 @@ python \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
 --libri_fn_root ${libri_fn_root} \
---batch_size 64 \
---val_batch_size 64 \
+--resume \
+--batch_size 32 \
+--val_batch_size 32 \
 --val_cross_batch_size 8 \
 --n_epochs 24 \
---n_print_steps 500 \
+--n_print_steps 100 \
 --n_val_steps 9252 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
