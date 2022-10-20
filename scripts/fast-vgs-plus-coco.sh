@@ -24,7 +24,6 @@ python \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --normalize \
---audio_feat_len 2\
 --xtrm_layers 1 \
 --trm_layers 3 \
 --fine_matching_weight 0.0 \
