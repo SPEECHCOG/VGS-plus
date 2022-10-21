@@ -90,10 +90,12 @@ class SpeechBasicBlock(nn.Module):
 class ResDavenet(nn.Module):
     def __init__(self):
         super(ResDavenet, self).__init__()
-        feat_dim=768
+        # khazar: I change 768 to 384
+        feat_dim=384
         block=SpeechBasicBlock
         layers=[2, 2, 2, 2]
-        layer_widths=[128, 128, 256, 512, 768]
+        #layer_widths=[128, 128, 256, 512, 768]
+        layer_widths=[128, 128, 256, 512, 384]
         convsize=9
         self.feat_dim = feat_dim
         self.inplanes = layer_widths[0]
