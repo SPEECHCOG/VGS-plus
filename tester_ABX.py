@@ -20,18 +20,18 @@ from datasets import spokencoco_dataset, libri_dataset
 
 # Paths for LibriSpeech input and output
 
-wav_path = '/worktmp2/hxkhkh/current/ZeroSpeech/data/phonetic/'
-audio_dataset_json_file = '/worktmp2/hxkhkh/current/ZeroSpeech/data/phonetic/index.json'
-save_path = '/worktmp2/hxkhkh/current/ZeroSpeech/submission/phonetic/'
+wav_path = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/'
+audio_dataset_json_file = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/index.json'
+save_path = '/worktmp/khorrami/current/ZeroSpeech/submission/phonetic/'
 
 # Paths for model weights (traind weights dir)
 
-twd = '/worktmp2/hxkhkh/current/FaST/experiments/model19base1S/27756_bundle.pth'
+twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/best_bundle.pth'
 
 #############################################################################
 
 # def LoadAudio( path):
-#     audio_feat_len = 2
+#     audio_feat_len = 8
 #     x, sr = sf.read(path, dtype = 'float32')
 #     assert sr == 16000
 #     length_orig = len(x)
@@ -51,7 +51,7 @@ twd = '/worktmp2/hxkhkh/current/FaST/experiments/model19base1S/27756_bundle.pth'
 #     return x, audio_length
 
 def LoadAudio( path):
-    audio_feat_len = 5
+    audio_feat_len = 8
     x, sr = sf.read(path, dtype = 'float32')
     assert sr == 16000
     length_orig = len(x)
@@ -70,7 +70,7 @@ def LoadAudio( path):
 with open(audio_dataset_json_file, 'r') as fp:
     data_json = json.load(fp)
     
-test_clean = data_json['subsets']['dev_other']
+test_clean = data_json['subsets']['dev_clean']
 wav_files_json = test_clean['items']['wav_list']['files_list']
 
 # signals_peng = []
@@ -99,7 +99,7 @@ args = parser.parse_args()
 
 # defining the model
 args.encoder_layers = 6
-args.layer_use = 5
+args.layer_use = 3
 args.trim_mask = True
 
 #..............................
@@ -131,7 +131,7 @@ with torch.no_grad():
         trm13_out_features = trm13_out['layer_feats']
         output_tensor = trm13_out_features[0]
         output_np_arr = output_tensor.cpu().detach().numpy()
-        print(len(output_np_arr))
+        #print(len(output_np_arr))
         numpy.savetxt(save_path + wav_file [0:-4] + '.txt', output_np_arr )
         
         torch.cuda.empty_cache()
@@ -142,4 +142,4 @@ with torch.no_grad():
 # plt.imshow(output_np_arr.T)
 # vec = {'embedding_pretrained_model':output_np_arr}
 # from scipy.io import savemat
-# savemat('/home/hxkhkh/Music/' + "embedding_w2v2_model.mat", vec)
+# savemat('/home/hxkhkh/Music/' + "embedding_w2v2_model_layer3.mat", vec)
