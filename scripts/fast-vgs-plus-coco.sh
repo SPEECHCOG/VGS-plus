@@ -15,19 +15,22 @@ python \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
 --libri_fn_root ${libri_fn_root} \
---resume \
---batch_size 32 \
---val_batch_size 32 \
+--batch_size 64 \
+--val_batch_size 64 \
 --val_cross_batch_size 8 \
---n_epochs 24 \
+--n_epochs 10 \
 --n_print_steps 100 \
 --n_val_steps 9252 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --normalize \
+--hidden_size 384 \
+--encoder_embed_dim 384 \
+--encoder_ffn_embed_dim 1536 \
+--intermediate_size 1536 \
 --audio_feat_len 2.0 \
 --xtrm_layers 1 \
---trm_layers 3 \
+--trm_layers 1 \
 --fine_matching_weight 0.0 \
 --coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
