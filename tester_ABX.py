@@ -26,8 +26,10 @@ save_path = '/worktmp/khorrami/current/ZeroSpeech/submission/phonetic/'
 
 # Paths for model weights (traind weights dir)
 
-twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/138780_bundle.pth'
+twd = '/worktmp/khorrami/current/FaST/exp/best_bundle.pth'
 
+
+os.makedirs(save_path + 'dev-clean', exist_ok=False)
 #############################################################################
 
 # def LoadAudio( path):
