@@ -5,9 +5,7 @@ import numpy as np
 import torch
 import json
 import numpy
-
-
-device = 'cpu'
+import sys
 
 # for model
 from models.w2v2_model import  Wav2Vec2Model_cls , ConvFeatureExtractionModel
@@ -23,13 +21,30 @@ from datasets import spokencoco_dataset, libri_dataset
 wav_path = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/'
 audio_dataset_json_file = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/index.json'
 save_path = '/worktmp/khorrami/current/ZeroSpeech/submission/phonetic/'
-
-# Paths for model weights (traind weights dir)
-
-twd = '/worktmp/khorrami/current/FaST/exp/best_bundle.pth'
-
-
 os.makedirs(save_path + 'dev-clean', exist_ok=False)
+
+
+# ARGS
+
+# twd = '/worktmp/khorrami/current/FaST/exp/best_bundle.pth'
+# subset_name = 'dev_clean'
+# total_layers = 6
+# target_layer = 5
+# trimTF = True 
+
+twd = sys.argv[1]
+subset_name = sys.argv[2]
+total_layers = sys.argv[3]
+target_layer = sys.argv[4]
+trimTF = sys.argv[5]
+
+
+print('twd is ' + twd)
+print('subset_name ' + subset_name)
+print('total_layers ' + str(total_layers))
+print('target_layer ' + str(target_layer))
+print('trimTF ' + str(trimTF))
+
 #############################################################################
 
 # def LoadAudio( path):
@@ -52,40 +67,41 @@ os.makedirs(save_path + 'dev-clean', exist_ok=False)
 #         x = new_x
 #     return x, audio_length
 
+# def LoadAudio( path):
+#     audio_feat_len = 8
+#     x, sr = sf.read(path, dtype = 'float32')
+#     assert sr == 16000
+#     length_orig = len(x)
+#     if length_orig > 16000 * audio_feat_len:
+#         audio_length = int(16000 * audio_feat_len)
+#         x = x[:audio_length]
+#     else:
+#         audio_length = length_orig
+#     x_norm = (x - np.mean(x)) / np.std(x)
+      
+#     return x_norm, audio_length
+
 def LoadAudio( path):
-    audio_feat_len = 8
     x, sr = sf.read(path, dtype = 'float32')
     assert sr == 16000
     length_orig = len(x)
-    if length_orig > 16000 * audio_feat_len:
-        audio_length = int(16000 * audio_feat_len)
-        x = x[:audio_length]
-    else:
-        audio_length = length_orig
+    audio_length = length_orig
     x_norm = (x - np.mean(x)) / np.std(x)
       
     return x_norm, audio_length
-#############################################################################
+
 #############################################################################
 # loading data
 
 with open(audio_dataset_json_file, 'r') as fp:
     data_json = json.load(fp)
     
-test_clean = data_json['subsets']['dev_clean']
+test_clean = data_json['subsets'][subset_name]
 wav_files_json = test_clean['items']['wav_list']['files_list']
 
-# signals_peng = []
-# for wav_file in wav_files_json:
-    
-#     signal_peng,l =  LoadAudio(wav_path + wav_file) 
-#     signals_peng.append(signal_peng)
-
-# audio_signals = torch.tensor(signals_peng ,dtype=torch.float)
-# audio_signals = audio_signals.to(device)
 #############################################################################
 # loading Model
-
+device = 'cpu'
 # adding all args
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--resume", action="store_true", dest="resume", help="load from exp_dir if True")
@@ -100,9 +116,9 @@ args = parser.parse_args()
 #..............................
 
 # defining the model
-args.encoder_layers = 6
-args.layer_use = 5
-args.trim_mask = True
+args.encoder_layers = total_layers
+args.layer_use = target_layer
+args.trim_mask = trimTF
 
 #..............................
 conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
