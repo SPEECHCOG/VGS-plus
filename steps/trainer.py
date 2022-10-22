@@ -83,8 +83,8 @@ class Trainer:
         print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
         
         # khazar: I added below lines (for automated resuming)
-        flag_resume = False
-        recall_previous = 0.001
+        # flag_resume = False
+        #recall_previous = 0.001
         
         while flag:
             logger.info('epoch starts here .... ')
@@ -748,13 +748,13 @@ class Trainer:
         N = self.args.n_epochs
         ############
         # model 19base1
-        alpha = 0
+        # alpha = 0
         ############
         # model 19base2
         # alpha = 1
         ############
         # model 19base3
-        # alpha = 0.5
+        alpha = 0.5
         ############
         # model 19base4 
         # if self.progress['epoch'] <=12:
