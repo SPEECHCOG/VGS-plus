@@ -21,29 +21,29 @@ from datasets import spokencoco_dataset, libri_dataset
 wav_path = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/'
 audio_dataset_json_file = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/index.json'
 save_path = '/worktmp/khorrami/current/ZeroSpeech/submission/phonetic/'
-os.makedirs(save_path + 'dev-clean', exist_ok=False)
+os.makedirs(save_path + 'dev-clean', exist_ok=True)
 
 
 # ARGS
 
-# twd = '/worktmp/khorrami/current/FaST/exp/best_bundle.pth'
-# subset_name = 'dev_clean'
-# total_layers = 6
-# target_layer = 5
-# trimTF = True 
-
-twd = sys.argv[1]
-subset_name = sys.argv[2]
-total_layers = sys.argv[3]
-target_layer = sys.argv[4]
-trimTF = sys.argv[5]
+#twd = sys.argv[1]
+#subset_name = sys.argv[2]
+#total_layers = sys.argv[3]
+#target_layer = sys.argv[4]
+#trimTF = sys.argv[5]
 
 
-print('twd is ' + twd)
-print('subset_name ' + subset_name)
-print('total_layers ' + str(total_layers))
-print('target_layer ' + str(target_layer))
-print('trimTF ' + str(trimTF))
+#print('twd is ' + twd)
+#print('subset_name ' + subset_name)
+#print('total_layers ' + str(total_layers))
+#print('target_layer ' + str(target_layer))
+#print('trimTF ' + str(trimTF))
+
+twd = '/worktmp/khorrami/current/FaST/experiments/model19base1/best_bundle.pth'
+subset_name = 'dev_clean'
+total_layers = 6
+target_layer = 5
+trimTF = True
 
 #############################################################################
 
@@ -92,7 +92,7 @@ def LoadAudio( path):
 
 #############################################################################
 # loading data
-
+print ('............. it is reading audio json file .................')
 with open(audio_dataset_json_file, 'r') as fp:
     data_json = json.load(fp)
     
