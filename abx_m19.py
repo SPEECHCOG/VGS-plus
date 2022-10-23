@@ -1,12 +1,11 @@
 #############################################################################
-twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/9252_bundle.pth'
-subset_name = 'dev_clean'
+#twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/9252_bundle.pth'
+#target_layer = 2
 total_layers = 6
-target_layer = 4
 trimTF = True
+subset_name = 'dev_clean'
 
 # Paths for LibriSpeech input and output
-
 wav_path = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/'
 audio_dataset_json_file = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/index.json'
 save_path = '/worktmp/khorrami/current/ZeroSpeech/submission/phonetic/'
@@ -16,6 +15,7 @@ os.makedirs(save_path + 'dev-clean', exist_ok=True)
 
 #############################################################################
 # for data
+import argparse
 import soundfile as sf
 import numpy as np
 import torch
@@ -23,27 +23,12 @@ import json
 import numpy
 # for model
 from models.w2v2_model import  Wav2Vec2Model_cls , ConvFeatureExtractionModel
-import argparse
+
 from steps import trainer
 from steps.utils import *
 from steps.trainer_utils import *
 from models import fast_vgs, w2v2_model
 from datasets import spokencoco_dataset, libri_dataset
-#############################################################################
-# ARGS
-#import sys
-#twd = sys.argv[1]
-#subset_name = sys.argv[2]
-#total_layers = sys.argv[3]
-#target_layer = sys.argv[4]
-#trimTF = sys.argv[5]
-
-
-#print('twd is ' + twd)
-#print('subset_name ' + subset_name)
-#print('total_layers ' + str(total_layers))
-#print('target_layer ' + str(target_layer))
-#print('trimTF ' + str(trimTF))
 
 #############################################################################
 
@@ -104,6 +89,10 @@ wav_files_json = test_clean['items']['wav_list']['files_list']
 device = 'cpu'
 # adding all args
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("--mytwd", help="my model dir")
+parser.add_argument("--mytarget_layer", help="my target layer")
+#..............................................................................
+
 parser.add_argument("--resume", action="store_true", dest="resume", help="load from exp_dir if True")
 parser.add_argument("--validate", action="store_true", default=False, help="temp, if call trainer_variants rather than trainer")
 parser.add_argument("--test", action="store_true", default=False, help="test the model on test set")
@@ -115,11 +104,23 @@ libri_dataset.LibriDataset.add_args(parser)
 args = parser.parse_args()
 #..............................
 
-# defining the model
-args.encoder_layers = total_layers
-args.layer_use = target_layer
-args.trim_mask = trimTF
+# input args
+mytwd = args.mytwd
+mytarget_layer = args.mytarget_layer
 
+args.layer_use = mytarget_layer
+
+# fixed args
+args.encoder_layers = total_layers
+args.trim_mask = trimTF
+args.normalize = True
+args.encoder_attention_heads = 8
+
+print ('###############################')
+print(args)
+print ('###############################')
+
+############################################## defining the model based on ARGS
 #..............................
 conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
 conv1_trm1_trm3.to(device)
@@ -128,7 +129,7 @@ conv1_trm1_trm3.eval()
 
 # loading Pre-trained weights
 
-bundle = torch.load(twd)
+bundle = torch.load(mytwd)
 conv1_trm1_trm3.carefully_load_state_dict(bundle['dual_encoder'])
 ############################################################################# test
 
