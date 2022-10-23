@@ -35,12 +35,13 @@ path_event_19base1 = 'model19base1/events.out.tfevents.1665774972.r02g07.bullx.1
 path_event_19base2 = 'model19base2/events.out.tfevents.1665775653.r01g04.bullx.2394627.0'
 path_event_19base3 = 'model19base3/events.out.tfevents.1665775653.r03g01.bullx.1285560.0'
 path_event_19base4 = 'model19base4/events.out.tfevents.1666016478.r03g04.bullx.1774863.0'
-c_3 = 'blue'
-c_4 = 'darkorange'
-c_5 = 'green'
-c_6 = 'red'
+
+c_1 = 'blue'
+c_2 = 'grey'
+c_3 = 'green'
+c_4 = 'red'
 c_7 = 'royalblue'
-c_18 = 'grey'
+c_18 = 'darkorange'
 c_19 = 'brown'
 c_11 = 'pink'
 c_12 = 'tan'
@@ -188,27 +189,11 @@ def plot_double_events(event1,event2, label1 , label2, c1,c2, n, pltname, title)
         plt.savefig(os.path.join(path_save , pltname + '.png'), format = 'png')
 ###############################################################################
 kh
-# event 6a
-event_6a =  EventAccumulator(os.path.join(path_source, path_event_6a))
-event_6a.Reload()
-plot_single_event(event_6a , n_32 , 'model6a' , 'VGS+, random init, bs = 32' )    
-
-# event 6b
-event_6b =  EventAccumulator(os.path.join(path_source, path_event_6b))
-event_6b.Reload()
-plot_single_event(event_6b , n_64 , 'model6b' , 'VGS+, random init, bs = 64' )  
-
 
 # event 6bTrim
 event_6bTrim =  EventAccumulator(os.path.join(path_source, path_event_6bTrim))
 event_6bTrim.Reload()
 plot_single_event(event_6bTrim , n_64 , 'model6bTrim' , 'VGS+ (Trim-mask), random init, bs = 64' )  
-
-# event 10bTrim
-event_10bTrim =  EventAccumulator(os.path.join(path_source, path_event_10bTrim))
-event_10bTrim.Reload()
-plot_single_event(event_10bTrim , n_64 , 'model10bTrim' , 'VGS+ (Trim-mask), model 10b' ) 
-
 
 # event 18b
 event_18b =  EventAccumulator(os.path.join(path_source, path_event_18b))
@@ -256,190 +241,84 @@ plot_double_events(event_19base1, event_19base1F, 'w2v2 Trim ','w2v2 not Trim ',
 
 plot_double_events(event_19base4, event_19base3, 'VGS+ Pre ','VGS+ Sim ','blue','green', n_64, 'm19b3b4','Pretrained versus simultaneous training')
 
-######### Model 0
-event_19bT0 =  EventAccumulator(os.path.join(path_source, path_event_19bT0))
-event_19bT0.Reload()
-x_recall, y_recall = plot_single_event(event_19bT0 , n_64 , 'm19bT3' , 'model 0, sinusoid function' ) 
 
-plot_double_events(event_19base3, event_19bT0, 'baseline ','19bT0 ','gray','green', n_64, 'm19bT0_19','19bT0 (alpha = 0.001) versus baseline')
+################################################################# Recalls
+event_19base2 =  EventAccumulator(os.path.join(path_source, path_event_19base2))
+event_19base2.Reload()
+x19_base2_recall, y19_base2_recall = find_single_recall(event_19base2, n_64)
 
-######### Model 3
-event_19bT3 =  EventAccumulator(os.path.join(path_source, path_event_19bT3))
-event_19bT3.Reload()
-x_recall, y_recall = plot_single_event(event_19bT3 , n_64 , 'm19bT3' , 'model 3, sinusoid function' ) 
+event_19base3 =  EventAccumulator(os.path.join(path_source, path_event_19base3))
+event_19base3.Reload()
+x19_base3_recall, y19_base3_recall = find_single_recall(event_19base3, n_64)
 
-plot_double_events(event_19base3, event_19bT3, 'baseline ','19bT3 ','gray','green', n_64, 'm19bT3_19','19bT3 versus baseline')
+event_19base4 =  EventAccumulator(os.path.join(path_source, path_event_19base4))
+event_19base4.Reload()
+x19_base4_recall, y19_base4_recall = find_single_recall(event_19base4, n_64)
 
-######### Model 4
-event_19bT4 =  EventAccumulator(os.path.join(path_source, path_event_19bT4))
-event_19bT4.Reload()
-x_recall, y_recall = plot_single_event(event_19bT4 , n_64 , 'm19bT4' , 'model 4, step function' ) 
+################################################################# VGS loss
+i = 500
+event_19base2 =  EventAccumulator(os.path.join(path_source, path_event_19base2))
+event_19base2.Reload()
+x19_base2_vgsloss, y19_base2_vgsloss = find_single_vgsloss(event_19base2, n_64 , i)
 
-plot_double_events(event_19base3, event_19bT4,'baseline ','19bT4 ','gray','green', n_64, 'm19bT4_19','19bT4 versus baseline')
+event_19base3 =  EventAccumulator(os.path.join(path_source, path_event_19base3))
+event_19base3.Reload()
+x19_base3_vgsloss, y19_base3_vgsloss = find_single_vgsloss(event_19base3, n_64, i)
 
-######### Model 5
-event_19bT5 =  EventAccumulator(os.path.join(path_source, path_event_19bT5))
-event_19bT5.Reload()
-x_recall, y_recall = plot_single_event(event_19bT5 , n_64 , 'm19bT5' , 'model 5, linear increasing' ) 
+event_19base4 =  EventAccumulator(os.path.join(path_source, path_event_19base4))
+event_19base4.Reload()
+x19_base4_vgsloss, y19_base4_vgsloss = find_single_vgsloss(event_19base4, n_64, i)
 
-plot_double_events(event_19base3, event_19bT5,'baseline ','19bT5 ','gray','green', n_64, 'm19bT5_19','19bT5 versus baseline')
+################################################################# caption loss
+i = 500
+event_19base1 =  EventAccumulator(os.path.join(path_source, path_event_19base1))
+event_19base1.Reload()
+x19_base1_caploss, y19_base1_caploss = find_single_caploss(event_19base1, n_64 , i)
 
-######### Model 6
-event_19bT6 =  EventAccumulator(os.path.join(path_source, path_event_19bT6))
-event_19bT6.Reload()
-x_recall, y_recall = plot_single_event(event_19bT6 , n_64 , 'm19bT6' , 'model 6, linear decreasing' ) 
+event_19base3 =  EventAccumulator(os.path.join(path_source, path_event_19base3))
+event_19base3.Reload()
+x19_base3_caploss, y19_base3_caploss = find_single_caploss(event_19base3, n_64, i)
 
-plot_double_events(event_19base3, event_19bT6,'baseline ','19bT6 ','gray','green', n_64, 'm19bT6_19','19bT6 versus baseline')
+event_19base4 =  EventAccumulator(os.path.join(path_source, path_event_19base4))
+event_19base4.Reload()
+x19_base4_caploss, y19_base4_caploss = find_single_caploss(event_19base4, n_64, i)
 
-######### Model 7
-event_19bT7 =  EventAccumulator(os.path.join(path_source, path_event_19bT7))
-event_19bT7.Reload()
-x_recall, y_recall = plot_single_event(event_19bT7 , n_64 , 'm19bT7' , 'model 7, alpha = 0.1' ) 
-
-plot_double_events(event_19base3, event_19bT7,'baseline ','19bT7 ','gray','green', n_64, 'm19bT7_19','19bT7 versus baseline')
-
-######### Model 8
-
-event_19bT8 =  EventAccumulator(os.path.join(path_source, path_event_19bT8))
-event_19bT8.Reload()
-x_recall, y_recall = plot_single_event(event_19bT8 , n_64 , 'm19bT8' , 'model 8,  alpha = 0.9' ) 
-
-plot_double_events(event_19base3, event_19bT8,'baseline ','19bT8 ','gray','green', n_64, 'm19bT8_19','m198 versus baseline')
-
-
-#########
-#plotting deltas
-
+################################################################# plotting recall and loss for model 19base
+title = 'model light, with gradmul = 0.1'
+label1 = 'w2v2'
+label2 = 'VGS'
+label3 = 'VGS+'
+label4 = 'VGS+ pretrained'
 fig = plt.figure(figsize=(15,10))
-fig.suptitle("loss-deltas during training ", fontsize=22)
-
-interval = 5
-plt.subplot(2,3,1)
-x_caploss, y_caploss =  find_single_caploss (event_19base3, n_64 , interval)  
-x_vgsloss, y_vgsloss = find_single_vgsloss (event_19base3, n_64, interval )
-delta_y_caploss = ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
-delta_y_vgsloss = ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_vgsloss[:-1])
-plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
-plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
+fig.suptitle(title, fontsize=20)
+# recall
+plt.subplot(1,3,1)
+plt.plot(x19_base2_recall, y19_base2_recall, c_2, label = label2)
+plt.plot(x19_base3_recall, y19_base3_recall, c_3, label = label3)
+plt.plot(x19_base4_recall, y19_base4_recall, c_4, label = label4)
+plt.xlabel('epoch',size=18)
+plt.ylabel('recall@10',size=18)
+plt.ylim(0,0.8)
 plt.grid()
-plt.ylim(0,5)
-plt.title("alpha = 0.5")
-
-plt.subplot(2,3,2)
-x_caploss, y_caploss =  find_single_caploss (event_19bT3, n_64 , interval)  
-x_vgsloss, y_vgsloss = find_single_vgsloss (event_19bT3, n_64, interval )
-delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
-delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_caploss[:-1])
-plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
-plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
+plt.legend(fontsize=16)
+#vgs loss
+plt.subplot(1,3,2)
+plt.plot(x19_base2_vgsloss, y19_base2_vgsloss, c_2, label = label2)
+plt.plot(x19_base3_vgsloss, y19_base3_vgsloss, c_3, label = label3)
+plt.plot(x19_base4_vgsloss, y19_base4_vgsloss, c_4, label = label4)
+plt.xlabel('epoch',size=18)
+plt.ylabel('VGS loss',size=18)
+plt.ylim(0,14)
 plt.grid()
-plt.ylim(0,5)
-plt.title("alpha = sin")
-
-plt.subplot(2,3,3)
-x_caploss, y_caploss =  find_single_caploss (event_19bT5, n_64 , interval)  
-x_vgsloss, y_vgsloss = find_single_vgsloss (event_19bT5, n_64, interval )
-delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
-delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_caploss[:-1])
-plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
-plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
+plt.legend(fontsize=16)
+# cap loss
+plt.subplot(1,3,3)
+plt.plot(x19_base1_caploss, y19_base1_caploss, c_1, label = label1)
+plt.plot(x19_base3_caploss, y19_base3_caploss, c_3, label = label3)
+plt.plot(x19_base4_caploss, y19_base4_caploss, c_4, label = label4)
+plt.xlabel('epoch',size=18)
+plt.ylabel('lcaption loss',size=18)
+plt.ylim(0,14)
 plt.grid()
-plt.ylim(0,5)
-plt.title("alpha = increasing")
-
-plt.subplot(2,3,4)
-x_caploss, y_caploss =  find_single_caploss (event_19bT6, n_64 , interval)  
-x_vgsloss, y_vgsloss = find_single_vgsloss (event_19bT6, n_64, interval )
-delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
-delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_caploss[:-1])
-plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
-plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
-plt.grid()
-plt.ylim(0,5)
-plt.title("alpha = decreasing")
-
-plt.subplot(2,3,5)
-x_caploss, y_caploss =  find_single_caploss (event_19bT7, n_64 , interval)  
-x_vgsloss, y_vgsloss = find_single_vgsloss (event_19bT7, n_64, interval )
-delta_y_caploss = ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
-delta_y_vgsloss = ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_vgsloss[:-1])
-plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
-plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
-plt.grid()
-plt.ylim(0,5)
-plt.title("alpha = 0.1 ")
-
-plt.subplot(2,3,6)
-x_caploss, y_caploss =  find_single_caploss (event_19bT8, n_64 , interval)  
-x_vgsloss, y_vgsloss = find_single_vgsloss (event_19bT8, n_64, interval )
-delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) / np.array(y_caploss[:-1])
-delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) / np.array(y_caploss[:-1])
-plt.plot(x_caploss[1:], np.abs(delta_y_caploss))
-plt.plot(x_vgsloss[1:], np.abs(delta_y_vgsloss))
-plt.grid()
-plt.ylim(0,5)
-plt.title("alpha = 0.9 ")
-
-plt.savefig(os.path.join(path_save , 'deltas-vgsloss' + '.png'), format = 'png')
-
-#######################################
-def smooth(data):
-    kernel_size = 10
-    kernel = np.ones(kernel_size) / kernel_size
-    data_convolved = np.convolve(data, kernel, mode='same')
-    return data_convolved
-
-
-interval = 100
-fig = plt.figure(figsize=(10,10))
-fig.suptitle("loss-deltas during training ", fontsize=22)
-
-plt.subplot(2,2,1)
-x_caploss, y_caploss =  find_single_caploss (event_19base3, n_64 , interval)  
-x_vgsloss, y_vgsloss = find_single_vgsloss (event_19base3, n_64, interval )
-delta_y_caploss = ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) #/ np.array(y_caploss[:-1])
-delta_y_vgsloss = ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) #/ np.array(y_vgsloss[:-1])
-plt.plot(x_caploss[1:], smooth (np.abs(delta_y_caploss)))
-#plt.plot(x_vgsloss[1:], smooth (np.abs(delta_y_vgsloss)))
-plt.grid()
-plt.ylim(0,1)
-plt.title("cap-loss simultaneous ")
-
-plt.subplot(2,2,2)
-x_caploss, y_caploss =  find_single_caploss (event_19base4, n_64 , interval)  
-x_vgsloss, y_vgsloss = find_single_vgsloss (event_19base4, n_64, interval )
-delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) #/ np.array(y_caploss[:-1])
-delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) #/ np.array(y_caploss[:-1])
-plt.plot(x_caploss[1:], smooth (np.abs(delta_y_caploss)))
-#plt.plot(x_vgsloss[1:], smooth (np.abs(delta_y_vgsloss)))
-plt.grid()
-plt.ylim(0,1)
-plt.title("cap-loss pretraining ")
-
-plt.subplot(2,2,3)
-x_caploss, y_caploss =  find_single_caploss (event_19base3, n_64 , interval)  
-x_vgsloss, y_vgsloss = find_single_vgsloss (event_19base3, n_64, interval )
-delta_y_caploss = ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) #/ np.array(y_caploss[:-1])
-delta_y_vgsloss = ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) #/ np.array(y_vgsloss[:-1])
-plt.plot(x_caploss[1:], smooth (np.abs(delta_y_caploss)))
-plt.plot(x_vgsloss[1:], smooth (np.abs(delta_y_vgsloss)))
-plt.grid()
-plt.ylim(0,5)
-plt.title("vgs-loss simultaneous ")
-
-plt.subplot(2,2,4)
-x_caploss, y_caploss =  find_single_caploss (event_19base4, n_64 , interval)  
-x_vgsloss, y_vgsloss = find_single_vgsloss (event_19base4, n_64, interval )
-delta_y_caploss =  ( np.array(y_caploss[1:]) - np.array(y_caploss[:-1]) ) #/ np.array(y_caploss[:-1])
-delta_y_vgsloss =  ( np.array(y_vgsloss[1:]) - np.array(y_vgsloss[:-1]) ) #/ np.array(y_caploss[:-1])
-plt.plot(x_caploss[1:], smooth (np.abs(delta_y_caploss)))
-plt.plot(x_vgsloss[1:], smooth (np.abs(delta_y_vgsloss)))
-plt.grid()
-plt.ylim(0,5)
-plt.title("vgs-loss pretraining ")
-
-plt.savefig(os.path.join(path_save , 'deltas-smooth-base3_4' + '.png'), format = 'png')
-
-
-
-
+plt.legend(fontsize=16)
+plt.savefig(os.path.join(path_save , 'fig1_light19_recall_loss' + '.png'), format = 'png')
