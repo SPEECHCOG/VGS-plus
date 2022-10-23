@@ -18,8 +18,8 @@ class ImageCaptionDataset(Dataset):
         parser.add_argument("--data_root", type=str, default="/data1/scratch/coco_pyp")
         parser.add_argument("--raw_audio_base_path", type=str, default="/data1/scratch/coco_pyp/SpokenCOCO")
         parser.add_argument("--img_feat_len", type=int, help="num of img feats we will use", choices=list(range(1,37)), default=36)
-        parser.add_argument("--audio_feat_len", type=float, help="maximal audio length", default=2.)
-        parser.add_argument("--val_audio_feat_len", type=float, help="maximal audio length", default=2.)
+        parser.add_argument("--audio_feat_len", type=float, help="maximal audio length", default=8.)
+        parser.add_argument("--val_audio_feat_len", type=float, help="maximal audio length", default=10.)
         parser.add_argument("--coco_label_root", type=str, default="/data1/scratch/exp_pyp/MixedModal/hubert/coco")
         parser.add_argument("--normalize", action="store_true", default=False, help="whether or not normalize raw input, both w2v2 and hubert base doesn't normalize the input, but in exps in two papers, we normalized it, hopefully this doesn't make a difference")
 
