@@ -1,5 +1,5 @@
 #############################################################################
-twd = '/worktmp/khorrami/current/FaST/experiments/model19base1/best_bundle.pth'
+twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/9252_bundle.pth'
 subset_name = 'dev_clean'
 total_layers = 6
 target_layer = 5
