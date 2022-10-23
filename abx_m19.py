@@ -106,7 +106,7 @@ args = parser.parse_args()
 
 # input args
 mytwd = args.mytwd
-mytarget_layer = args.mytarget_layer
+mytarget_layer = int(args.mytarget_layer)
 
 args.layer_use = mytarget_layer
 
