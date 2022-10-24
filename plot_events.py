@@ -36,6 +36,12 @@ path_event_19base2 = 'model19base2/events.out.tfevents.1665775653.r01g04.bullx.2
 path_event_19base3 = 'model19base3/events.out.tfevents.1665775653.r03g01.bullx.1285560.0'
 path_event_19base4 = 'model19base4/events.out.tfevents.1666016478.r03g04.bullx.1774863.0'
 
+
+path_event_20base1 = 'model20base1/'
+path_event_20base2 = 'model20base2/'
+path_event_20base3 = 'model20base3/'
+path_event_20base4 = 'model20base4/'
+
 c_1 = 'blue'
 c_2 = 'grey'
 c_3 = 'green'
@@ -148,45 +154,7 @@ def plot_double_events(event1,event2, label1 , label2, c1,c2, n, pltname, title)
 
     plt.savefig(os.path.join(path_save , pltname + '.png'), format = 'png')
     
-    def plot_several_events(event1,event2,event3,event4,levent5,event6,label1,label2,label3,label4,label5,label6, n, pltname, title):
-
-        x1_recall, y1_recall = find_single_recall (event1, n)   
-        x1_vgsloss, y1_vgsloss = find_single_vgsloss (event1, n)
-        x1_caploss, y1_caploss = find_single_caploss (event1, n)
-        
-        x2_recall, y2_recall = find_single_recall (event2, n)   
-        x2_vgsloss, y2_vgsloss = find_single_vgsloss (event2, n)
-        x2_caploss, y2_caploss = find_single_caploss (event2, n)
-        
-        fig = plt.figure(figsize=(15,10))
-        fig.suptitle(title, fontsize=18)
-        plt.subplot(1,3,1)
-        plt.plot(x1_recall,y1_recall, c1, label = label1)
-        plt.plot(x2_recall,y2_recall, c2, label = label2)
-        #plt.plot(x_lr,y_lr, label = 'lr')
-        plt.xlabel('epoch',size=14)
-        plt.ylabel('recall@10',size=14)
-        plt.ylim(0,0.8)
-        plt.grid()
-        plt.legend(fontsize=14)
-        plt.subplot(1,3,2)
-        plt.plot(x1_vgsloss  , y1_vgsloss, c1, label = label1)
-        plt.plot(x2_vgsloss  , y2_vgsloss, c2, label = label2)
-        plt.xlabel('epoch',size=14)
-        plt.ylabel('loss-vgs',size=14)
-        plt.ylim(0,14)
-        plt.grid()
-        plt.legend(fontsize=14)
-        plt.subplot(1,3,3)
-        plt.plot(x1_caploss  , y1_caploss, c1, label = label1)
-        plt.plot(x2_caploss  , y2_caploss, c2, label = label2)
-        plt.xlabel('epoch',size=14)
-        plt.ylabel('loss-caption',size=14)
-        plt.ylim(0,14)
-        plt.grid()
-        plt.legend(fontsize=14)
-
-        plt.savefig(os.path.join(path_save , pltname + '.png'), format = 'png')
+    
 ###############################################################################
 kh
 
@@ -322,3 +290,55 @@ plt.ylim(0,14)
 plt.grid()
 plt.legend(fontsize=16)
 plt.savefig(os.path.join(path_save , 'fig1_light19_recall_loss' + '.png'), format = 'png')
+
+################################################################# plotting abx for m19base
+m19base1E1 =  np.array([[0.1816,0,0.1061,0.1024,0.1022],[0.1902,0 ,0.1175,0.1145,0.1167],
+              [0.2025,0,0.1567,0.1604,0.1659],[0.2129,0,0.2233,0.2429,0.2484],
+              [0.2072,0,0.2189,0.2491,0.2546]])
+
+m19base2E1 = np.array([[],[],
+              [],[],
+              []])
+
+m19base3E1 = np.array([[0.1409,0.066,0.0643, 0.0634, 0.0616],[0.1383, 0.0626, 0.0588, 0.0587,0.0560],
+              [0.1361,0.0594,0.0562,0.0554,0.0524],[0.1396,0.0575,0.0537,0.0534,0.0501],
+              [0.1467,0.0603,0.0547,0.0537,0.0503]])
+
+
+m19base4E1 = np.array([[],[],
+              [],[],
+              []])
+
+title = 'ABX-error for the light models at different epochs during training'
+fig = plt.figure(figsize=(15, 10))
+fig.suptitle(title, fontsize=20)
+plt.subplot(2, 2, 1)
+plt.plot(m19base1E1.T[:, 0], label='layer1')
+plt.plot(m19base1E1.T[:, 1], label='layer2')
+plt.plot(m19base1E1.T[:, 2], label='layer3')
+plt.plot(m19base1E1.T[:, 3], label='layer4')
+plt.plot(m19base1E1.T[:, 4], label='layer5')
+plt.title('w2v2',size=14)
+#plt.xlabel('epoch', size=14)
+plt.ylabel('abx-error', size=18)
+#plt.xlim(-0.5, 4.5)
+#plt.ylim(0, 0.25)
+plt.xticks([0,1,2,3,4],['1', '5', '10', '15', '20'])
+plt.grid()
+plt.legend(fontsize=14)
+
+plt.subplot(2, 2, 3)
+plt.plot(m19base3E1.T[:, 0], label='layer1')
+plt.plot(m19base3E1.T[:, 1], label='layer2')
+plt.plot(m19base3E1.T[:, 2], label='layer3')
+plt.plot(m19base3E1.T[:, 3], label='layer4')
+plt.plot(m19base3E1.T[:, 4], label='layer5')
+plt.title('VGS+', size=14)
+plt.xlabel('epoch', size=14)
+plt.ylabel('abx-error', size=18)
+#plt.xlim(-0.5, 4.5)
+#plt.ylim(0, 0.15)
+plt.xticks([0,1,2,3,4],['1', '5', '10', '15', '20'])
+plt.grid()
+plt.legend(fontsize=14)
+plt.savefig(os.path.join(path_save, 'fig2_light19_abx' + '.png'), format='png')
