@@ -18,7 +18,7 @@ python \
 --batch_size 64 \
 --val_batch_size 64 \
 --val_cross_batch_size 8 \
---n_epochs 20 \
+--n_epochs 30 \
 --n_print_steps 500 \
 --n_val_steps 9252 \
 --lr 0.0001 \
@@ -29,11 +29,8 @@ python \
 --fine_matching_weight 0.0 \
 --coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
---caption_w2v2_weight 1.0 \
---coarse_to_fine_retrieve \
+--caption_w2v2_weight 0.0 \
 --trim_mask \
---encoder_layers 12 \
---encoder_attention_heads 12 \
 --feature_grad_mult 0.1 \
 --layer_use 7 \
 
