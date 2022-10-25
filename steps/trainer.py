@@ -166,7 +166,7 @@ class Trainer:
                 # validation and save models
                 if self.progress['num_updates'] % self.args.n_val_steps == 0:
                     
-                    r10, r5, r1 = self.validate_and_save(libri=self.use_libri_loss, places=self.args.places, n_save_ind = self.progress['num_updates'])
+                    r10, r5, r1 = self.validate_and_save(libri=self.use_libri_loss, places=self.args.places, n_save_ind = self.progress['epoch'])
                     
                     # khazar: I added below lines (for automated resuming)
                     
@@ -222,7 +222,7 @@ class Trainer:
             optim_states = None
             
         # Khazar : for random initialization     
-        self.args.fb_w2v2_weights_fn = None
+        # self.args.fb_w2v2_weights_fn = None
         
         if self.args.fb_w2v2_weights_fn and self.progress['num_updates'] <= 1 and not self.args.validate and self.args.trained_weights_dir == None:          
             b = torch.load(self.args.fb_w2v2_weights_fn)['model']
@@ -293,7 +293,10 @@ class Trainer:
             logger.info(f"save *best* models at {save_path} at global step {self.progress['num_updates']}")
         # Khazar: here it saves the model in each call    
         save_progress(self)
-        save_path = os.path.join(self.args.exp_dir, str(n_save_ind) + "_bundle.pth")
+        if self.progress['epoch'] % 5 == 0:
+            save_path = os.path.join(self.args.exp_dir, 'E' + str(n_save_ind) + "_bundle.pth")
+        else:
+            save_path = os.path.join(self.args.exp_dir, "bundle.pth")
         #save_path = os.path.join(self.args.exp_dir,"bundle.pth")
         torch.save(
             {
@@ -743,12 +746,12 @@ class Trainer:
 
     def weight_loss(self, losses):
         
-        #n = self.progress['num_updates']    
-        n = self.progress['epoch']
-        N = self.args.n_epochs
+        # n = self.progress['num_updates']    
+        # n = self.progress['epoch']
+        # N = self.args.n_epochs
         ############
         # model 19base1
-        alpha = 0
+        # alpha = 0
         ############
         # model 19base2
         # alpha = 1
@@ -803,12 +806,12 @@ class Trainer:
         # alpha = y [n-1] #because n starts from 1 not 0
         ############         
         #khazar: I removed 'fine_matching_loss' below line
-        weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight * alpha #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
+        weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight #* alpha #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
         
         # print (' kh.............. here it is printing losses, coarse.............')
         # print(weighted_loss)
         if 'caption_w2v2_loss' in losses:
-            weighted_loss += losses['caption_w2v2_loss'].mean() * self.args.caption_w2v2_weight * (1-alpha)
+            weighted_loss += losses['caption_w2v2_loss'].mean() * self.args.caption_w2v2_weight #* (1-alpha)
             
             # print (' kh.............. here it is printing losses, w2v2.............')
             # print(losses['caption_w2v2_loss'])
