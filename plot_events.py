@@ -14,7 +14,9 @@ path_save = '/worktmp2/hxkhkh/current/FaST/experiments/plots/'
 path_event_6a = 'model6a/events.out.tfevents.1665150679.r01g05.bullx.404982.0'
 # I deleted weights of 6b on puhti by mistake
 path_event_6b = 'model6b/events.out.tfevents.1665144281.r13g01.bullx.830503.0'
-path_event_6bTrim = 'model6bTrim/events.out.tfevents.1665332229.r13g02.bullx.1144814.0'
+path_event_6bTrim1 = 'model6bTrim/events.out.tfevents.1665332229.r13g02.bullx.1144814.0'
+path_event_6bTrim2 = 'model6bTrim/events.out.tfevents.1666434510.r02g03.bullx.2084431.0'
+path_event_6bTrim3 = 'model6bTrim/events.out.tfevents.1666452388.r02g03.bullx.2120801.0'
 
 path_event_10bTrim = 'model10bTrim/events.out.tfevents.1665346196.r03g01.bullx.1369259.0'
 path_event_18b = 'model18b/events.out.tfevents.1665249277.r03g02.bullx.465911.0'
@@ -46,7 +48,7 @@ c_1 = 'blue'
 c_2 = 'grey'
 c_3 = 'green'
 c_4 = 'red'
-c_7 = 'royalblue'
+c_5 = 'royalblue'
 c_18 = 'darkorange'
 c_19 = 'brown'
 c_11 = 'pink'
@@ -63,7 +65,7 @@ def find_single_recall (event, n):
     recall = pd.DataFrame(event.Scalars('acc_r10'))
     x_recall = [ i/n for i in recall['step']]
     y_recall = recall['value']
-    return x_recall, y_recall
+    return x_recall, y_recall.to_list()
 
 def find_single_lr (event, n , interval):
     lr = pd.DataFrame(event.Scalars('lr'))
@@ -159,9 +161,18 @@ def plot_double_events(event1,event2, label1 , label2, c1,c2, n, pltname, title)
 kh
 
 # event 6bTrim
-event_6bTrim =  EventAccumulator(os.path.join(path_source, path_event_6bTrim))
-event_6bTrim.Reload()
-plot_single_event(event_6bTrim , n_64 , 'model6bTrim' , 'VGS+ (Trim-mask), random init, bs = 64' )  
+event_6bTrim1 =  EventAccumulator(os.path.join(path_source, path_event_6bTrim1))
+event_6bTrim1.Reload()
+
+event_6bTrim2 =  EventAccumulator(os.path.join(path_source, path_event_6bTrim2))
+event_6bTrim2.Reload()
+
+event_6bTrim3 =  EventAccumulator(os.path.join(path_source, path_event_6bTrim3))
+event_6bTrim3.Reload()
+
+
+
+# plot_single_event(event_6bTrim1 , n_64 , 'model6bTrim' , 'VGS+ (Trim-mask), random init, bs = 64' )  
 
 # event 18b
 event_18b =  EventAccumulator(os.path.join(path_source, path_event_18b))
@@ -223,6 +234,12 @@ event_19base4 =  EventAccumulator(os.path.join(path_source, path_event_19base4))
 event_19base4.Reload()
 x19_base4_recall, y19_base4_recall = find_single_recall(event_19base4, n_64)
 
+# ecall for the reference model
+x6bTrim1_recall, y6bTrim1_recall = find_single_recall(event_6bTrim1, n_64)
+#x6bTrim2_recall, y6bTrim2_recall = find_single_recall(event_6bTrim2, n_64)
+x6bTrim3_recall, y6bTrim3_recall = find_single_recall(event_6bTrim3, n_64)
+
+y6bTrim_recall = np.append(y6bTrim1_recall,y6bTrim3_recall[2:])
 ################################################################# VGS loss
 i = 500
 event_19base2 =  EventAccumulator(os.path.join(path_source, path_event_19base2))
@@ -257,6 +274,7 @@ label1 = 'w2v2'
 label2 = 'VGS'
 label3 = 'VGS+'
 label4 = 'VGS+ pretrained'
+label5 = 'VGS+ reference'
 fig = plt.figure(figsize=(15,10))
 fig.suptitle(title, fontsize=20)
 # recall
@@ -264,6 +282,7 @@ plt.subplot(1,3,1)
 plt.plot(x19_base2_recall, y19_base2_recall, c_2, label = label2)
 plt.plot(x19_base3_recall, y19_base3_recall, c_3, label = label3)
 plt.plot(x19_base4_recall, y19_base4_recall, c_4, label = label4)
+plt.plot(x19_base2_recall [0:20] ,y6bTrim_recall, c_5, label = label5)
 plt.xlabel('epoch',size=18)
 plt.ylabel('recall@10',size=18)
 plt.ylim(0,0.8)
@@ -289,12 +308,12 @@ plt.ylabel('lcaption loss',size=18)
 plt.ylim(0,14)
 plt.grid()
 plt.legend(fontsize=16)
-plt.savefig(os.path.join(path_save , 'fig1_light19_recall_loss' + '.png'), format = 'png')
+plt.savefig(os.path.join(path_save , 'fig1_light19_recall_loss-add' + '.png'), format = 'png')
 
 ################################################################# plotting abx for m19base
-m19base1E1 =  np.array([[0.1816,0,0.1061,0.1024,0.1022],[0.1902,0 ,0.1175,0.1145,0.1167],
-              [0.2025,0,0.1567,0.1604,0.1659],[0.2129,0,0.2233,0.2429,0.2484],
-              [0.2072,0,0.2189,0.2491,0.2546]])
+m19base1E1 =  np.array([[0.1816,0.1183,0.1061,0.1024,0.1022],[0.1902,0.1264 ,0.1175,0.1145,0.1167],
+              [0.2025,0.1532,0.1567,0.1604,0.1659],[0.2129,0.1948,0.2233,0.2429,0.2484],
+              [0.2072,0.1950,0.2189,0.2491,0.2546]])
 
 m19base2E1 = np.array([[],[],
               [],[],
