@@ -637,9 +637,8 @@ class Trainer:
             indices = None
             libri_indices = None
             optim_states = None
-        print('khazar: here is w2v2 weight condition')
-        print(self.args.fb_w2v2_weights_fn)
-        self.args.fb_w2v2_weights_fn = None
+        
+        # self.args.fb_w2v2_weights_fn = None
         print('khazar: here is w2v2 weight condition')
         print(self.args.fb_w2v2_weights_fn)
         if self.args.fb_w2v2_weights_fn and self.progress['num_updates'] <= 1 and not self.args.validate and self.args.trained_weights_dir == None:
