@@ -26,6 +26,7 @@ python \
 --trm_layers 6 \
 --fine_matching_weight 0 \
 --coarse_matching_weight 1 \
+--libri_w2v2_weight 0.0 \
 --feature_grad_mult 0. \
 --layer_use 7
 
