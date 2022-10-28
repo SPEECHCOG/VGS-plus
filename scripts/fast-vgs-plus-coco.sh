@@ -16,7 +16,7 @@ python \
 --exp_dir ${exp_dir} \
 --libri_fn_root ${libri_fn_root} \
 --batch_size 64 \
---val_batch_size 64 \
+--val_batch_size 100 \
 --val_cross_batch_size 8 \
 --n_epochs 30 \
 --n_print_steps 500 \
@@ -29,7 +29,7 @@ python \
 --fine_matching_weight 0.0 \
 --coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
---caption_w2v2_weight 0.0 \
+--caption_w2v2_weight 1.0 \
 --trim_mask \
 --feature_grad_mult 0.1 \
 --layer_use 7 \
