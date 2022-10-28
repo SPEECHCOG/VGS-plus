@@ -49,8 +49,8 @@ class Trainer:
         self.dual_encoder, self.cross_encoder, self.trainables, self.indices, self.libri_indices, self.optim_states = self._setup_models()
         # self.dual_encoder_test = _setup_models_for_test(self)
         self.use_libri_loss = self.args.libri_w2v2_weight != 0
-        print ('################# self.use_libri_loss ########################')
-        print(args.libri_w2v2_weight)
+        print ('################# self.encoder layers ########################')
+        print(args.encoder_layer)
         print ('##############################################################')
         self.train_loader, self.valid_loader, self.valid_loader2, self.train_sampler, self.libri_train_loader, self.libri_valid_loader, self.libri_train_sampler, self.train_data_length = self._setup_dataloader()
         # self.test_loader, self.test_data_length = self._setup_testdataloader(arg.bundle_name)
@@ -171,99 +171,10 @@ class Trainer:
                     
                     r10, r5, r1 = self.validate_and_save(libri=self.use_libri_loss, places=self.args.places, n_save_ind = self.progress['epoch'])
                     
-                    # khazar: I added below lines (for automated resuming)
-                    
-                    # recall_current = r10
-                    # recall_delta = recall_current - recall_previous  
-                    # if recall_delta <= - 0.025:
-                    #     logger.info('.............. The condition for resume satisfied .............')
-                    #     print('.................... current recall is  = ' + str(recall_current))
-                    #     print('.................... previous recall is  = ' + str(recall_previous))
-                    #     print('.................... delta recall  = ' + str(recall_delta))
-                        
-                    #     flag_resume = True
-                    # recall_previous = recall_current
-                    
-                    
                 self.progress['num_updates'] += 1
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
                 data_start_time = time.time()
-                
-                # khazar: I added below lines (for automated resuming)
-                # if flag_resume:
-                #     torch.cuda.empty_cache()#this does not change memory allocation here
-                #     print ('..................... torch memory before resume and after empty cache ......................... ')
-                #     print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
-                #     self.dual_encoder, self.cross_encoder, self.trainables, self.indices, self.libri_indices, self.optim_states = self._setup_models_at_resume()
-                #     if torch.cuda.device_count() > 1:
-                #         self.dual_encoder = nn.DataParallel(self.dual_encoder)
-                #         self.cross_encoder = nn.DataParallel(self.cross_encoder)
-                #     flag_resume = False
-                #     logger.info('#################### one resume happened ###############')
-                    # khazar: here torch memory allocation increase (e.g., from 2.2 to 3)
-                    # It produces CUDA memory error at the next forward pass 
-     
-    # khazar: I added below method (for automated resuming) 
-    def _setup_models_at_resume(self):
-        dual_encoder = fast_vgs.DualEncoder(self.args)
-        cross_encoder = fast_vgs.CrossEncoder(self.args)
-        
-        # Khazar: change print_model = True if you want to print the whole model and not only the model parameters
-        print_model_info(dual_encoder , print_model = False)
-        print_model_info(cross_encoder, print_model = False)
-        if self.args.trained_weights_dir != None:
-            bundle = torch.load(os.path.join(self.args.trained_weights_dir, "best_bundle.pth"))
-            dual_encoder.carefully_load_state_dict(bundle['dual_encoder'])
-            #cross_encoder.carefully_load_state_dict(bundle['cross_encoder'])
-            indices = None
-            libri_indices = None
-            optim_states = None
-            logger.info(f"Load trained weights from {self.args.trained_weights_dir}")
-        else:
-            indices = None
-            libri_indices = None
-            optim_states = None
-            
-        # Khazar : for random initialization     
-        # self.args.fb_w2v2_weights_fn = None
-        
-        if self.args.fb_w2v2_weights_fn and self.progress['num_updates'] <= 1 and not self.args.validate and self.args.trained_weights_dir == None:          
-            b = torch.load(self.args.fb_w2v2_weights_fn)['model']
-            # b = b.module
-            #khazar: I added below lines due to an error like: 'DataParallel' object has no attribute 'carefully_load_state_dict'
-            # if isinstance(b, torch.nn.DataParallel):
-            #     print("b is a dataparallel object")
-            #     b = b.module
-            dual_encoder.conv1_trm1_trm3.carefully_load_state_dict(b)
 
-        if self.args.feature_grad_mult <= 0.:
-            for name, p in dual_encoder.named_parameters():
-                if "feature_extractor" in name:
-                    p.requires_grad = False
-        trainables1 = [p for p in dual_encoder.parameters() if p.requires_grad]
-        trainables2 = [p for p in cross_encoder.parameters() if p.requires_grad]
-        trainables = trainables1 + trainables2
-
-        dual_encoder.to(self.device)
-        cross_encoder.to(self.device)
-
-        return dual_encoder, cross_encoder, trainables, indices, libri_indices, optim_states
-
-    # def test_and_save (self):
-    #     # khazar: I added "n_save_ind" argument to save intermediate models 
-    #     self.dual_encoder_test.eval()
-    #     ###############################################
-    #     start_val_time = time.time()
-    #     N_examples = self.valid_loader.dataset.__len__()
-    #     print(' here is the size of the test data .............................')
-    #     print(N_examples)
-    #     with torch.no_grad():
-    #         # get single modal representations
-    #         audio_feats_total = [] 
-    #         for i, batch in enumerate(self.test_loader):         
-    #             audio_feats = self.dual_encoder_test.forward_test (audio_feats = batch['audio'].to(self.device) , attention_mask = batch['audio_attention_mask'].to(self.device))
-    #             audio_feats_total.append(audio_feats.detach()) # still on cude after .detach(), just removed from graph, so no gradient
-    #     return audio_feats_total
         
     def validate_and_save(self, libri=False, places=False , n_save_ind = 0):
         # khazar: I added "n_save_ind" argument to save intermediate models 
@@ -640,18 +551,10 @@ class Trainer:
             indices = None
             libri_indices = None
             optim_states = None
-        
-        # self.args.fb_w2v2_weights_fn = None
-        print('khazar: here is w2v2 weight condition')
-        print(self.args.fb_w2v2_weights_fn)
-        if self.args.fb_w2v2_weights_fn and self.progress['num_updates'] <= 1 and not self.args.validate and self.args.trained_weights_dir == None:
-            
+        # Khazar: for random initialization
+        self.args.fb_w2v2_weights_fn = None
+        if self.args.fb_w2v2_weights_fn and self.progress['num_updates'] <= 1 and not self.args.validate and self.args.trained_weights_dir == None:           
             b = torch.load(self.args.fb_w2v2_weights_fn)['model']
-            # b = b.module
-            #khazar: I added below lines due to an error like: 'DataParallel' object has no attribute 'carefully_load_state_dict'
-            # if isinstance(b, torch.nn.DataParallel):
-            #     print("b is a dataparallel object")
-            #     b = b.module
             dual_encoder.conv1_trm1_trm3.carefully_load_state_dict(b)
 
         if self.args.feature_grad_mult <= 0.:
@@ -752,16 +655,19 @@ class Trainer:
         # n = self.progress['epoch']
         # N = self.args.n_epochs
         ############
-        # model 19base1
-        # alpha = 0
+        # model base1
+        alpha = 0
         ############
-        # model 19base2
+        # model base2
         # alpha = 1
         ############
-        # model 19base3
+        # model base3
         # alpha = 0.5
         ############
-        # model 19base4 
+        # model base4
+        # alpha = 0.5
+        ############
+        # model 19base4-old 
         # if self.progress['epoch'] <=12:
         #     alpha = 0
         # else:
@@ -808,12 +714,12 @@ class Trainer:
         # alpha = y [n-1] #because n starts from 1 not 0
         ############         
         #khazar: I removed 'fine_matching_loss' below line
-        weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight #* alpha #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
+        weighted_loss = losses['coarse_matching_loss'] * self.args.coarse_matching_weight * alpha #+ losses['fine_matching_loss'] * self.args.fine_matching_weight
         
         # print (' kh.............. here it is printing losses, coarse.............')
         # print(weighted_loss)
         if 'caption_w2v2_loss' in losses:
-            weighted_loss += losses['caption_w2v2_loss'].mean() * self.args.caption_w2v2_weight #* (1-alpha)
+            weighted_loss += losses['caption_w2v2_loss'].mean() * self.args.caption_w2v2_weight * (1-alpha)
             
             # print (' kh.............. here it is printing losses, w2v2.............')
             # print(losses['caption_w2v2_loss'])
