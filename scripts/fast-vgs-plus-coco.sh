@@ -30,6 +30,7 @@ python \
 --coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
 --caption_w2v2_weight 1.0 \
---feature_grad_mult 0.1 \
+--feature_grad_mult 1.0 \
+--trim_mask \
 --layer_use 7 \
 
