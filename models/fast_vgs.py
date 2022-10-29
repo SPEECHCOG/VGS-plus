@@ -201,7 +201,8 @@ class DualEncoder(nn.Module):
         
         if self.args.caption_w2v2_weight == None and self.args.libri_w2v2_weight == None:
             args.encoder_layers = args.layer_use + 1
-        
+        print("################# args.encoder_layers ######################")
+        print(args.encoder_layers)
         self.conv1_trm1_trm3 = Wav2Vec2Model_cls(args)
         self.conv2 = ResDavenet()
         self.audio_cls_token_proj_coarse = nn.Sequential(nn.Linear(self.args.hidden_size, self.args.hidden_size*2), nn.GELU(), nn.Linear(self.args.hidden_size*2, self.args.hidden_size))
