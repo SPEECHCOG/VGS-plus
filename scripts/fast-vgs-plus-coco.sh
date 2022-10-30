@@ -15,7 +15,7 @@ python \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
 --libri_fn_root ${libri_fn_root} \
---batch_size 100 \
+--batch_size 64 \
 --val_batch_size 100 \
 --val_cross_batch_size 8 \
 --n_epochs 50 \
@@ -25,12 +25,12 @@ python \
 --warmup_fraction 0.1 \
 --normalize \
 --xtrm_layers 1 \
---trm_layers 1 \
+--trm_layers 6 \
 --fine_matching_weight 0.0 \
 --coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
 --caption_w2v2_weight 1.0 \
 --feature_grad_mult 1.0 \
 --trim_mask \
---layer_use 6 \
+--layer_use 7 \
 
