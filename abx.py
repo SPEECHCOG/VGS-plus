@@ -1,7 +1,7 @@
 #############################################################################
 #twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/9252_bundle.pth'
 #target_layer = 2
-total_layers = 6
+total_layers = 12
 trimTF = True
 subset_name = 'dev_clean'
 
@@ -108,13 +108,11 @@ args = parser.parse_args()
 mytwd = args.mytwd
 mytarget_layer = int(args.mytarget_layer)
 
-args.layer_use = mytarget_layer
-
 # fixed args
 args.encoder_layers = total_layers
 args.trim_mask = trimTF
 args.normalize = True
-args.encoder_attention_heads = 8
+args.encoder_attention_heads = 12
 
 print ('###############################')
 print(args)
@@ -170,7 +168,7 @@ with torch.no_grad():
         
         audio_signal = torch.tensor(signal_peng ,dtype=torch.float).to(device)
         input_signal = audio_signal.view(1, -1)
-        trm13_out = conv1_trm1_trm3(input_signal,  mask=False, features_only=True, tgt_layer=args.layer_use)
+        trm13_out = conv1_trm1_trm3(input_signal,  mask=False, features_only=True, tgt_layer=mytarget_layer)
         trm13_out_features = trm13_out['layer_feats']
         output_tensor = trm13_out_features[0]
         output_np_arr = output_tensor.cpu().detach().numpy()
