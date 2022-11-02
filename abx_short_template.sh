@@ -15,7 +15,7 @@ mkdir $OUTFILE
 zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE  -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
 rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 
-for LAYERNAME in 2 3 4 5
+for LAYERNAME in 2 3 4 5 6
 do
     OUTNAME="E5L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
@@ -29,7 +29,7 @@ done
 
 M="E15_bundle.pth"
 
-for LAYERNAME in 1 2 3 4 5
+for LAYERNAME in 1 2 3 4 5 6
 do
     OUTNAME="E15L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
@@ -43,7 +43,7 @@ done
 
 M="E25_bundle.pth"
 
-for LAYERNAME in 1 2 3 4 5
+for LAYERNAME in 1 2 3 4 5 6
 do
     OUTNAME="E25L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
@@ -57,7 +57,7 @@ done
 
 M="E35_bundle.pth"
 
-for LAYERNAME in 1 2 3 4 5
+for LAYERNAME in 1 2 3 4 5 6
 do
     OUTNAME="E35L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
@@ -71,7 +71,7 @@ done
 
 M="E45_bundle.pth"
 
-for LAYERNAME in 1 2 3 4 5
+for LAYERNAME in 1 2 3 4 5 6
 do
     OUTNAME="E45L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
