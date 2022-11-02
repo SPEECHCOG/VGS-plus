@@ -2,7 +2,7 @@
 #twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/9252_bundle.pth'
 #target_layer = 2
 total_layers = 12
-trimTF = False
+trimTF = True
 subset_name = 'dev_clean'
 
 # Paths for LibriSpeech input and output

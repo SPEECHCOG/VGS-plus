@@ -1,5 +1,5 @@
 #!/bin/sh
-NAME="model6base3T"
+NAME="testw2v2"
 OUTFOLDER="/worktmp/khorrami/current/ZeroSpeech/output"/$NAME
 mkdir $OUTFOLDER
 MFOLDER="/worktmp/khorrami/current/FaST/experiments"/$NAME/"exp"
