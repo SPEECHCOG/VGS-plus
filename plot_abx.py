@@ -37,10 +37,10 @@ def read_all_scores(path , model_name):
 ##################################################################
                         ### example  ###
 ################################################################## 
-scores_m6base1 = []
-model_name = 'model6base1T'
-layer_names = ['L1','L2','L3','L4','L5']
-for epoch in range(5,30,5):
+scores_m6base3 = []
+model_name = 'model6base3T'
+layer_names = ['L1','L2','L3','L4','L5','L6']
+for epoch in range(5,55,10):
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -48,26 +48,26 @@ for epoch in range(5,30,5):
         path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
         name = 'E' + str(epoch) + layer_name
         s = read_score (path)
-        scores_m6base1.append(s)
+        scores_m6base3.append(s)
 
-m6base1 =  ( np.reshape(scores_m6base1 , [5, 5])).T
+m6base3 = (np.reshape(scores_m6base3, (5,6))).T
 
-scores_test = read_all_scores(path_input, model_name)
 ################################################################ Plotting
 
 # title = 'ABX-error for the light models ( grad-mul = 1) '
 # fig = plt.figure(figsize=(15, 10))
 # fig.suptitle(title, fontsize=20)
 
-# plt.subplot(2, 2, 1)  
-# plt.plot(m20base1[0], label='layer1')
-# plt.plot(m20base1[1], label='layer2')
-# plt.plot(m20base1[2], label='layer3')
-# plt.plot(m20base1[3], label='layer4')
-# plt.plot(m20base1[4], label='layer5')
-# plt.title('w2v2',size=14)  
-# plt.ylabel('abx-error', size=18) 
-# plt.xticks([0,1,2,3,4],['1', '5', '10', '15', '20'])
-# plt.grid()
-# plt.legend(fontsize=14)     
+
+plt.plot(m6base3[0], label='layer1')
+plt.plot(m6base3[1], label='layer2')
+plt.plot(m6base3[2], label='layer3')
+plt.plot(m6base3[3], label='layer4')
+plt.plot(m6base3[4], label='layer5')
+plt.plot(m6base3[5], label='layer6')
+plt.title('VGS+',size=14)  
+plt.ylabel('abx-error', size=18) 
+plt.xticks([0,1,2,3,4],['5', '15', '25', '35', '45'])
+plt.grid()
+plt.legend(fontsize=14)     
 
