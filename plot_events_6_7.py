@@ -137,89 +137,27 @@ def plot_double_events(event1,event2, label1 , label2, c1,c2, n, pltname, title)
     
     
 ############################################################################## Model 6
-# event_6base1T =  EventAccumulator(os.path.join(path_source, path_event_6base1T))
-# event_6base1T.Reload()
+event_6base1T =  EventAccumulator(os.path.join(path_source, path_event_6base1T))
+event_6base1T.Reload()
 
-# event_6base2T =  EventAccumulator(os.path.join(path_source, path_event_6base2T))
-# event_6base2T.Reload()
+event_6base2T =  EventAccumulator(os.path.join(path_source, path_event_6base2T))
+event_6base2T.Reload()
 
-# event_6base3T =  EventAccumulator(os.path.join(path_source, path_event_6base3T))
-# event_6base3T.Reload()
-# ################################################################# Recalls
-# x_6base2T_recall, y_6base2T_recall = find_single_recall(event_6base2T, n_64)
-# x_6base3T_recall, y_6base3T_recall = find_single_recall(event_6base3T, n_64)
-
-# ################################################################# VGS loss
-# i = 500
-# x_6base2T_vgsloss, y_6base2T_vgsloss = find_single_vgsloss(event_6base2T, n_64 , i)
-# x_6base3T_vgsloss, y_6base3T_vgsloss = find_single_vgsloss(event_6base3T, n_64, i)
-
-# ################################################################# caption loss
-# i = 500
-# x_6base1T_caploss, y_6base1T_caploss = find_single_caploss(event_6base1T, n_64 , i)
-# x_6base3T_caploss, y_6base3T_caploss = find_single_caploss(event_6base3T, n_64, i)
-
-# ################################################################# plotting recall and loss for model 6
-# title = 'model origin, with gradmul = 0.1'
-# label1 = 'w2v2'
-# label2 = 'VGS'
-# label3 = 'VGS+'
-# label4 = 'VGS+ pretrained'
-# label5 = 'VGS+ reference'
-# fig = plt.figure(figsize=(15,10))
-# fig.suptitle(title, fontsize=20)
-# # recall
-# plt.subplot(1,3,1)
-# plt.plot(x_6base2T_recall, y_6base2T_recall, c_2, label = label2)
-# plt.plot(x_6base3T_recall, y_6base3T_recall, c_3, label = label3)
-# plt.xlabel('epoch',size=18)
-# plt.ylabel('recall@10',size=18)
-# plt.ylim(0,0.8)
-# plt.grid()
-# plt.legend(fontsize=16)
-# #vgs loss
-# plt.subplot(1,3,2)
-# plt.plot(x_6base2T_vgsloss, y_6base2T_vgsloss, c_2, label = label2)
-# plt.plot(x_6base3T_vgsloss, y_6base3T_vgsloss, c_3, label = label3)
-# plt.xlabel('epoch',size=18)
-# plt.ylabel('VGS loss',size=18)
-# plt.ylim(0,14)
-# plt.grid()
-# plt.legend(fontsize=16)
-# # cap loss
-# plt.subplot(1,3,3)
-# plt.plot(x_6base1T_caploss, y_6base1T_caploss, c_1, label = label1)
-# plt.plot(x_6base3T_caploss, y_6base3T_caploss, c_3, label = label3)
-# plt.xlabel('epoch',size=18)
-# plt.ylabel('lcaption loss',size=18)
-# plt.ylim(0,14)
-# plt.grid()
-# plt.legend(fontsize=16)
-# plt.savefig(os.path.join(path_save , 'model6_recall_loss' + '.png'), format = 'png')
-
-
-############################################################################## Model 7
-event_7base1T =  EventAccumulator(os.path.join(path_source, path_event_7base1T))
-event_7base1T.Reload()
-
-event_7base2T =  EventAccumulator(os.path.join(path_source, path_event_7base2T))
-event_7base2T.Reload()
-
-event_7base3T =  EventAccumulator(os.path.join(path_source, path_event_7base3T))
-event_7base3T.Reload()
+event_6base3T =  EventAccumulator(os.path.join(path_source, path_event_6base3T))
+event_6base3T.Reload()
 ################################################################# Recalls
-x_7base2T_recall, y_7base2T_recall = find_single_recall(event_7base2T, n_64)
-x_7base3T_recall, y_7base3T_recall = find_single_recall(event_7base3T, n_64)
+x_6base2T_recall, y_6base2T_recall = find_single_recall(event_6base2T, n_64)
+x_6base3T_recall, y_6base3T_recall = find_single_recall(event_6base3T, n_64)
 
 ################################################################# VGS loss
 i = 500
-x_7base2T_vgsloss, y_7base2T_vgsloss = find_single_vgsloss(event_7base2T, n_64 , i)
-x_7base3T_vgsloss, y_7base3T_vgsloss = find_single_vgsloss(event_7base3T, n_64, i)
+x_6base2T_vgsloss, y_6base2T_vgsloss = find_single_vgsloss(event_6base2T, n_64 , i)
+x_6base3T_vgsloss, y_6base3T_vgsloss = find_single_vgsloss(event_6base3T, n_64, i)
 
 ################################################################# caption loss
 i = 500
-x_7base1T_caploss, y_7base1T_caploss = find_single_caploss(event_7base1T, n_64 , i)
-x_7base3T_caploss, y_7base3T_caploss = find_single_caploss(event_7base3T, n_64, i)
+x_6base1T_caploss, y_6base1T_caploss = find_single_caploss(event_6base1T, n_64 , i)
+x_6base3T_caploss, y_6base3T_caploss = find_single_caploss(event_6base3T, n_64, i)
 
 ################################################################# plotting recall and loss for model 6
 title = 'model origin, with gradmul = 0.1'
@@ -232,8 +170,8 @@ fig = plt.figure(figsize=(15,10))
 fig.suptitle(title, fontsize=20)
 # recall
 plt.subplot(1,3,1)
-plt.plot(x_7base2T_recall, y_7base2T_recall, c_2, label = label2)
-plt.plot(x_7base3T_recall, y_7base3T_recall, c_3, label = label3)
+plt.plot(x_6base2T_recall, y_6base2T_recall, c_2, label = label2)
+plt.plot(x_6base3T_recall, y_6base3T_recall, c_3, label = label3)
 plt.xlabel('epoch',size=18)
 plt.ylabel('recall@10',size=18)
 plt.ylim(0,0.8)
@@ -241,8 +179,8 @@ plt.grid()
 plt.legend(fontsize=16)
 #vgs loss
 plt.subplot(1,3,2)
-plt.plot(x_7base2T_vgsloss, y_7base2T_vgsloss, c_2, label = label2)
-plt.plot(x_7base3T_vgsloss, y_7base3T_vgsloss, c_3, label = label3)
+plt.plot(x_6base2T_vgsloss, y_6base2T_vgsloss, c_2, label = label2)
+plt.plot(x_6base3T_vgsloss, y_6base3T_vgsloss, c_3, label = label3)
 plt.xlabel('epoch',size=18)
 plt.ylabel('VGS loss',size=18)
 plt.ylim(0,14)
@@ -250,11 +188,73 @@ plt.grid()
 plt.legend(fontsize=16)
 # cap loss
 plt.subplot(1,3,3)
-plt.plot(x_7base1T_caploss, y_7base1T_caploss, c_1, label = label1)
-plt.plot(x_7base3T_caploss, y_7base3T_caploss, c_3, label = label3)
+plt.plot(x_6base1T_caploss, y_6base1T_caploss, c_1, label = label1)
+plt.plot(x_6base3T_caploss, y_6base3T_caploss, c_3, label = label3)
 plt.xlabel('epoch',size=18)
 plt.ylabel('lcaption loss',size=18)
 plt.ylim(0,14)
 plt.grid()
 plt.legend(fontsize=16)
 plt.savefig(os.path.join(path_save , 'model6_recall_loss' + '.png'), format = 'png')
+
+
+############################################################################## Model 7
+# event_7base1T =  EventAccumulator(os.path.join(path_source, path_event_7base1T))
+# event_7base1T.Reload()
+
+# event_7base2T =  EventAccumulator(os.path.join(path_source, path_event_7base2T))
+# event_7base2T.Reload()
+
+# event_7base3T =  EventAccumulator(os.path.join(path_source, path_event_7base3T))
+# event_7base3T.Reload()
+# ################################################################# Recalls
+# x_7base2T_recall, y_7base2T_recall = find_single_recall(event_7base2T, n_64)
+# x_7base3T_recall, y_7base3T_recall = find_single_recall(event_7base3T, n_64)
+
+# ################################################################# VGS loss
+# i = 500
+# x_7base2T_vgsloss, y_7base2T_vgsloss = find_single_vgsloss(event_7base2T, n_64 , i)
+# x_7base3T_vgsloss, y_7base3T_vgsloss = find_single_vgsloss(event_7base3T, n_64, i)
+
+# ################################################################# caption loss
+# i = 500
+# x_7base1T_caploss, y_7base1T_caploss = find_single_caploss(event_7base1T, n_64 , i)
+# x_7base3T_caploss, y_7base3T_caploss = find_single_caploss(event_7base3T, n_64, i)
+
+# ################################################################# plotting recall and loss for model 6
+# title = 'model origin, with gradmul = 1'
+# label1 = 'w2v2'
+# label2 = 'VGS'
+# label3 = 'VGS+'
+# label4 = 'VGS+ pretrained'
+# label5 = 'VGS+ reference'
+# fig = plt.figure(figsize=(15,10))
+# fig.suptitle(title, fontsize=20)
+# # recall
+# plt.subplot(1,3,1)
+# plt.plot(x_7base2T_recall, y_7base2T_recall, c_2, label = label2)
+# plt.plot(x_7base3T_recall, y_7base3T_recall, c_3, label = label3)
+# plt.xlabel('epoch',size=18)
+# plt.ylabel('recall@10',size=18)
+# plt.ylim(0,0.8)
+# plt.grid()
+# plt.legend(fontsize=16)
+# #vgs loss
+# plt.subplot(1,3,2)
+# plt.plot(x_7base2T_vgsloss, y_7base2T_vgsloss, c_2, label = label2)
+# plt.plot(x_7base3T_vgsloss, y_7base3T_vgsloss, c_3, label = label3)
+# plt.xlabel('epoch',size=18)
+# plt.ylabel('VGS loss',size=18)
+# plt.ylim(0,14)
+# plt.grid()
+# plt.legend(fontsize=16)
+# # cap loss
+# plt.subplot(1,3,3)
+# plt.plot(x_7base1T_caploss, y_7base1T_caploss, c_1, label = label1)
+# plt.plot(x_7base3T_caploss, y_7base3T_caploss, c_3, label = label3)
+# plt.xlabel('epoch',size=18)
+# plt.ylabel('lcaption loss',size=18)
+# plt.ylim(0,14)
+# plt.grid()
+# plt.legend(fontsize=16)
+# plt.savefig(os.path.join(path_save , 'model7_recall_loss' + '.png'), format = 'png')
