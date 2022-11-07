@@ -35,7 +35,7 @@ def read_all_scores(path , model_name):
     scores_out =  ( np.reshape(scores , [5, 5])).T
     return scores_out()
 ##################################################################
-                        ### example  ###
+                        ### m6base3  ###
 ################################################################## 
 scores_m6base3 = []
 model_name = 'model6base3T'
@@ -52,22 +52,101 @@ for epoch in range(5,55,10):
 
 m6base3 = (np.reshape(scores_m6base3, (5,6))).T
 
+##################################################################
+                        ### m7base1  ###
+################################################################## 
+scores_m7base1 = []
+model_name = 'model7base1T'
+layer_names = ['L1','L2','L3','L4','L5','L6']
+for epoch in [5,15,25,35,40]:
+    print(epoch)
+    for layer_name in layer_names:
+        name = 'E' + str(epoch) + layer_name
+        print(name) # name = 'E10L3'
+        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
+        name = 'E' + str(epoch) + layer_name
+        s = read_score (path)
+        scores_m7base1.append(s)
+
+m7base1 = (np.reshape(scores_m7base1, (5,6))).T
+
+##################################################################
+                        ### testw2v2  ###
+################################################################## 
+scores_mtest = []
+model_name = 'testw2v2'
+layer_names = ['L1','L2','L3','L4']
+for epoch in [25,30]:
+    print(epoch)
+    for layer_name in layer_names:
+        name = 'E' + str(epoch) + layer_name
+        print(name) # name = 'E10L3'
+        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
+        name = 'E' + str(epoch) + layer_name
+        s = read_score (path)
+        scores_mtest.append(s)
+
+mtest = (np.reshape(scores_mtest, (2,4))).T
+##################################################################
+                        ### model7base3T  ###
+################################################################## 
+scores_m7base3 = []
+model_name = 'model7base3T'
+layer_names = ['L1','L2','L3','L4','L5','L6']
+for epoch in [5,15,25]:
+    print(epoch)
+    for layer_name in layer_names:
+        name = 'E' + str(epoch) + layer_name
+        print(name) # name = 'E10L3'
+        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
+        name = 'E' + str(epoch) + layer_name
+        s = read_score (path)
+        scores_m7base1.append(s)
+
+m7base3 = (np.reshape(scores_m7base3, (5,6))).T
 ################################################################ Plotting
 
-# title = 'ABX-error for the light models ( grad-mul = 1) '
-# fig = plt.figure(figsize=(15, 10))
-# fig.suptitle(title, fontsize=20)
+title = 'ABX-error for the original models '
+fig = plt.figure(figsize=(15, 10))
+fig.suptitle(title, fontsize=20)
 
-
+plt.subplot(2, 2, 1)  
 plt.plot(m6base3[0], label='layer1')
 plt.plot(m6base3[1], label='layer2')
 plt.plot(m6base3[2], label='layer3')
 plt.plot(m6base3[3], label='layer4')
 plt.plot(m6base3[4], label='layer5')
 plt.plot(m6base3[5], label='layer6')
-plt.title('VGS+',size=14)  
+plt.title('VGS+ (gradmul = 0.1)',size=14)  
 plt.ylabel('abx-error', size=18) 
 plt.xticks([0,1,2,3,4],['5', '15', '25', '35', '45'])
 plt.grid()
+plt.legend(fontsize=14) 
+
+plt.subplot(2, 2, 2)  
+plt.plot(m7base1[0], label='layer1')
+plt.plot(m7base1[1], label='layer2')
+plt.plot(m7base1[2], label='layer3')
+plt.plot(m7base1[3], label='layer4')
+plt.plot(m7base1[4], label='layer5')
+plt.plot(m7base1[5], label='layer6')
+plt.title('w2v2 (gradmul = 1)',size=14)  
+plt.ylabel('abx-error', size=18) 
+plt.xticks([0,1,2,3,4],['5', '15', '25', '35', '40'])
+plt.grid()
+plt.legend(fontsize=14) 
+
+plt.subplot(2, 2, 4)  
+plt.plot(mtest[0], label='layer1')
+plt.plot(mtest[1], label='layer2')
+plt.plot(mtest[2], label='layer3')
+plt.plot(mtest[3], label='layer4')
+# plt.plot(mtest[4], label='layer5')
+# plt.plot(mtest[5], label='layer6')
+plt.title('w2v2 (gradmul = 1), batch size = 100',size=14)  
+plt.ylabel('abx-error', size=18) 
+plt.xticks([0,1],['25', '30'])
+plt.grid()
 plt.legend(fontsize=14)     
 
+plt.savefig(os.path.join(path_save, 'abx_6_7' + '.png'), format='png')
