@@ -71,16 +71,6 @@ def read_score (path):
 ################################################################## reading from csv files
 layer_names = ['L1','L2','L3','L4','L5']
 
-# for epoch in range(5,30,5):
-#     print(epoch)
-#     for layer_name in layer_names:
-#         name = 'E' + str(epoch) + layer_name
-#         print(name) # name = 'E10L3'
-#         path = os.path.join(path_input,  name , 'score_phonetic.csv')
-#         name = 'E' + str(epoch) + layer_name
-#         s = read_score (path)
-#         scores_m20base1.append(s)
-
 scores_m20base1 = []
 for epoch in ['E1','E5','E10','E15','E20']:
     print(epoch)
@@ -114,16 +104,6 @@ for epoch in ['E1','E5','E10','E15','E20']:
         scores_m20base3.append(s)
 m20base3 =  ( np.reshape(scores_m20base3 , [5, 5])).T
 
-# scores_m20base4 = []
-# for epoch in ['E1','E5','E10','E15','E20']:
-#     print(epoch)
-#     for layer_name in layer_names:
-#         name = 'E' + str(epoch) + layer_name
-#         path = os.path.join(path_input , 'm20' , 'm20base4' , 'm20base4' + epoch + layer_name ,'score_phonetic.csv')
-#         print(path)
-#         s = read_score (path)
-#         scores_m20base4.append(s)
-# m20base4 =   np.reshape(scores_m20base4 , [5, 5])
 kh
 ################################################################ Plotting
 
