@@ -173,8 +173,9 @@ class BertAdam(Optimizer):
                 p.data.add_(-update_with_lr)
 
                 state['step'] += 1
-                print("........here is printing lr_scheduled")
-                print(lr_scheduled)
+                # print("........here is printing lr_scheduled")
+                # print(lr_scheduled)
+                
                 # step_size = lr_scheduled * math.sqrt(bias_correction2) / bias_correction1
                 # No bias correction
                 # bias_correction1 = 1 - beta1 ** state['step']
