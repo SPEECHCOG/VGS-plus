@@ -93,9 +93,6 @@ class Trainer:
                 libri_loader_iterator = iter(self.libri_train_loader)
             print ('khazar: train data length is ' + str(self.train_data_length))
             for i, batch in enumerate(self.train_loader):
-                # print ('......printing i and n ...............')
-                # print(i)
-                # print(self.progress['num_updates'])
                 if self.use_libri_loss:
                     libri_batch = next(libri_loader_iterator)
                 data_end_time = time.time()
@@ -108,8 +105,6 @@ class Trainer:
                     break
                 
                 cur_lr = np.mean(self.optimizer.get_lr())
-                # khazar : I removed mean from here:
-                # cur_lr = self.optimizer.get_lr()
 
                 self.writer.add_scalar("lr", cur_lr, self.progress['num_updates'])
                 cur_step = self.progress['num_updates'] % step_per_epoch
@@ -139,15 +134,20 @@ class Trainer:
 
                 weighted_loss.backward()
                 torch.nn.utils.clip_grad_norm_(self.trainables, 1.)
+                #########
                 self.optimizer.step()
                 self.optimizer.zero_grad()
                 self.meters['data_time'].update(data_end_time - data_start_time)
                 self.meters['train_time'].update(time.time() - data_end_time)
                 #########
+                print('...... I am printing lr')
+                print(np.mean(self.optimizer.get_lr()))
+                #########   
                 self.writer.add_scalar("data_time", data_end_time - data_start_time, self.progress['num_updates'])
                 self.writer.add_scalar("train_time", time.time() - data_end_time, self.progress['num_updates'])
 
-                # logging
+                #########
+                logging
                 if self.progress['num_updates'] % self.args.n_print_steps == 0:
                     
                     log_out = {}
@@ -168,11 +168,11 @@ class Trainer:
                 if self.progress['num_updates'] % self.args.n_val_steps == 0:
                     
                     r10, r5, r1 = self.validate_and_save(libri=self.use_libri_loss, places=self.args.places, n_save_ind = self.progress['epoch'])
-                    
+                ########    
                 self.progress['num_updates'] += 1
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
                 data_start_time = time.time()
-
+                print(self.progress['num_updates'])
         
     def validate_and_save(self, libri=False, places=False , n_save_ind = 0):
         # khazar: I added "n_save_ind" argument to save intermediate models 
@@ -634,7 +634,12 @@ class Trainer:
     
     def _setup_optimizer(self):
         optimizer = BertAdam(self.trainables, lr=self.args.lr, warmup=self.args.warmup_fraction, t_total=self.total_num_updates)
-
+        # KH: I added this
+        print('...................... we are inside setup optimizer function .......................')
+        print (optimizer)
+        print('...................... here printing lr .......................')
+        for param_group in optimizer.param_groups:
+            print(param_group['lr'])
         if self.progress['num_updates'] > 1:
             optimizer.load_state_dict(self.optim_states)
             for state in optimizer.state.values():
