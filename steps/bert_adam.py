@@ -96,7 +96,8 @@ class BertAdam(Optimizer):
                     lr_scheduled = group['lr'] * schedule_fct(state['step']/group['t_total'], group['warmup'])
                 else:
                     lr_scheduled = group['lr']
-                lr.append(lr_scheduled)
+                lr.append(lr_scheduled)    
+        print(lr)
         return lr
 
     def step(self, closure=None):
