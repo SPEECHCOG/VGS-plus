@@ -98,6 +98,7 @@ class BertAdam(Optimizer):
                     lr_scheduled = group['lr'] * schedule_fct(state['step']/group['t_total'], group['warmup'])
                     print(' group total is not minus one')
                     print(group['t_total'])
+                    print(lr_scheduled)
                 else:
                     lr_scheduled = group['lr']
                     print(' last condition')
