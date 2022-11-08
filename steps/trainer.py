@@ -140,7 +140,7 @@ class Trainer:
                 self.meters['data_time'].update(data_end_time - data_start_time)
                 self.meters['train_time'].update(time.time() - data_end_time)
                 #########
-                print('...... I am printing lr')
+                print('...... I am printing optimizer.get_lr()')
                 print(np.mean(self.optimizer.get_lr()))
                 #########   
                 self.writer.add_scalar("data_time", data_end_time - data_start_time, self.progress['num_updates'])
