@@ -90,7 +90,6 @@ class BertAdam(Optimizer):
         for group in self.param_groups:
             for p in group['params']:
                 state = self.state[p]
-                print(state)
                 if len(state) == 0:
                     return [0]
                 if group['t_total'] != -1:
@@ -113,7 +112,7 @@ class BertAdam(Optimizer):
             loss = closure()
 
         warned_for_t_total = False
-        print(".................................................................we are inside optimizer adam class")
+        print(".............we are inside optimizer adam class step function .............")
         for group in self.param_groups:
             for p in group['params']:
                 if p.grad is None:
@@ -174,9 +173,8 @@ class BertAdam(Optimizer):
                 p.data.add_(-update_with_lr)
 
                 state['step'] += 1
-                print("........we are inside optimizer adam class")
+                print("........here is printing lr_scheduled")
                 print(lr_scheduled)
-                group['lr_scheduled'] = lr_scheduled
                 # step_size = lr_scheduled * math.sqrt(bias_correction2) / bias_correction1
                 # No bias correction
                 # bias_correction1 = 1 - beta1 ** state['step']
