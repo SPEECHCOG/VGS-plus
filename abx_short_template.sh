@@ -17,7 +17,7 @@ rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 
 for LAYERNAME in 2 3 4 5 6 7 8 9 10 11
 do
-    OUTNAME="E5L"$LAYERNAME
+    OUTNAME="E20L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
     conda activate fastvgs
     python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
