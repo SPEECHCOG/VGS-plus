@@ -127,26 +127,10 @@ class Trainer:
 
                 self.meters['weighted_loss'].update(weighted_loss.item(), cur_batch['visual_feats'].shape[0])
                 self.writer.add_scalar('weighted_loss', weighted_loss.item(), self.progress['num_updates'])
-                #########
-                print('...... I am printing optimizer.get_lr()')
-                print(self.optimizer.get_lr()[0]*1)
-                #########
                 weighted_loss.backward()
                 torch.nn.utils.clip_grad_norm_(self.trainables, 1.)
-                #########
-                print('...... I am printing optimizer.get_lr()')
-                print(self.optimizer.get_lr())
-                #########
-                #########
                 self.optimizer.step()
-                #########
-                print('...... I am printing optimizer.get_lr()')
-                print(self.optimizer.get_lr())
-                #########
                 self.optimizer.zero_grad()
-                #########
-                print('...... I am printing optimizer.get_lr()')
-                print(self.optimizer.get_lr())
                 #########
                 self.meters['data_time'].update(data_end_time - data_start_time)
                 self.meters['train_time'].update(time.time() - data_end_time)
@@ -154,8 +138,7 @@ class Trainer:
                 self.writer.add_scalar("data_time", data_end_time - data_start_time, self.progress['num_updates'])
                 self.writer.add_scalar("train_time", time.time() - data_end_time, self.progress['num_updates'])
 
-                #########
-                logging
+                # logging
                 if self.progress['num_updates'] % self.args.n_print_steps == 0:
                     
                     log_out = {}
@@ -180,7 +163,7 @@ class Trainer:
                 self.progress['num_updates'] += 1
                 self.progress['epoch'] = int(math.ceil(self.progress['num_updates'] / step_per_epoch))
                 data_start_time = time.time()
-                print(self.progress['num_updates'])
+                #print(self.progress['num_updates'])
         
     def validate_and_save(self, libri=False, places=False , n_save_ind = 0):
         # khazar: I added "n_save_ind" argument to save intermediate models 
