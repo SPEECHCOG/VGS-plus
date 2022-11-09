@@ -101,8 +101,8 @@ class BertAdam(Optimizer):
                     print(lr_scheduled)
                 else:
                     lr_scheduled = group['lr']
-                    print(' last condition')
-                    print(group['lr'])
+                    #print(' last condition')
+                    #print(group['lr'])
                 lr.append(lr_scheduled)    
         
         return lr
