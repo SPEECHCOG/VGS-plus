@@ -127,9 +127,16 @@ class Trainer:
 
                 self.meters['weighted_loss'].update(weighted_loss.item(), cur_batch['visual_feats'].shape[0])
                 self.writer.add_scalar('weighted_loss', weighted_loss.item(), self.progress['num_updates'])
-
+                #########
+                print('...... I am printing optimizer.get_lr()')
+                print(self.optimizer.get_lr())
+                #########
                 weighted_loss.backward()
                 torch.nn.utils.clip_grad_norm_(self.trainables, 1.)
+                #########
+                print('...... I am printing optimizer.get_lr()')
+                print(self.optimizer.get_lr())
+                #########
                 #########
                 self.optimizer.step()
                 #########
@@ -137,6 +144,10 @@ class Trainer:
                 print(self.optimizer.get_lr())
                 #########
                 self.optimizer.zero_grad()
+                #########
+                print('...... I am printing optimizer.get_lr()')
+                print(self.optimizer.get_lr())
+                #########
                 self.meters['data_time'].update(data_end_time - data_start_time)
                 self.meters['train_time'].update(time.time() - data_end_time)
    
