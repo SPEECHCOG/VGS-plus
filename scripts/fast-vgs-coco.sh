@@ -14,19 +14,21 @@ python \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
 --num_workers 4 \
---batch_size 4 \
---val_batch_size 100 \
+--batch_size 32 \
+--val_batch_size 32 \
 --val_cross_batch_size 8 \
---n_epochs 30 \
+--n_epochs 1 \
 --n_print_steps 500 \
 --n_val_steps 9252 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --xtrm_layers 1 \
---trm_layers 6 \
+--trm_layers 1 \
 --fine_matching_weight 0 \
 --coarse_matching_weight 1 \
 --libri_w2v2_weight 0.0 \
+--encoder_layers 3 \
+--encoder_attention_heads 6 \
 --feature_grad_mult 0. \
---layer_use 7
+--layer_use 2
 
