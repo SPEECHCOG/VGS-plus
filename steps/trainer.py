@@ -129,7 +129,7 @@ class Trainer:
                 self.writer.add_scalar('weighted_loss', weighted_loss.item(), self.progress['num_updates'])
                 #########
                 print('...... I am printing optimizer.get_lr()')
-                print(self.optimizer.get_lr())
+                print(self.optimizer.get_lr()[0]*1)
                 #########
                 weighted_loss.backward()
                 torch.nn.utils.clip_grad_norm_(self.trainables, 1.)
