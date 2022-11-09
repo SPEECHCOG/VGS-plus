@@ -83,10 +83,6 @@ class Trainer:
         print ('kh: memory allocated at training time')
         print(torch.cuda.memory_allocated(device=0) / 1024 ** 3)
         
-        # khazar: I added below lines (for automated resuming)
-        # flag_resume = False
-        #recall_previous = 0.001
-        
         while flag:
             logger.info('epoch starts here .... ')
             if self.use_libri_loss:
@@ -136,13 +132,14 @@ class Trainer:
                 torch.nn.utils.clip_grad_norm_(self.trainables, 1.)
                 #########
                 self.optimizer.step()
-                self.optimizer.zero_grad()
-                self.meters['data_time'].update(data_end_time - data_start_time)
-                self.meters['train_time'].update(time.time() - data_end_time)
                 #########
                 print('...... I am printing optimizer.get_lr()')
                 print(self.optimizer.get_lr())
-                #########   
+                #########
+                self.optimizer.zero_grad()
+                self.meters['data_time'].update(data_end_time - data_start_time)
+                self.meters['train_time'].update(time.time() - data_end_time)
+   
                 self.writer.add_scalar("data_time", data_end_time - data_start_time, self.progress['num_updates'])
                 self.writer.add_scalar("train_time", time.time() - data_end_time, self.progress['num_updates'])
 
