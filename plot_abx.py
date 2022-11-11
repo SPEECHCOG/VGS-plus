@@ -34,7 +34,7 @@ def read_all_scores(path , model_name):
 
     scores_out =  ( np.reshape(scores , [5, 5])).T
     return scores_out()
-kh
+
 ##################################################################
                         ### m6base3  ###
 ################################################################## 
@@ -59,7 +59,7 @@ m6base3 = (np.reshape(scores_m6base3, (5,11))).T
 scores_m7base1 = []
 model_name = 'model7base1T'
 layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
-for epoch in range(5,45,10):
+for epoch in [5,15,20,25,35]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -69,7 +69,7 @@ for epoch in range(5,45,10):
         s = read_score (path)
         scores_m7base1.append(s)
 
-m7base1 = (np.reshape(scores_m7base1, (4,11))).T
+m7base1 = (np.reshape(scores_m7base1, (5,11))).T
 
 ##################################################################
                         ### testw2v2  ###
@@ -91,20 +91,20 @@ mtest = (np.reshape(scores_mtest, (2,4))).T
 ##################################################################
                         ### model7base3T  ###
 ################################################################## 
-scores_m7base3 = []
-model_name = 'model7base3T'
-layer_names = ['L1','L2','L3','L4','L5','L6']
-for epoch in [5,15,25]:
-    print(epoch)
-    for layer_name in layer_names:
-        name = 'E' + str(epoch) + layer_name
-        print(name) # name = 'E10L3'
-        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
-        name = 'E' + str(epoch) + layer_name
-        s = read_score (path)
-        scores_m7base1.append(s)
+# scores_m7base3 = []
+# model_name = 'model7base3T'
+# layer_names = ['L1','L2','L3','L4','L5','L6']
+# for epoch in [5,15,25]:
+#     print(epoch)
+#     for layer_name in layer_names:
+#         name = 'E' + str(epoch) + layer_name
+#         print(name) # name = 'E10L3'
+#         path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
+#         name = 'E' + str(epoch) + layer_name
+#         s = read_score (path)
+#         scores_m7base1.append(s)
 
-m7base3 = (np.reshape(scores_m7base3, (5,6))).T
+# m7base3 = (np.reshape(scores_m7base3, (5,6))).T
 ################################################################ Plotting
 
 title = 'ABX-error for the original models '
@@ -144,7 +144,7 @@ plt.plot(m7base1[9], label='layer10')
 plt.plot(m7base1[10], label='layer11')
 plt.title('w2v2 (gradmul = 1)',size=14)  
 plt.ylabel('abx-error', size=18) 
-plt.xticks([0,1,2,3],['5', '15', '25', '35'])
+plt.xticks([0,1,2,3,4],['5', '15', '20' ,'25','35'])
 plt.grid()
 plt.legend(fontsize=14) 
 
