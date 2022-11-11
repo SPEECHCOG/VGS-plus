@@ -18,14 +18,14 @@ python \
 --batch_size 64 \
 --val_batch_size 100 \
 --val_cross_batch_size 100 \
---n_epochs 50 \
+--n_epochs 80 \
 --n_print_steps 500 \
 --n_val_steps 46260 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --normalize \
 --xtrm_layers 1 \
---trm_layers 1 \
+--trm_layers 3 \
 --fine_matching_weight 0.0 \
 --coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
