@@ -1,12 +1,12 @@
 #!/bin/sh
-NAME="model7base1T"
+NAME="model7base3T"
 OUTFOLDER="/worktmp/khorrami/current/ZeroSpeech/output"/$NAME
 mkdir $OUTFOLDER
 MFOLDER="/worktmp/khorrami/current/FaST/experiments"/$NAME/"exp"
 
-M="E20_bundle.pth"
+M="E30_bundle.pth"
 
-OUTNAME="E20L1"
+OUTNAME="E30L1"
 OUTFILE=$OUTFOLDER/$OUTNAME
 source activate fastvgs
 python abx.py --mytarget_layer 1 --mytwd $MFOLDER/$M
