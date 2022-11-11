@@ -34,12 +34,13 @@ def read_all_scores(path , model_name):
 
     scores_out =  ( np.reshape(scores , [5, 5])).T
     return scores_out()
+kh
 ##################################################################
                         ### m6base3  ###
 ################################################################## 
 scores_m6base3 = []
 model_name = 'model6base3T'
-layer_names = ['L1','L2','L3','L4','L5','L6']
+layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
 for epoch in range(5,55,10):
     print(epoch)
     for layer_name in layer_names:
@@ -50,15 +51,15 @@ for epoch in range(5,55,10):
         s = read_score (path)
         scores_m6base3.append(s)
 
-m6base3 = (np.reshape(scores_m6base3, (5,6))).T
+m6base3 = (np.reshape(scores_m6base3, (5,11))).T
 
 ##################################################################
                         ### m7base1  ###
 ################################################################## 
 scores_m7base1 = []
 model_name = 'model7base1T'
-layer_names = ['L1','L2','L3','L4','L5','L6']
-for epoch in [5,15,25,35,40]:
+layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
+for epoch in range(5,45,10):
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -68,7 +69,7 @@ for epoch in [5,15,25,35,40]:
         s = read_score (path)
         scores_m7base1.append(s)
 
-m7base1 = (np.reshape(scores_m7base1, (5,6))).T
+m7base1 = (np.reshape(scores_m7base1, (4,11))).T
 
 ##################################################################
                         ### testw2v2  ###
@@ -117,6 +118,12 @@ plt.plot(m6base3[2], label='layer3')
 plt.plot(m6base3[3], label='layer4')
 plt.plot(m6base3[4], label='layer5')
 plt.plot(m6base3[5], label='layer6')
+plt.plot(m6base3[6], label='layer7')
+plt.plot(m6base3[7], label='layer8')
+plt.plot(m6base3[8], label='layer9')
+plt.plot(m6base3[9], label='layer10')
+plt.plot(m6base3[10], label='layer11')
+
 plt.title('VGS+ (gradmul = 0.1)',size=14)  
 plt.ylabel('abx-error', size=18) 
 plt.xticks([0,1,2,3,4],['5', '15', '25', '35', '45'])
@@ -130,9 +137,14 @@ plt.plot(m7base1[2], label='layer3')
 plt.plot(m7base1[3], label='layer4')
 plt.plot(m7base1[4], label='layer5')
 plt.plot(m7base1[5], label='layer6')
+plt.plot(m7base1[6], label='layer7')
+plt.plot(m7base1[7], label='layer8')
+plt.plot(m7base1[8], label='layer9')
+plt.plot(m7base1[9], label='layer10')
+plt.plot(m7base1[10], label='layer11')
 plt.title('w2v2 (gradmul = 1)',size=14)  
 plt.ylabel('abx-error', size=18) 
-plt.xticks([0,1,2,3,4],['5', '15', '25', '35', '40'])
+plt.xticks([0,1,2,3],['5', '15', '25', '35'])
 plt.grid()
 plt.legend(fontsize=14) 
 
