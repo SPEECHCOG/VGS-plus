@@ -1,7 +1,7 @@
 #############################################################################
 #twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/9252_bundle.pth'
 #target_layer = 2
-total_layers = 12
+total_layers = 6
 trimTF = True
 subset_name = 'dev_clean'
 
@@ -111,7 +111,7 @@ args.layer_use = int(args.mytarget_layer)
 args.encoder_layers = total_layers
 args.trim_mask = trimTF
 args.normalize = True
-args.encoder_attention_heads = 12
+args.encoder_attention_heads = 8
 
 print ('###############################')
 print(args)
