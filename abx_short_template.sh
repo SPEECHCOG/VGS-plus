@@ -12,7 +12,7 @@ source activate fastvgs
 python abx.py --mytarget_layer 6 --mytwd $MFOLDER/$M
 conda activate zerospeech2021
 mkdir $OUTFILE
-zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE  -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
 rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 
 M="E15_bundle.pth"
@@ -24,7 +24,7 @@ do
     python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
     conda activate zerospeech2021
     mkdir $OUTFILE
-    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFIL$ -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
     rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 done
 
@@ -37,7 +37,7 @@ do
     python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
     conda activate zerospeech2021
     mkdir $OUTFILE
-    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFIL$ -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
     rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 done
 
@@ -50,7 +50,7 @@ do
     python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
     conda activate zerospeech2021
     mkdir $OUTFILE
-    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFIL$ -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
     rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 done
 
@@ -63,7 +63,7 @@ do
     python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
     conda activate zerospeech2021
     mkdir $OUTFILE
-    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFIL$ -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
     rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 done
 
