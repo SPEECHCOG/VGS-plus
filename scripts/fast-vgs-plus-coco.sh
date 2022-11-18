@@ -32,7 +32,7 @@ python \
 --coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
 --caption_w2v2_weight 1.0 \
---feature_grad_mult 1.0 \
+--feature_grad_mult 0.1 \
 --trim_mask \
 --encoder_layers 6 \
 --encoder_attention_heads 8 \
