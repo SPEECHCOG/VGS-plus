@@ -27,12 +27,14 @@ python \
 --warmup_fraction 0.1 \
 --normalize \
 --xtrm_layers 1 \
---trm_layers 6 \
+--trm_layers 3 \
 --fine_matching_weight 0.0 \
 --coarse_matching_weight 1.0 \
 --libri_w2v2_weight 0.0 \
 --caption_w2v2_weight 1.0 \
 --feature_grad_mult 1.0 \
 --trim_mask \
---layer_use 7 \
+--encoder_layers 6 \
+--encoder_attention_heads 8 \
+--layer_use 5 \
 
