@@ -5,8 +5,8 @@ total_layers = 12
 trimTF = True
 
 # Paths for LibriSpeech input and output
-wav_path = '/worktmp2/hxkhkh/current/lextest/data/CDI/'
-save_path = '/worktmp2/hxkhkh/current/lextest/embedds/'
+wav_path = '/scratch/specog/lextest/data/CDI/'
+save_path = '/scratch/specog/lextest/embedds/'
 
 #############################################################################
 # for data
