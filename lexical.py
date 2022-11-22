@@ -5,8 +5,8 @@ total_layers = 12
 trimTF = True
 
 # Paths for LibriSpeech input and output
-wav_path = '/scratch/specog/lextest/data/CDI/'
-save_path = '/scratch/specog/lextest/embedds/'
+wav_path = '/scratch/specog/lextest/data/CDI/'#"/worktmp2/hxkhkh/current/lextest/data/CDI/"
+save_path = '/scratch/specog/lextest/embedds/'#"/worktmp2/hxkhkh/current/lextest/embedds"
 
 #############################################################################
 # for data
@@ -111,6 +111,8 @@ args = parser.parse_args()
 # input args
 mytwd = args.mytwd
 args.layer_use = int(args.mytarget_layer)
+
+
 # fixed args
 args.encoder_layers = total_layers
 args.trim_mask = trimTF
@@ -167,7 +169,7 @@ conv1_trm1_trm3.eval()
 wav_files_json = os.listdir(wav_path)
 
 with torch.no_grad():
-    for counter, wav_file in enumerate(wav_files_json):
+    for counter, wav_file in enumerate(wav_files_json[0:2]):
         print(counter)
         signal_peng,l =  LoadAudio(wav_path + wav_file) 
         
@@ -175,7 +177,7 @@ with torch.no_grad():
         input_signal = audio_signal.view(1, -1)
         trm13_out = conv1_trm1_trm3(input_signal,  mask=False, features_only=True, tgt_layer=args.layer_use)
         trm13_out_features = trm13_out['layer_feats']
-        output_tensor = trm13_out_features[0]
+        output_tensor = trm13_out_features[0] # (time, 768)
         output_np_arr = output_tensor.cpu().detach().numpy()
         #print(len(output_np_arr))
         numpy.savetxt(save_path + wav_file [0:-4] + '.txt', output_np_arr )
