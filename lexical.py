@@ -169,7 +169,7 @@ conv1_trm1_trm3.eval()
 wav_files_json = os.listdir(wav_path)
 
 with torch.no_grad():
-    for counter, wav_file in enumerate(wav_files_json[0:2]):
+    for counter, wav_file in enumerate(wav_files_json):
         print(counter)
         signal_peng,l =  LoadAudio(wav_path + wav_file) 
         
