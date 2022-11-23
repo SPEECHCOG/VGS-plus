@@ -20,7 +20,7 @@ python \
 --batch_size 64 \
 --val_batch_size 100 \
 --val_cross_batch_size 100 \
---n_epochs 50 \
+--n_epochs 35 \
 --n_print_steps 500 \
 --n_val_steps 46260 \
 --lr 0.0001 \
