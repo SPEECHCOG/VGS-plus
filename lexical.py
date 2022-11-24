@@ -1,3 +1,4 @@
+import os
 #############################################################################
 #twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/9252_bundle.pth'
 #target_layer = 2
@@ -7,11 +8,9 @@ trimTF = True
 # Paths for LibriSpeech input and output
 wav_path = '/scratch/specog/lextest/data/CDI/'#"/worktmp2/hxkhkh/current/lextest/data/CDI/"
 save_path = '/scratch/specog/lextest/embedds/'#"/worktmp2/hxkhkh/current/lextest/embedds"
-
+os.makedirs(save_path, exist_ok=True)
 #############################################################################
 # for data
-import os
-
 import argparse
 import soundfile as sf
 import numpy as np
