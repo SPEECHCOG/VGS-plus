@@ -10,7 +10,7 @@ subset_name = 'dev_clean'
 wav_path = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/'
 audio_dataset_json_file = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/index.json'
 save_path = '/worktmp/khorrami/current/ZeroSpeech/submission/phonetic/'
-os.makedirs(save_path, exist_ok=True)
+os.makedirs(save_path + 'dev-clean', exist_ok=True)
 
 #############################################################################
 # for data
