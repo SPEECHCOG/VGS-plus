@@ -1,3 +1,4 @@
+import os
 #############################################################################
 #twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/9252_bundle.pth'
 #target_layer = 2
@@ -10,8 +11,8 @@ wav_path = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/'
 audio_dataset_json_file = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/index.json'
 save_path = '/worktmp/khorrami/current/ZeroSpeech/submission/phonetic/'
 
-import os
-os.makedirs(save_path + 'dev-clean', exist_ok=True)
+subpath = os.path.join(save_path , 'dev-clean')
+os.makedirs(subpath, exist_ok=True)
 
 #############################################################################
 # for data
@@ -172,7 +173,7 @@ with torch.no_grad():
         output_tensor = trm13_out_features[0]
         output_np_arr = output_tensor.cpu().detach().numpy()
         #print(len(output_np_arr))
-        numpy.savetxt(save_path + wav_file [0:-4] + '.txt', output_np_arr )
+        numpy.savetxt(subpath + wav_file [0:-4] + '.txt', output_np_arr )
         
         torch.cuda.empty_cache()
         del trm13_out,trm13_out_features,output_tensor,output_np_arr
