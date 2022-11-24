@@ -9,7 +9,7 @@ subset_name = 'dev_clean'
 # Paths for LibriSpeech input and output
 wav_path = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/'
 audio_dataset_json_file = '/worktmp/khorrami/current/ZeroSpeech/data/phonetic/index.json'
-save_path = '/worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean/'
+save_path = '/worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean'
 
 os.makedirs(save_path, exist_ok=True)
 
