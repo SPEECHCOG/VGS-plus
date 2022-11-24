@@ -91,20 +91,20 @@ mtest = (np.reshape(scores_mtest, (2,4))).T
 ##################################################################
                         ### model7base3T  ###
 ################################################################## 
-# scores_m7base3 = []
-# model_name = 'model7base3T'
-# layer_names = ['L1','L2','L3','L4','L5','L6']
-# for epoch in [5,15,25]:
-#     print(epoch)
-#     for layer_name in layer_names:
-#         name = 'E' + str(epoch) + layer_name
-#         print(name) # name = 'E10L3'
-#         path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
-#         name = 'E' + str(epoch) + layer_name
-#         s = read_score (path)
-#         scores_m7base1.append(s)
+scores_m7base3 = []
+model_name = 'model7base3T'
+layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
+for epoch in [5, 30, 55, 65, 75]:
+    print(epoch)
+    for layer_name in layer_names:
+        name = 'E' + str(epoch) + layer_name
+        print(name) # name = 'E10L3'
+        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
+        name = 'E' + str(epoch) + layer_name
+        s = read_score (path)
+        scores_m7base3.append(s)
 
-# m7base3 = (np.reshape(scores_m7base3, (5,6))).T
+m7base3 = (np.reshape(scores_m7base3, (5,11))).T
 ################################################################ Plotting
 
 title = 'ABX-error for the original models '
@@ -148,6 +148,25 @@ plt.xticks([0,1,2,3,4],['5', '15', '20' ,'25','35'])
 plt.grid()
 plt.legend(fontsize=14) 
 
+
+plt.subplot(2, 2, 3)  
+plt.plot(m7base3[0], label='layer1')
+plt.plot(m7base3[1], label='layer2')
+plt.plot(m7base3[2], label='layer3')
+plt.plot(m7base3[3], label='layer4')
+plt.plot(m7base3[4], label='layer5')
+plt.plot(m7base3[5], label='layer6')
+plt.plot(m7base3[6], label='layer7')
+plt.plot(m7base3[7], label='layer8')
+plt.plot(m7base3[8], label='layer9')
+plt.plot(m7base3[9], label='layer10')
+plt.plot(m7base3[10], label='layer11')
+plt.title('VGS (gradmul = 1)',size=14)  
+plt.ylabel('abx-error', size=18) 
+plt.xticks([0,1,2,3,4],['5', '30', '55' ,'65','75'])
+plt.grid()
+plt.legend(fontsize=14) 
+
 plt.subplot(2, 2, 4)  
 plt.plot(mtest[0], label='layer1')
 plt.plot(mtest[1], label='layer2')
@@ -160,5 +179,5 @@ plt.ylabel('abx-error', size=18)
 plt.xticks([0,1],['25', '30'])
 plt.grid()
 plt.legend(fontsize=14)     
-
+kh
 plt.savefig(os.path.join(path_save, 'abx_6_7' + '.png'), format='png')
