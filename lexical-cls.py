@@ -179,7 +179,7 @@ with torch.no_grad():
         output_tensor = trm13_out_features[0] # (time, 768)
         output_np_arr = output_tensor.cpu().detach().numpy()
         #print(len(output_np_arr))
-        output_np_arr_cls = output_np_arr[-1]
+        output_np_arr_cls = numpy.mean(output_np_arr, axis = 0)
         # below line is for saving the results as the first row in text file
         output_np_arr_cls = output_np_arr_cls.reshape(1, output_np_arr_cls.shape[0])
         numpy.savetxt(save_path + wav_file [0:-4] + '.txt', output_np_arr_cls)
