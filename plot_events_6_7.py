@@ -11,17 +11,18 @@ import numpy as np
 path_source = '/worktmp2/hxkhkh/current/FaST/experiments/'
 path_save = '/worktmp2/hxkhkh/current/FaST/experiments/plots/'
 
-path_event_6base1T = 'model6base1T/'
-path_event_6base1F = 'model6base1F/'
-path_event_6base2T = 'model6base2T/'
-path_event_6base3T = 'model6base3T/'
-path_event_6base4T = 'model6base4T/'
+# path_event_6base1T = 'model6base1T/'
+# path_event_6base1F = 'model6base1F/'
+# path_event_6base2T = 'model6base2T/'
+# path_event_6base3T = 'model6base3T/'
+# path_event_6base4T = 'model6base4T/'
 
 path_event_7base1T = 'model7base1T/'
 path_event_7base1F = 'model7base1F/'
 path_event_7base2T = 'model7base2T/'
 path_event_7base3T = 'model7base3T/'
-path_event_7base4T = 'model7base4T/'
+path_event_7base3T_extra = 'model7base3T/exp-additional/'
+
 
 c_1 = 'blue'
 c_2 = 'grey'
@@ -42,12 +43,10 @@ def find_average_train_load_timec(event):
     return train_time.mean , data_time.mean
 def find_single_recall (event, n):
     recall = pd.DataFrame(event.Scalars('acc_r10'))
-    x_recall_0 = 0
-    y_recall_0 = 0.002
+    
     x_recall = [i/n for i in recall['step']]
     y_recall = recall['value'].to_list()
-    x_recall.insert(0, x_recall_0)
-    y_recall.insert(0, y_recall_0)
+    
     return x_recall, y_recall
 
 def find_single_lr (event, n , interval):
@@ -139,7 +138,7 @@ def plot_double_events(event1,event2, label1 , label2, c1,c2, n, pltname, title)
 
     plt.savefig(os.path.join(path_save , pltname + '.png'), format = 'png')
     
-kh    
+  
 ############################################################################## Model 6
 # event_6base1T =  EventAccumulator(os.path.join(path_source, path_event_6base1T))
 # event_6base1T.Reload()
@@ -210,6 +209,7 @@ kh
 
 
 ############################################################################## Model 7
+
 event_7base1T =  EventAccumulator(os.path.join(path_source, path_event_7base1T))
 event_7base1T.Reload()
 
@@ -218,10 +218,25 @@ event_7base2T.Reload()
 
 event_7base3T =  EventAccumulator(os.path.join(path_source, path_event_7base3T))
 event_7base3T.Reload()
+
+event_7base3T_extra =  EventAccumulator(os.path.join(path_source, path_event_7base3T_extra))
+event_7base3T_extra.Reload()
 ################################################################# Recalls
 x_7base2T_recall, y_7base2T_recall = find_single_recall(event_7base2T, n_64)
-x_7base3T_recall, y_7base3T_recall = find_single_recall(event_7base3T, n_64)
 
+x_7base3T_recall, y_7base3T_recall = find_single_recall(event_7base3T, n_64)
+x_7base3T_recall_extra, y_7base3T_recall_extra = find_single_recall(event_7base3T_extra, n_64)
+
+x_recall_0 = 0
+y_recall_0 = 0.002
+x_7base3T_recall.insert(0, x_recall_0)
+y_7base3T_recall.insert(0, y_recall_0)
+
+x_7base3T_recall = x_7base3T_recall[0:-1]
+y_7base3T_recall = y_7base3T_recall [0:-1]
+for i in range(6):
+    x_7base3T_recall.append(55 + (i*5)) 
+    y_7base3T_recall.append(y_7base3T_recall_extra[i])
 ################################################################# VGS loss
 i = 500
 x_7base2T_vgsloss, y_7base2T_vgsloss = find_single_vgsloss(event_7base2T, n_64 , i)
@@ -232,7 +247,7 @@ i = 500
 x_7base1T_caploss, y_7base1T_caploss = find_single_caploss(event_7base1T, n_64 , i)
 x_7base3T_caploss, y_7base3T_caploss = find_single_caploss(event_7base3T, n_64, i)
 
-################################################################# plotting recall and loss for model 6
+################################################################# plotting recall and loss for model 7
 title = 'model origin, with gradmul = 1'
 label1 = 'w2v2'
 label2 = 'VGS'
