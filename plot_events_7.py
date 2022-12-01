@@ -21,7 +21,7 @@ path_event_7ver5 = 'model7ver5/exp/'
 path_event_7ver6 = 'model7ver6/exp/'
 path_event_7ver7 = 'model7ver7/exp/'
 path_event_7ver8 = 'model7ver8/exp/'
-path_event_7ver9 = 'model7ver9/exp/'
+#path_event_7ver9 = 'model7ver9/exp/'
 
 path_event_7ver14 = 'model7ver14/exp/'
 path_event_7ver26 = 'model7ver26/exp/'
@@ -137,7 +137,7 @@ def plot_double_events(event1,event2, label1 , label2, c1,c2, n, pltname, title)
     plt.legend(fontsize=18)
 
     plt.savefig(os.path.join(path_save , pltname + '.png'), format = 'png')
-kh
+
 ############################################################################## Model 7 bases
 
 event_7base1T =  EventAccumulator(os.path.join(path_source, path_event_7base1T))
@@ -167,6 +167,9 @@ event_7ver5.Reload()
 event_7ver7 =  EventAccumulator(os.path.join(path_source, path_event_7ver7))
 event_7ver7.Reload()
 
+event_7ver8 =  EventAccumulator(os.path.join(path_source, path_event_7ver8))
+event_7ver8.Reload()
+
 
 event_7ver14 =  EventAccumulator(os.path.join(path_source, path_event_7ver14))
 event_7ver14.Reload()
@@ -189,7 +192,10 @@ for i in range(6):
 x_7ver4_recall, y_7ver4_recall = find_single_recall(event_7ver4, n_64)    
 x_7ver6_recall, y_7ver6_recall = find_single_recall(event_7ver6, n_64)
  
-x_7ver5_recall, y_7ver5_recall = find_single_recall(event_7ver5, n_64)    
+x_7ver5_recall, y_7ver5_recall = find_single_recall(event_7ver5, n_64)
+
+x_7ver8_recall, y_7ver8_recall = find_single_recall(event_7ver8, n_64)
+    
 
 x_7ver14_recall, y_7ver14_recall = find_single_recall(event_7ver14, n_64) 
 x_7ver26_recall, y_7ver26_recall = find_single_recall(event_7ver26, n_64) 
@@ -201,34 +207,47 @@ x_7base2T_recall.insert(0, x_recall_0)
 y_7base2T_recall.insert(0, y_recall_0)
 
 x_7base3T_recall.insert(0, x_recall_0)
-y_7base3T_recall.insert(0, y_recall_0)    
+y_7base3T_recall.insert(0, y_recall_0)
 
-# x_7ver4_recall.insert(0, x_recall_0)
-# y_7ver4_recall.insert(0, y_7base3T_recall [4])  
+x_7ver4_recall.insert(0, x_recall_0)
+y_7ver4_recall.insert(0, y_recall_0)
 
+x_7ver6_recall.insert(0, x_recall_0)
+y_7ver6_recall.insert(0, y_recall_0)    
+
+x_7ver5_recall.insert(0, x_recall_0)
+y_7ver5_recall.insert(0, y_7base2T_recall [4])  
+
+x_7ver8_recall.insert(0, x_recall_0)
+y_7ver8_recall.insert(0, y_7base3T_recall [5])  
 # x_7ver4_recall.insert(0, x_recall_0)
 # y_7ver4_recall.insert(0, y_7base2T_recall [4])  
     
 ############ plot recalls for version 4, 6
 
-label1 = 'VGS+'
+label1 = 'w2v2'
 label2 = 'VGS'
-label3 = 'VGS+ pretrained with w2v2-20E'
-label4 = 'VGS pretrained with w2v2-20E'
+label3 = 'VGS+'
+label4 = 'VGS+ pretrained with w2v2-20E'
 label5 = 'VGS+ pretrained with VGS-20E'
-label6 = 'VGS+ pretrained with w2v2-35E'
-label7 = 'VGS pretrained with w2v2-5E'
+label6 = 'VGS pretrained with w2v2-20E'
+label7 = 'w2v2 pretrained with VGS-20E'
+label8 = 'w2v2 pretrained with VGS+-20E'
+label14 = 'VGS+ pretrained with w2v2-35E'
+label26 = 'VGS pretrained with w2v2-5E'
 
 fig = plt.figure(figsize=(7,10))
 
 title = 'original versus pretrained models '
 plt.subplot(2,1,1)
-plt.plot(x_7base3T_recall, y_7base3T_recall, c_1, label = label1)
-plt.plot(x_7base2T_recall, y_7base2T_recall, c_2, label = label2)
 
-plt.plot(x_7ver4_recall, y_7ver4_recall, c_3, label = label3)
-plt.plot(x_7ver6_recall, y_7ver6_recall, c_4, label = label4)
-#plt.plot(x_7ver5_recall, y_7ver5_recall, c_5, label = label5)
+plt.plot(x_7base2T_recall, y_7base2T_recall, c_2, label = label2)
+plt.plot(x_7base3T_recall, y_7base3T_recall, c_1, label = label3)
+plt.plot(x_7ver4_recall, y_7ver4_recall, c_4, label = label4)
+plt.plot(x_7ver5_recall, y_7ver5_recall, c_5, label = label5)
+plt.plot(x_7ver6_recall, y_7ver6_recall, c_6, label = label6)
+
+plt.plot(x_7ver8_recall, y_7ver8_recall, c_7, label = label8)
 
 #plt.xlabel('epoch',size=18)
 plt.ylabel('recall@10',size=18)
@@ -243,8 +262,8 @@ plt.subplot(2,1,2)
 plt.plot(x_7ver4_recall, y_7ver4_recall, c_3, label = label3)
 plt.plot(x_7ver6_recall, y_7ver6_recall, c_4, label = label4)
 
-plt.plot(x_7ver14_recall, y_7ver14_recall, c_6, label = label6)
-plt.plot(x_7ver26_recall, y_7ver26_recall, c_7, label = label7)
+plt.plot(x_7ver14_recall, y_7ver14_recall, c_6, label = label14)
+plt.plot(x_7ver26_recall, y_7ver26_recall, c_7, label = label26)
 
 plt.xlabel('epoch',size=18)
 plt.ylabel('recall@10',size=18)
@@ -277,6 +296,7 @@ x_7ver4_vgsloss, y_7ver4_vgsloss = find_single_vgsloss(event_7ver4, n_64, i)
 x_7ver5_vgsloss, y_7ver5_vgsloss = find_single_vgsloss(event_7ver5, n_64, i)
 x_7ver6_vgsloss, y_7ver6_vgsloss = find_single_vgsloss(event_7ver6, n_64, i)
 x_7ver7_vgsloss, y_7ver7_vgsloss = find_single_vgsloss(event_7ver7, n_64, i)
+x_7ver8_vgsloss, y_7ver8_vgsloss = find_single_vgsloss(event_7ver8, n_64, i)
 
 
 
@@ -286,7 +306,7 @@ x_7ver4_vgsloss, y_7ver4_vgsloss = smooth_losses(x_7ver4_vgsloss, y_7ver4_vgslos
 x_7ver5_vgsloss, y_7ver5_vgsloss = smooth_losses(x_7ver5_vgsloss, y_7ver5_vgsloss )
 x_7ver6_vgsloss, y_7ver6_vgsloss = smooth_losses(x_7ver6_vgsloss, y_7ver6_vgsloss )
 x_7ver7_vgsloss, y_7ver7_vgsloss = smooth_losses(x_7ver7_vgsloss, y_7ver7_vgsloss )
-
+x_7ver8_vgsloss, y_7ver8_vgsloss = smooth_losses(x_7ver8_vgsloss, y_7ver8_vgsloss )
 
 ################################################################# caption loss
 i = 500
@@ -297,6 +317,7 @@ x_7ver4_caploss, y_7ver4_caploss = find_single_caploss(event_7ver4, n_64, i)
 x_7ver5_caploss, y_7ver5_caploss = find_single_caploss(event_7ver5, n_64, i)
 x_7ver6_caploss, y_7ver6_caploss = find_single_caploss(event_7ver6, n_64, i)
 x_7ver7_caploss, y_7ver7_caploss = find_single_caploss(event_7ver7, n_64, i)
+x_7ver8_caploss, y_7ver8_caploss = find_single_caploss(event_7ver8, n_64, i)
 
 x_7base1T_caploss, y_7base1T_caploss = smooth_losses (x_7base1T_caploss, y_7base1T_caploss)
 x_7base3T_caploss, y_7base3T_caploss = smooth_losses (x_7base3T_caploss, y_7base3T_caploss)
@@ -304,6 +325,7 @@ x_7ver4_caploss, y_7ver4_caploss = smooth_losses(x_7ver4_caploss, y_7ver4_caplos
 x_7ver5_caploss, y_7ver5_caploss = smooth_losses(x_7ver5_caploss, y_7ver5_caploss)
 x_7ver6_caploss, y_7ver6_caploss = smooth_losses(x_7ver6_caploss, y_7ver6_caploss)
 x_7ver7_caploss, y_7ver7_caploss = smooth_losses(x_7ver7_caploss, y_7ver7_caploss)
+x_7ver8_caploss, y_7ver8_caploss = smooth_losses(x_7ver8_caploss, y_7ver8_caploss)
 
 ################################################################# plotting losses for base models
 label1 = 'w2v2'
@@ -371,8 +393,10 @@ plt.title(title)
 title = ' vgs loss '
 plt.subplot(2,2,2)
 plt.plot(x_7base3T_vgsloss, y_7base3T_vgsloss, c_3, label = 'VGS+')
-plt.plot(x_7ver4_vgsloss, y_7ver4_vgsloss, c_4, label = 'VGS+ pretrained w2v2')
-plt.plot(x_7ver6_vgsloss, y_7ver6_vgsloss, c_6, label = 'VGS pretrained w2v2')
+plt.plot(x_7ver4_vgsloss, y_7ver4_vgsloss, c_4, label = label4)
+plt.plot(x_7ver6_vgsloss, y_7ver6_vgsloss, c_6, label = label6)
+plt.plot(x_7ver5_vgsloss, y_7ver5_vgsloss, c_5, label = label5)
+plt.plot(x_7ver8_vgsloss, y_7ver8_vgsloss, c_8, label = label8)
 plt.ylim(0,10.5)
 plt.xticks(ticks = np.arange(0,50,5) )
 plt.yticks(ticks = np.arange(0,11) )
@@ -396,8 +420,10 @@ title = ' caption loss '
 plt.subplot(2,2,4)
 plt.plot(x_7base1T_caploss, y_7base1T_caploss, c_1, label = 'w2v2')
 plt.plot(x_7base3T_caploss, y_7base3T_caploss, c_3, label = 'VGS+')
-plt.plot(x_7ver5_caploss, y_7ver5_caploss, c_5, label = 'VGS+ pretrained VGS')
-plt.plot(x_7ver7_caploss, y_7ver7_caploss, c_7, label = 'w2v2 pretrained VGS')
+plt.plot(x_7ver4_caploss, y_7ver4_caploss, c_4, label = label4)
+plt.plot(x_7ver5_caploss, y_7ver5_caploss, c_5, label = label5)
+plt.plot(x_7ver7_caploss, y_7ver7_caploss, c_7, label = label7)
+plt.plot(x_7ver8_caploss, y_7ver8_caploss, c_8, label = label8)
 plt.ylim(0,5.5)
 plt.xticks(ticks = np.arange(0,50,5) )
 plt.yticks(ticks = np.arange(0,5) )
