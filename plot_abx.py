@@ -38,28 +38,28 @@ def read_all_scores(path , model_name):
 ##################################################################
                         ### m6base3  ###
 ################################################################## 
-scores_m6base3 = []
-model_name = 'model6base3T'
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
-for epoch in range(5,55,10):
-    print(epoch)
-    for layer_name in layer_names:
-        name = 'E' + str(epoch) + layer_name
-        print(name) # name = 'E10L3'
-        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
-        name = 'E' + str(epoch) + layer_name
-        s = read_score (path)
-        scores_m6base3.append(s)
+# scores_m6base3 = []
+# model_name = 'model6base3T'
+# layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
+# for epoch in range(5,55,10):
+#     print(epoch)
+#     for layer_name in layer_names:
+#         name = 'E' + str(epoch) + layer_name
+#         print(name) # name = 'E10L3'
+#         path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
+#         name = 'E' + str(epoch) + layer_name
+#         s = read_score (path)
+#         scores_m6base3.append(s)
 
-m6base3 = (np.reshape(scores_m6base3, (5,11))).T
+# m6base3 = (np.reshape(scores_m6base3, (5,11))).T
 
 ##################################################################
-                        ### m7base1  ###
+                        ### m7base1T  ###
 ################################################################## 
 scores_m7base1 = []
 model_name = 'model7base1T'
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
-for epoch in [5,15,20,25,35]:
+layer_names = ['L1','L2','L3','L4','L5']
+for epoch in [5,15,20,25,35,40]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -69,32 +69,15 @@ for epoch in [5,15,20,25,35]:
         s = read_score (path)
         scores_m7base1.append(s)
 
-m7base1 = (np.reshape(scores_m7base1, (5,11))).T
+m7base1 = (np.reshape(scores_m7base1, (6,5))).T
 
-##################################################################
-                        ### testw2v2  ###
-################################################################## 
-scores_mtest = []
-model_name = 'testw2v2'
-layer_names = ['L1','L2','L3','L4']
-for epoch in [25,30]:
-    print(epoch)
-    for layer_name in layer_names:
-        name = 'E' + str(epoch) + layer_name
-        print(name) # name = 'E10L3'
-        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
-        name = 'E' + str(epoch) + layer_name
-        s = read_score (path)
-        scores_mtest.append(s)
-
-mtest = (np.reshape(scores_mtest, (2,4))).T
 ##################################################################
                         ### model7base3T  ###
 ################################################################## 
 scores_m7base3 = []
 model_name = 'model7base3T'
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
-for epoch in [5, 30, 55, 65, 75]:
+layer_names = ['L5','L6','L7']
+for epoch in [5,15,25, 35, 45, 55, 65, 75]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -104,7 +87,46 @@ for epoch in [5, 30, 55, 65, 75]:
         s = read_score (path)
         scores_m7base3.append(s)
 
-m7base3 = (np.reshape(scores_m7base3, (5,11))).T
+
+m7base3 = (np.reshape(scores_m7base3, (8,3))).T
+
+##################################################################
+                        ### model7ver4  ###
+################################################################## 
+scores_m7ver4 = []
+model_name = 'model7ver4'
+layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
+for epoch in [5,15,25, 35, 45]:
+    print(epoch)
+    for layer_name in layer_names:
+        name = 'E' + str(epoch) + layer_name
+        print(name) # name = 'E10L3'
+        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
+        name = 'E' + str(epoch) + layer_name
+        s = read_score (path)
+        scores_m7ver4.append(s)
+
+
+m7ver4 = (np.reshape(scores_m7ver4, (5,8))).T
+
+##################################################################
+                        ### model7ver6  ###
+################################################################## 
+scores_m7ver6 = []
+model_name = 'model7ver6'
+layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
+for epoch in [5,15,25, 35, 45]:
+    print(epoch)
+    for layer_name in layer_names:
+        name = 'E' + str(epoch) + layer_name
+        print(name) # name = 'E10L3'
+        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
+        name = 'E' + str(epoch) + layer_name
+        s = read_score (path)
+        scores_m7ver6.append(s)
+
+
+m7ver6 = (np.reshape(scores_m7ver6, (5,8))).T
 ################################################################ Plotting
 
 title = 'ABX-error for the original models '
@@ -112,72 +134,64 @@ fig = plt.figure(figsize=(15, 10))
 fig.suptitle(title, fontsize=20)
 
 plt.subplot(2, 2, 1)  
-plt.plot(m6base3[0], label='layer1')
-plt.plot(m6base3[1], label='layer2')
-plt.plot(m6base3[2], label='layer3')
-plt.plot(m6base3[3], label='layer4')
-plt.plot(m6base3[4], label='layer5')
-plt.plot(m6base3[5], label='layer6')
-plt.plot(m6base3[6], label='layer7')
-plt.plot(m6base3[7], label='layer8')
-plt.plot(m6base3[8], label='layer9')
-plt.plot(m6base3[9], label='layer10')
-plt.plot(m6base3[10], label='layer11')
-
-plt.title('VGS+ (gradmul = 0.1)',size=14)  
-plt.ylabel('abx-error', size=18) 
-plt.xticks([0,1,2,3,4],['5', '15', '25', '35', '45'])
-plt.grid()
-plt.legend(fontsize=14) 
-
-plt.subplot(2, 2, 2)  
 plt.plot(m7base1[0], label='layer1')
 plt.plot(m7base1[1], label='layer2')
 plt.plot(m7base1[2], label='layer3')
 plt.plot(m7base1[3], label='layer4')
-plt.plot(m7base1[4], label='layer5')
-plt.plot(m7base1[5], label='layer6')
-plt.plot(m7base1[6], label='layer7')
-plt.plot(m7base1[7], label='layer8')
-plt.plot(m7base1[8], label='layer9')
-plt.plot(m7base1[9], label='layer10')
-plt.plot(m7base1[10], label='layer11')
-plt.title('w2v2 (gradmul = 1)',size=14)  
+# plt.plot(m7base1[4], label='layer5')
+# plt.plot(m7base1[5], label='layer6')
+# plt.plot(m7base1[6], label='layer7')
+# plt.plot(m7base1[7], label='layer8')
+# plt.plot(m7base1[8], label='layer9')
+# plt.plot(m7base1[9], label='layer10')
+# plt.plot(m7base1[10], label='layer11')
+plt.title('w2v2 ',size=14)  
 plt.ylabel('abx-error', size=18) 
-plt.xticks([0,1,2,3,4],['5', '15', '20' ,'25','35'])
+plt.xticks([0,1,2,3,4,5],['5', '15', '20' ,'25','35','40'])
 plt.grid()
 plt.legend(fontsize=14) 
 
 
-plt.subplot(2, 2, 3)  
-plt.plot(m7base3[0], label='layer1')
-plt.plot(m7base3[1], label='layer2')
-plt.plot(m7base3[2], label='layer3')
-plt.plot(m7base3[3], label='layer4')
-plt.plot(m7base3[4], label='layer5')
-plt.plot(m7base3[5], label='layer6')
-plt.plot(m7base3[6], label='layer7')
-plt.plot(m7base3[7], label='layer8')
-plt.plot(m7base3[8], label='layer9')
-plt.plot(m7base3[9], label='layer10')
-plt.plot(m7base3[10], label='layer11')
-plt.title('VGS (gradmul = 1)',size=14)  
+plt.subplot(2, 2, 2)  
+plt.plot(m7base3[0], label='layer5')
+plt.plot(m7base3[1], label='layer6')
+plt.plot(m7base3[2], label='layer7')
+plt.title('VGS+',size=14)  
 plt.ylabel('abx-error', size=18) 
-plt.xticks([0,1,2,3,4],['5', '30', '55' ,'65','75'])
+plt.xticks([0,1,2,3,4,5,6,7],['5', '15', '25' ,'35','45','55','65','75'])
 plt.grid()
 plt.legend(fontsize=14) 
 
-plt.subplot(2, 2, 4)  
-plt.plot(mtest[0], label='layer1')
-plt.plot(mtest[1], label='layer2')
-plt.plot(mtest[2], label='layer3')
-plt.plot(mtest[3], label='layer4')
-# plt.plot(mtest[4], label='layer5')
-# plt.plot(mtest[5], label='layer6')
-plt.title('w2v2 (gradmul = 1), batch size = 100',size=14)  
+plt.subplot(2, 2, 3)    
+plt.plot(m7ver4[0], label='layer1')
+plt.plot(m7ver4[1], label='layer2')
+plt.plot(m7ver4[2], label='layer3')
+plt.plot(m7ver4[3], label='layer4')
+plt.plot(m7ver4[4], label='layer5')
+# plt.plot(m7ver4[5], label='layer6')
+# plt.plot(m7ver4[6], label='layer7')
+# plt.plot(m7ver4[7], label='layer8')
+plt.title('VGS+ pretrained w2v2(E20) ',size=14)  
 plt.ylabel('abx-error', size=18) 
-plt.xticks([0,1],['25', '30'])
+plt.xlabel('epoch', size=18)
+plt.xticks([0,1,2,3,4],['5', '15', '25' ,'35','45'])
 plt.grid()
-plt.legend(fontsize=14)     
-kh
-plt.savefig(os.path.join(path_save, 'abx_6_7' + '.png'), format='png')
+plt.legend(fontsize=14)
+
+plt.subplot(2, 2, 4)    
+plt.plot(m7ver6[0], label='layer1')
+plt.plot(m7ver6[1], label='layer2')
+plt.plot(m7ver6[2], label='layer3')
+plt.plot(m7ver6[3], label='layer4')
+plt.plot(m7ver6[4], label='layer5')
+# plt.plot(m7ver6[5], label='layer6')
+# plt.plot(m7ver6[6], label='layer7')
+# plt.plot(m7ver6[7], label='layer8')
+plt.title('VGS pretrained w2v2(E20) ',size=14)  
+plt.ylabel('abx-error', size=18)
+plt.xlabel('epoch', size=18) 
+plt.xticks([0,1,2,3,4],['5', '15', '25' ,'35','45'])
+plt.grid()
+plt.legend(fontsize=14)
+ 
+#plt.savefig(os.path.join(path_save, 'abx_base13-ver46' + '.png'), format='png')
