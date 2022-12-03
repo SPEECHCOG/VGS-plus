@@ -196,7 +196,7 @@ class Trainer:
             logger.info(f"save *best* models at {save_path} at global step {self.progress['num_updates']}")
         # Khazar: here it saves the model in each call    
         save_progress(self)
-        if self.progress['epoch'] % 5 == 0:
+        if self.progress['epoch'] % 1 == 0:
             save_path = os.path.join(self.args.exp_dir, 'E' + str(n_save_ind) + "_bundle.pth")
         else:
             save_path = os.path.join(self.args.exp_dir, "bundle.pth")
