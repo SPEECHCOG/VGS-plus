@@ -150,10 +150,29 @@ for epoch in [5, 15, 25, 30]:
 
 
 m7ver7 = (np.reshape(scores_m7ver7, (4,8))).T
+
+##################################################################
+                        ### model7ver8  ###
+################################################################## 
+scores_m7ver8 = []
+model_name = 'model7ver8'
+layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
+for epoch in [5, 15, 25, 30, 35, 45, 50]:
+    print(epoch)
+    for layer_name in layer_names:
+        name = 'E' + str(epoch) + layer_name
+        print(name) # name = 'E10L3'
+        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
+        name = 'E' + str(epoch) + layer_name
+        s = read_score (path)
+        scores_m7ver8.append(s)
+
+
+m7ver8 = (np.reshape(scores_m7ver8, (7,8))).T
 ################################################################ Plotting
 
 title = 'ABX-error for the original models '
-fig = plt.figure(figsize=(15, 10))
+fig = plt.figure(figsize=(15, 15))
 fig.suptitle(title, fontsize=20)
 
 plt.subplot(3, 2, 1)  
@@ -233,4 +252,21 @@ plt.xlabel('epoch', size=18)
 plt.xticks([0,1,2,3],['5', '15', '25' ,'30'])
 plt.grid()
 plt.legend(fontsize=14) 
-plt.savefig(os.path.join(path_save, 'abx_base13-ver46' + '.png'), format='png')
+
+plt.subplot(3, 2, 6)    
+# plt.plot(m7ver8[0], label='layer1')
+# plt.plot(m7ver8[1], label='layer2')
+# plt.plot(m7ver8[2], label='layer3')
+plt.plot(m7ver8[3], label='layer4')
+plt.plot(m7ver8[4], label='layer5')
+plt.plot(m7ver8[5], label='layer6')
+plt.plot(m7ver8[6], label='layer7')
+plt.plot(m7ver8[7], label='layer8')
+plt.title('w2v2 pretrained VGS+(E20) ',size=14)  
+plt.ylabel('abx-error', size=18)
+plt.xlabel('epoch', size=18) 
+plt.xticks([0,1,2,3,4,5,6],['5', '15', '25' ,'30', '35', '45','50'])
+plt.grid()
+plt.legend(fontsize=14) 
+
+plt.savefig(os.path.join(path_save, 'abx_base_versions' + '.png'), format='png')
