@@ -4,9 +4,9 @@ OUTFOLDER="/worktmp/khorrami/current/ZeroSpeech/output"/$NAME
 mkdir $OUTFOLDER
 MFOLDER="/worktmp/khorrami/current/FaST/experiments"/$NAME/"exp"
 
-M="E1_bundle.pth"
+M="E6_bundle.pth"
 
-OUTNAME="E1L1"
+OUTNAME="E6L1"
 OUTFILE=$OUTFOLDER/$OUTNAME
 source activate fastvgs
 python abx.py --mytarget_layer 1 --mytwd $MFOLDER/$M
@@ -17,7 +17,7 @@ rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 
 for LAYERNAME in 2 3 4 5 6 7 8
 do
-    OUTNAME="E1L"$LAYERNAME
+    OUTNAME="E6L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
     conda activate fastvgs
     python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
@@ -27,10 +27,10 @@ do
     rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 done
 
-M="E2_bundle.pth"
+M="E7_bundle.pth"
 for LAYERNAME in 1 2 3 4 5 6 7 8
 do
-    OUTNAME="E2L"$LAYERNAME
+    OUTNAME="E7L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
     conda activate fastvgs
     python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
@@ -40,10 +40,10 @@ do
     rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 done
 
-M="E3_bundle.pth"
+M="E8_bundle.pth"
 for LAYERNAME in 1 2 3 4 5 6 7 8
 do
-    OUTNAME="E3L"$LAYERNAME
+    OUTNAME="E8L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
     conda activate fastvgs
     python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
@@ -53,10 +53,10 @@ do
     rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 done
 
-M="E4_bundle.pth"
+M="E9_bundle.pth"
 for LAYERNAME in 1 2 3 4 5 6 7 8
 do
-    OUTNAME="E4L"$LAYERNAME
+    OUTNAME="E9L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
     conda activate fastvgs
     python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
@@ -66,10 +66,10 @@ do
     rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 done
 
-M="E5_bundle.pth"
+M="E10_bundle.pth"
 for LAYERNAME in 1 2 3 4 5 6 7 8
 do
-    OUTNAME="E5L"$LAYERNAME
+    OUTNAME="E10L"$LAYERNAME
     OUTFILE=$OUTFOLDER/$OUTNAME
     conda activate fastvgs
     python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
@@ -78,5 +78,3 @@ do
     zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
     rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 done
-
-
