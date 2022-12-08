@@ -52,7 +52,23 @@ def read_all_scores(path , model_name):
 #         scores_m6base3.append(s)
 
 # m6base3 = (np.reshape(scores_m6base3, (5,11))).T
+##################################################################
+                        ### m7ver0  ###
+################################################################## 
+scores_m7ver0 = []
+model_name = 'model7ver0'
+layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
+for epoch in [1,2,3,4,5]:
+    print(epoch)
+    for layer_name in layer_names:
+        name = 'E' + str(epoch) + layer_name
+        print(name) # name = 'E10L3'
+        path = os.path.join(path_input, model_name , name , 'score_phonetic.csv')
+        name = 'E' + str(epoch) + layer_name
+        s = read_score (path)
+        scores_m7ver0.append(s)
 
+m7ver0 = (np.reshape(scores_m7ver0, (5,8))).T
 ##################################################################
                         ### m7base1T  ###
 ################################################################## 
@@ -210,7 +226,26 @@ plt.xticks([0,1,2,3,4,5],['5', '15', '20' ,'25','35','40'])
 plt.grid()
 plt.legend(fontsize=14) 
 
+
 plt.subplot(4, 2, 2)  
+plt.plot(m7ver0[0], label='layer1')
+plt.plot(m7ver0[1], label='layer2')
+plt.plot(m7ver0[2], label='layer3')
+plt.plot(m7ver0[3], label='layer4')
+plt.plot(m7ver0[4], label='layer5')
+plt.plot(m7ver0[5], label='layer6')
+plt.plot(m7ver0[6], label='layer7')
+plt.plot(m7ver0[7], label='layer8')
+
+
+plt.title('w2v2 pretrained libri ',size=14)  
+plt.ylabel('abx-error', size=18) 
+plt.xticks([0,1,2,3,4],['1', '2','3', '4', '5'])
+plt.grid()
+plt.legend(fontsize=14) 
+
+
+plt.subplot(4, 2, 3)  
 plt.plot(m7base2[0], label='layer1')
 plt.plot(m7base2[1], label='layer2')
 plt.plot(m7base2[2], label='layer3')
@@ -228,7 +263,7 @@ plt.grid()
 plt.legend(fontsize=14) 
 
 
-plt.subplot(4, 2, 3)  
+plt.subplot(4, 2, 4)  
 plt.plot(m7base3[0], label='layer5')
 plt.plot(m7base3[1], label='layer6')
 plt.plot(m7base3[2], label='layer7')
@@ -303,4 +338,4 @@ plt.xticks([0,1,2,3,4,5,6],['5', '15', '25' ,'30', '35', '45','50'])
 plt.grid()
 plt.legend(fontsize=14) 
 
-plt.savefig(os.path.join(path_save, 'abx_base_versions' + '.png'), format='png')
+#plt.savefig(os.path.join(path_save, 'abx_base_versions' + '.png'), format='png')
