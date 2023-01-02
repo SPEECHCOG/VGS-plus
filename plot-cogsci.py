@@ -662,11 +662,15 @@ max_recall_4 = np.max(y_7ver4T_recall)
 min_recall_3 = np.min(y_recall_m7base3)
 min_recall_4 = np.min(y_7ver4T_recall)
 
-delta_recall_3 = max_recall_3 - min_recall_3
-delta_recall_4 = max_recall_4 - min_recall_4
+max_recall = max (max_recall_3, max_recall_4)
+min_recall = min (min_recall_3, min_recall_4)
 
-r_3 = [(item - min_recall_3) / delta_recall_3 for item in y_recall_m7base3]
-r_4 = [(item - min_recall_4) / delta_recall_4 for item in y_recall_m7ver4]
+delta_recall = max_recall - min_recall
+# delta_recall_3 = max_recall_3 - min_recall_3
+# delta_recall_4 = max_recall_4 - min_recall_4
+
+r_3 = [(item - min_recall) / delta_recall for item in y_recall_m7base3]
+r_4 = [(item - min_recall) / delta_recall for item in y_recall_m7ver4]
 
 # =============================================================================
 # ############################################## Normalizing and merging ABX
@@ -697,11 +701,15 @@ max_abx_4 = np.max(y_abx_m7ver4)
 min_abx_3 = np.min(y_abx_m7base3)
 min_abx_4 = np.min(y_abx_m7ver4)
 
-delta_abx_3 = max_abx_3 - min_abx_3
-delta_abx_4 = max_abx_4 - min_abx_4
+max_abx = max(max_abx_3,max_abx_4)
+min_abx = min(min_abx_3,min_abx_4)
 
-abx_3 = [1- ((item - min_abx_3) / delta_abx_3) for item in y_abx_m7base3]
-abx_4 = [1- ((item - min_abx_4) / delta_abx_4) for item in y_abx_m7ver4]
+delta_abx = max_abx - min_abx
+# delta_abx_3 = max_abx_3 - min_abx_3
+# delta_abx_4 = max_abx_4 - min_abx_4
+
+abx_3 = [1- ((item - min_abx) / delta_abx) for item in y_abx_m7base3]
+abx_4 = [1- ((item - min_abx) / delta_abx) for item in y_abx_m7ver4]
 
 # =============================================================================
 # ############################################## Normalizing Lexical F
@@ -729,11 +737,15 @@ max_lexF_4 = np.max(y_lexF_m7ver4)
 min_lexF_3 = np.min(y_lexF_m7base3)
 min_lexF_4 = np.min(y_lexF_m7ver4)
 
-delta_lexF_3 = max_lexF_3 - min_lexF_3
-delta_lexF_4 = max_lexF_4 - min_lexF_4
+max_lexF = max(max_lexF_3, max_lexF_4)
+min_lexF = min(min_lexF_3, min_lexF_4)
 
-lexF_3 = [(item - min_lexF_3) / delta_lexF_3 for item in y_lexF_m7base3]
-lexF_4 = [(item - min_lexF_4) / delta_lexF_4 for item in y_lexF_m7ver4]
+delta_lexF = max_lexF - min_lexF
+# delta_lexF_3 = max_lexF_3 - min_lexF_3
+# delta_lexF_4 = max_lexF_4 - min_lexF_4
+
+lexF_3 = [(item - min_lexF) / delta_lexF for item in y_lexF_m7base3]
+lexF_4 = [(item - min_lexF) / delta_lexF for item in y_lexF_m7ver4]
 
 # =============================================================================
 # ############################################## Normalizing Lexical C : bestC_w2v2 = 0.383
@@ -762,40 +774,56 @@ max_lexC_4 = np.max(y_lexC_m7ver4)
 min_lexC_3 = np.min(y_lexC_m7base3)
 min_lexC_4 = np.min(y_lexC_m7ver4)
 
-delta_lexC_3 = max_lexC_3 - min_lexC_3
-delta_lexC_4 = max_lexC_4 - min_lexC_4
+max_lexC = max(max_lexC_3,max_lexC_4)
+min_lexC = min(min_lexC_3,min_lexC_4)
 
-lexC_3 = [(item - min_lexC_3) / delta_lexC_3 for item in y_lexC_m7base3]
-lexC_4 = [(item - min_lexC_4) / delta_lexC_4 for item in y_lexC_m7ver4]
+delta_lexC = max_lexC - min_lexC
+# delta_lexC_3 = max_lexC_3 - min_lexC_3
+# delta_lexC_4 = max_lexC_4 - min_lexC_4
+
+lexC_3 = [(item - min_lexC) / delta_lexC for item in y_lexC_m7base3]
+lexC_4 = [(item - min_lexC) / delta_lexC for item in y_lexC_m7ver4]
 ########################################### Plotting Normalized graphs
 
 fig = plt.figure(figsize=(10,10))
-
 title = 'VGS+ (random init) '
-plt.subplot(2,1,1)
+#plt.subplot(2,1,1)
+ax = fig.add_subplot(2, 1, 1)
+x_recall_m7base3 [0] = 0.5
+x_abx_m7base3 [0] = 0.5
+x_lexC_m7base3 [0] = 0.5
+x_lexF_m7base3 [0] = 0.5
 plt.plot(x_recall_m7base3, r_3, c_1, label = 'recall@10')
 plt.plot(x_abx_m7base3[0:-3],abx_3[0:-3],c_3, label='abx')
 plt.plot(x_lexC_m7base3, lexC_3,c_2, label='lex-average')
 plt.plot(x_lexF_m7base3, lexF_3,c_4, label='lex-frame')
+ax.set_xscale('log')
+plt.xticks([0.5,1,2,3,4,5,10,50],['0','1','2','3','4','5','10','50'])
 plt.ylim(0,1)
 plt.ylabel('Normalized performance',size=18)
-plt.xticks([0,1,2,3,4,5,10,15,20,25,30,35,40,45,50],['0','1','2','3','4','5','10','15','20','25','30','35','40','45','50'])
+#plt.xticks([0,1,2,3,4,5,10,15,20,25,30,35,40,45,50],['0','1','2','3','4','5','10','15','20','25','30','35','40','45','50'])
 plt.grid()
 plt.legend(fontsize=12)
 plt.title(title)
 
 title = 'VGS+ (Pretrained) '
-plt.subplot(2,1,2)
-plt.plot(x_recall_m7ver4, r_3, c_1, label = 'recall@10')
+#plt.subplot(2, 1, 2)
+ax = fig.add_subplot(2, 1, 2)
+x_recall_m7ver4 [0] = 0.5
+x_abx_m7ver4 [0] = 0.5
+x_lexC_m7ver4 [0] = 0.5
+x_lexF_m7ver4 [0] = 0.5
+plt.plot(x_recall_m7ver4, r_4, c_1, label='recall@10')
 plt.plot(x_abx_m7ver4, abx_4,c_3, label='abx')
 plt.plot(x_lexC_m7ver4, lexC_4,c_2, label='lex-average')
 plt.plot(x_lexF_m7ver4, lexF_4,c_4, label='lex-frame')
-
+ax.set_xscale('log')
+plt.xticks([0.5,1,2,3,4,5,10,50],['0','1','2','3','4','5','10','50'])
 plt.ylim(0,1)
 plt.ylabel('Normalized performance',size=18)
-plt.xticks([0,1,2,3,4,5,10,15,20,25,30,35,40,45,50],['0','1','2','3','4','5','10','15','20','25','30','35','40','45','50'])
+#plt.xticks([0,1,2,3,4,5,10,15,20,25,30,35,40,45,50],['0','1','2','3','4','5','10','15','20','25','30','35','40','45','50'])
 plt.grid()
 plt.legend(fontsize=12)
 plt.title(title)
 
-plt.savefig(os.path.join(path_save, 'all_normalized' + '.png'), format='png')
+plt.savefig(os.path.join(path_save, 'all_normalized_logx' + '.png'), format='png')
