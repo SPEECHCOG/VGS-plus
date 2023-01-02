@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 path_source = '/worktmp2/hxkhkh/current/FaST/experiments/'
-path_save = '/worktmp2/hxkhkh/current/FaST/experiments/plots/'
+path_save = '/worktmp2/hxkhkh/current/FaST/experiments/plots/eusipco/'
 
 path_event_7base1T = 'model7base1T/'
 path_event_7base2T = 'model7base2T/'
@@ -228,13 +228,13 @@ y_7ver8_recall.insert(0, y_7base3T_recall [5])
 label1 = 'w2v2'
 label2 = 'VGS'
 label3 = 'VGS+'
-label4 = 'VGS+ pretrained with w2v2-20E'
-label5 = 'VGS+ pretrained with VGS-20E'
-label6 = 'VGS pretrained with w2v2-20E'
-label7 = 'w2v2 pretrained with VGS-20E'
-label8 = 'w2v2 pretrained with VGS+-20E'
-label14 = 'VGS+ pretrained with w2v2-35E'
-label26 = 'VGS pretrained with w2v2-5E'
+label4 = 'VGS+ (pre w2v2)'
+label5 = 'VGS+ (pre VGS)'
+label6 = 'VGS (pre w2v2)'
+label7 = 'w2v2 (pre VGS)'
+label8 = 'w2v2 (pre VGS+)'
+label14 = 'VGS+ (pre w2v2-35E)'
+label26 = 'VGS (pre w2v2-5E)'
 
 fig = plt.figure(figsize=(7,10))
 
@@ -326,8 +326,62 @@ x_7ver5_caploss, y_7ver5_caploss = smooth_losses(x_7ver5_caploss, y_7ver5_caplos
 x_7ver6_caploss, y_7ver6_caploss = smooth_losses(x_7ver6_caploss, y_7ver6_caploss)
 x_7ver7_caploss, y_7ver7_caploss = smooth_losses(x_7ver7_caploss, y_7ver7_caploss)
 x_7ver8_caploss, y_7ver8_caploss = smooth_losses(x_7ver8_caploss, y_7ver8_caploss)
+kh
+################################################################# plotting losses for base models in single plot
+fig = plt.figure(figsize=(9,9))
+title = ' losses for the base models '
+ax = fig.add_subplot(2, 2, 1)#plt.subplot(2,2,1)
+plt.plot(x_7base2T_vgsloss, y_7base2T_vgsloss, c_2, label = 'vgs loss, VGS ')
+plt.plot(x_7base3T_vgsloss, y_7base3T_vgsloss, c_3, label = 'vgs loss, VGS+ ')
+plt.plot(x_7base1T_caploss, y_7base1T_caploss, c_1, label = 'caption loss, w2v2 ')
+plt.plot(x_7base3T_caploss, y_7base3T_caploss, c_3, label = 'caption loss, VGS+ ')
 
-################################################################# plotting losses for base models
+ax.set_yscale('log')
+#plt.ylim(0,10.5)
+plt.xticks(ticks = np.arange(0,50,5) )
+#plt.yticks(ticks = np.arange(0,11) )
+plt.grid()
+plt.legend(fontsize=12)
+plt.title(title)
+
+# 2,2,2 ..> recall
+
+title = ' vgs loss '
+ax = fig.add_subplot(2, 2, 3) #plt.subplot(2,2,3)
+plt.plot(x_7base3T_vgsloss, y_7base3T_vgsloss, c_3, label = 'VGS+')
+plt.plot(x_7ver4_vgsloss, y_7ver4_vgsloss, c_4, label = label4)
+plt.plot(x_7ver6_vgsloss, y_7ver6_vgsloss, c_6, label = label6)
+plt.plot(x_7ver5_vgsloss, y_7ver5_vgsloss, c_5, label = label5)
+plt.plot(x_7ver8_vgsloss, y_7ver8_vgsloss, c_8, label = label8)
+ax.set_yscale('log')
+#plt.ylim(0,10.5)
+plt.xticks(ticks = np.arange(0,50,5) )
+#plt.yticks(ticks = np.arange(0,11) )
+plt.grid()
+plt.legend(fontsize=12)
+plt.xlabel('epoch',size=18)
+plt.title(title)
+
+title = ' caption loss '
+ax = fig.add_subplot(2, 2, 4)#plt.subplot(2,2,4)
+plt.plot(x_7base1T_caploss, y_7base1T_caploss, c_1, label = 'w2v2')
+plt.plot(x_7base3T_caploss, y_7base3T_caploss, c_3, label = 'VGS+')
+plt.plot(x_7ver4_caploss, y_7ver4_caploss, c_4, label = label4)
+plt.plot(x_7ver5_caploss[1:], y_7ver5_caploss[1:], c_5, label = label5)
+plt.plot(x_7ver7_caploss[1:], y_7ver7_caploss[1:], c_7, label = label7)
+plt.plot(x_7ver8_caploss, y_7ver8_caploss, c_8, label = label8)
+ax.set_yscale('log')
+#plt.ylim(0,5.5)
+plt.xticks(ticks = np.arange(0,50,5) )
+#plt.yticks(ticks = np.arange(0,5) )
+plt.grid()
+plt.legend(fontsize=12)
+plt.xlabel('epoch',size=18)
+plt.title(title)
+
+plt.savefig(os.path.join(path_save , 'model7_losses_logarithmic' + '.png'), format = 'png')
+kh
+################################################################# plotting losses for base models separately
 label1 = 'w2v2'
 label2 = 'VGS'
 label3 = 'VGS+'
