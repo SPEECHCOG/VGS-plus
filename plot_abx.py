@@ -355,4 +355,4 @@ plt.xticks([0,1,2,3,4,5,6],['5', '15', '25' ,'30', '35', '45','50'])
 plt.grid()
 plt.legend(fontsize=14) 
 
-plt.savefig(os.path.join(path_save, 'abx_base_versions_best_layers' + '.png'), format='png')
+#plt.savefig(os.path.join(path_save, 'abx_base_versions_best_layers' + '.png'), format='png')
