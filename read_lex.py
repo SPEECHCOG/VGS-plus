@@ -44,7 +44,7 @@ def read_score (path):
 scores_m7base1 = []
 model_name = 'model7base1T'
 layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-for epoch in [5,15,25,35,45]:
+for epoch in [5,10,15,25,35,45]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -54,7 +54,7 @@ for epoch in [5,15,25,35,45]:
         s = read_score (path)
         scores_m7base1.append(s)
 
-m7base1 = (np.reshape(scores_m7base1, (5,8))).T
+m7base1 = (np.reshape(scores_m7base1, (6,8))).T
 ##################################################################
                         ### model7base3T  ###
 ################################################################## 
@@ -129,10 +129,10 @@ for epoch in [1,2,3,4,5,15,25,35,45]:
 m7base5 = (np.reshape(scores_m7base5, (9,8))).T
 
 # =============================================================================
-# ############################################## Normalizing and merging ABX
+# ############################################# Normalizing and merging Lexcical
 # =============================================================================
 
-x_abx_m7base1 = [0.,5,15,25,35,45]
+x_abx_m7base1 = [0.,5,10,15,25,35,45]
 y_abx_m7base1 = []
 y_abx_m7base1.extend(np.max(m7base1 , axis = 0)) #best layer performance
 y_abx_m7base1.insert(0, 1/89) 
@@ -145,7 +145,7 @@ y_abx_m7base3.insert(0, 1/89)
 x_abx_m7ver4 = [0.,1,2,3,4,5,15,25,35,45]
 y_abx_m7ver4 = []
 y_abx_m7ver4.extend(np.max(m7ver4T , axis = 0)) #best layer performance
-bestC_w2v2 = 0.383 
+bestC_w2v2 = 0.364 
 y_abx_m7ver4.insert(0, bestC_w2v2)
 
 
