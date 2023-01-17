@@ -67,7 +67,7 @@ def read_lex_score (path):
 scores_m7base1 = []
 model_name = 'model7base1T'
 layer_names = ['L1','L2','L3','L4','L5']
-for epoch in [5,15,20,25,35,40]:
+for epoch in [5,10,15,20,25,35,40]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -77,7 +77,7 @@ for epoch in [5,15,20,25,35,40]:
         s = read_score (path)
         scores_m7base1.append(s)
 
-m7base1 = (np.reshape(scores_m7base1, (6,5))).T
+m7base1 = (np.reshape(scores_m7base1, (7,5))).T
 ##################################################################
                         ### model7base3T  ###
 ################################################################## 
@@ -100,8 +100,8 @@ m7base3T = (np.reshape(scores_m7base3T, (9,3))).T
                         ### model7ver4T  ###
 ################################################################## 
 scores_m7ver4T = []
-for i in [10, 11,12,13,14]:
-    scores_m7ver4T.append(scores_m7base1[i])
+for i in [0,1,2,3,4]:
+    scores_m7ver4T.append(m7base1[i,3])
 model_name = 'model7ver4'
 layer_names = ['L1','L2','L3','L4','L5']#,'L6','L7','L8']
 for epoch in [1,2,3,4,5,15,25, 35, 45]:
@@ -157,7 +157,7 @@ m7base5 = (np.reshape(scores_m7base5, (9,8))).T
 # ############################################## Normalizing and merging ABX
 # =============================================================================
 
-x_abx_m7base1 = [0.0,5,15,25,35,45]
+x_abx_m7base1 = [0.0,5,10,15,25,35,45]
 y_abx_m7base1 = []
 y_abx_m7base1.extend(np.min(m7base1 , axis = 0)) #best layer performance
 y_abx_m7base1.insert(0, 50)
