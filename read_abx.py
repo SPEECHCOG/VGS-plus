@@ -157,7 +157,7 @@ m7base5 = (np.reshape(scores_m7base5, (9,8))).T
 # ############################################## Normalizing and merging ABX
 # =============================================================================
 
-x_abx_m7base1 = [0.0,5,10,15,25,35,45]
+x_abx_m7base1 = [0.0,5,10,15,20,25,35,40]
 y_abx_m7base1 = []
 y_abx_m7base1.extend(np.min(m7base1 , axis = 0)) #best layer performance
 y_abx_m7base1.insert(0, 50)
@@ -256,4 +256,4 @@ dict_recall['VGSplus09']['x'] = x_abx_m7base5
 dict_recall['VGSplus09']['y'] = y_abx_m7base5
 dict_recall['VGSplus09']['norm'] = abx_b5
 
-savemat(path_save + "abx.mat", dict_recall)
+#savemat(path_save + "abx.mat", dict_recall)
