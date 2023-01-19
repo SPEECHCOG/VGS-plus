@@ -26,7 +26,8 @@ path_event_7base3T_extra = 'model7base3T/exp-additional/'
 path_event_7ver4T = 'model7ver4/exp/'
 path_event_7ver4 = 'model7ver4/exp5/'
 
-path_event_7ver5 = 'model7ver5/exp/'
+path_event_7ver8T = 'model7ver8/exp/'
+path_event_7ver8 = 'model7ver8/exp5/'
 
 path_event_7base4T = 'model7base4T/exp/'
 path_event_7base5T = 'model7base5T/exp/'
@@ -61,8 +62,11 @@ event_7ver4T.Reload()
 event_7ver4 =  EventAccumulator(os.path.join(path_source, path_event_7ver4))
 event_7ver4.Reload()
 
-event_7ver5 =  EventAccumulator(os.path.join(path_source, path_event_7ver5))
-event_7ver5.Reload()
+event_7ver8T =  EventAccumulator(os.path.join(path_source, path_event_7ver8T))
+event_7ver8T.Reload()
+
+event_7ver8 =  EventAccumulator(os.path.join(path_source, path_event_7ver8))
+event_7ver8.Reload()
 
 event_7base4T =  EventAccumulator(os.path.join(path_source, path_event_7base4T))
 event_7base4T.Reload()
@@ -102,25 +106,22 @@ x_7base3_recall.insert(0, x_recall_0)
 y_7base3_recall.insert(0, y_recall_0)
 
 #........... ver4T
-
 x_7ver4T_recall, y_7ver4T_recall = find_single_recall(event_7ver4T, n_64) 
 x_7ver4T_recall.insert(0, x_recall_0)
 y_7ver4T_recall.insert(0, y_recall_0)
-
-
 #........... ver4
-
 x_7ver4_recall, y_7ver4_recall = find_single_recall(event_7ver4, n_64) 
 x_7ver4_recall.insert(0, x_recall_0)
 y_7ver4_recall.insert(0, y_recall_0)
 
-
-#........... ver5T
-
-x_7ver5_recall, y_7ver5_recall = find_single_recall(event_7ver5, n_64) 
-x_7ver5_recall.insert(0, x_recall_0)
-y_7ver5_recall.insert(0, y_recall_0)
-
+#........... ver8T
+x_7ver8T_recall, y_7ver8T_recall = find_single_recall(event_7ver8T, n_64) 
+x_7ver8T_recall.insert(0, x_recall_0) #khazar: correct this later also for ver8
+y_7ver8T_recall.insert(0, y_recall_0)
+#........... ver8
+x_7ver8_recall, y_7ver8_recall = find_single_recall(event_7ver8, n_64) 
+x_7ver8T_recall.insert(0, x_recall_0)
+y_7ver8T_recall.insert(0, y_recall_0)
 
 #........... base4T
 x_7base4T_recall, y_7base4T_recall = find_single_recall(event_7base4T, n_64) 
