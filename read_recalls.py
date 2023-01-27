@@ -41,8 +41,8 @@ def find_single_recall (event, n):
     x_recall = [i/n for i in recall['step']]
     y_recall = recall['value'].to_list()    
     return x_recall, y_recall
-kh
-############################################################################## Model 7 
+
+############################################################################## CogSci 
 
 event_7base1T =  EventAccumulator(os.path.join(path_source, path_event_7base1T))
 event_7base1T.Reload()
@@ -74,10 +74,11 @@ event_7base4T.Reload()
 event_7base5T =  EventAccumulator(os.path.join(path_source, path_event_7base5T))
 event_7base5T.Reload()
 
+############################################################################## Euscipco 
+
 ############################################################################## Recalls
 x_recall_0 = 0
 y_recall_0 = 0.002
-
 
 #........... base1T
 
@@ -116,12 +117,14 @@ y_7ver4_recall.insert(0, y_recall_0)
 
 #........... ver8T
 x_7ver8T_recall, y_7ver8T_recall = find_single_recall(event_7ver8T, n_64) 
-x_7ver8T_recall.insert(0, x_recall_0) #khazar: correct this later also for ver8
-y_7ver8T_recall.insert(0, y_recall_0)
+x_7ver8T_recall.insert(0, x_recall_0) 
+ind_E20 = x_7base3T_recall.index(20.0)
+y_7ver8T_recall.insert(0, y_7base3T_recall[ind_E20])
 #........... ver8
 x_7ver8_recall, y_7ver8_recall = find_single_recall(event_7ver8, n_64) 
-x_7ver8T_recall.insert(0, x_recall_0)
-y_7ver8T_recall.insert(0, y_recall_0)
+x_7ver8_recall.insert(0, x_recall_0)
+ind_E20 = x_7base3T_recall.index(20.0)
+y_7ver8_recall.insert(0, y_7base3T_recall[ind_E20])
 
 #........... base4T
 x_7base4T_recall, y_7base4T_recall = find_single_recall(event_7base4T, n_64) 
@@ -156,22 +159,44 @@ y_recall_m7ver4.extend(y_7ver4_recall[0:5])
 
 x_recall_m7ver4.extend(x_7ver4T_recall[1:12])
 y_recall_m7ver4.extend(y_7ver4T_recall[1:12])
+#.......................................
+
+x_recall_m7ver8 = []
+y_recall_m7ver8 = []
+
+x_recall_m7ver8.extend(x_7ver8_recall[0:5])
+y_recall_m7ver8.extend(y_7ver8_recall[0:5])
+
+x_recall_m7ver8.extend(x_7ver8T_recall[1:])
+y_recall_m7ver8.extend(y_7ver8T_recall[1:])
 
 #.......................................
 
 x_recall_m7base4 = []
 y_recall_m7base4 = []
 
-x_recall_m7base4.extend(x_7base4T_recall)
-y_recall_m7base4.extend(y_7base4T_recall)
+x_recall_m7base4.extend(x_7base4T_recall[0:-10])
+y_recall_m7base4.extend(y_7base4T_recall[0:-10])
 
 #.......................................
 x_recall_m7base5 = []
 y_recall_m7base5 = []
 
-x_recall_m7base5.extend(x_7base5T_recall)
-y_recall_m7base5.extend(y_7base5T_recall)
+x_recall_m7base5.extend(x_7base5T_recall[0:-10])
+y_recall_m7base5.extend(y_7base5T_recall[0:-10])
 
+
+#.......................plot test
+plt.plot(x_recall_m7base3, y_recall_m7base3,c_1, label='VGS+ (0.5)')
+plt.plot(x_recall_m7base4, y_recall_m7base4,c_2, label='VGS+ (0.1)')
+plt.plot(x_recall_m7base5, y_recall_m7base5,c_3, label='VGS+ (0.9)')
+plt.plot(x_recall_m7ver4, y_recall_m7ver4,c_4, label='VGS+ Pre w2v2')
+plt.plot(x_recall_m7ver8, y_recall_m7ver8,c_5, label='w2v2 Pre VGS+')
+plt.grid()
+plt.legend(fontsize=12)
+plt.ylabel('Recall@10',size=18)
+plt.xlabel('Epoch',size=18)
+plt.savefig(os.path.join(path_save, 'recall' + '.png'), format='png')
 #.......................................
 # normalizing
 #.......................................
@@ -183,7 +208,7 @@ delta_recall = max_recall - min_recall
 
 r_b3 = [(item - min_recall) / delta_recall for item in y_recall_m7base3]
 r_v4 = [(item - min_recall) / delta_recall for item in y_recall_m7ver4]
-
+r_v8 = [(item - min_recall) / delta_recall for item in y_recall_m7ver8]
 r_b4 = [(item - min_recall) / delta_recall for item in y_recall_m7base4]
 r_b5 = [(item - min_recall) / delta_recall for item in y_recall_m7base5]
 
@@ -191,15 +216,17 @@ r_b5 = [(item - min_recall) / delta_recall for item in y_recall_m7base5]
 
 x_recall_m7base3 [0] = 0.5
 x_recall_m7ver4 [0] = 0.5
+x_recall_m7ver8 [0] = 0.5
 x_recall_m7base4 [0] = 0.5
 x_recall_m7base5 [0] = 0.5
 
 fig = plt.figure(figsize=(8,8))
 ax = fig.add_subplot(2, 1, 1)
 plt.plot(x_recall_m7base3, r_b3, c_1, label='VGS+ (0.5)')
-plt.plot(x_recall_m7ver4, r_v4, c_2, label='VGS+ Pre')
-plt.plot(x_recall_m7base4, r_b4, c_3, label='VGS+ (0.1)')
-plt.plot(x_recall_m7base5, r_b5, c_4, label='VGS+ (0.9)')
+plt.plot(x_recall_m7base4, r_b4, c_2, label='VGS+ (0.1)')
+plt.plot(x_recall_m7base5, r_b5, c_3, label='VGS+ (0.9)')
+plt.plot(x_recall_m7ver4, r_v4, c_4, label='VGS+ Pre w2v2')
+plt.plot(x_recall_m7ver8, r_v8, c_5, label='w2v2 Pre VGS+')
 ax.set_xscale('log')
 plt.xticks([0.5,1,2,3,4,5,10,50],['0','1','2','3','4','5','10','50'])
 plt.ylim(0,1)
@@ -209,11 +236,12 @@ plt.legend(fontsize=12)
 plt.savefig(os.path.join(path_save, 'normalized-recall' + '.png'), format='png')
 
 ########################################### saving Recalls as mat file
-kh
+
 from scipy.io import savemat
 
 x_recall_m7base3 [0] = 0
 x_recall_m7ver4 [0] = 0
+x_recall_m7ver8 [0] = 0
 x_recall_m7base4 [0] = 0
 x_recall_m7base5 [0] = 0
 
@@ -224,10 +252,15 @@ dict_recall['VGSplus05']['x'] = x_recall_m7base3
 dict_recall['VGSplus05']['y'] = y_recall_m7base3
 dict_recall['VGSplus05']['norm'] = r_b3
 
-dict_recall['VGSpluspre'] = {}
-dict_recall['VGSpluspre']['x'] = x_recall_m7ver4
-dict_recall['VGSpluspre']['y'] = y_recall_m7ver4
-dict_recall['VGSpluspre']['norm'] = r_v4
+dict_recall['VGSplusprew2v2'] = {}
+dict_recall['VGSplusprew2v2']['x'] = x_recall_m7ver4
+dict_recall['VGSplusprew2v2']['y'] = y_recall_m7ver4
+dict_recall['VGSplusprew2v2']['norm'] = r_v4
+
+dict_recall['w2v2preVGSplus'] = {}
+dict_recall['w2v2preVGSplus']['x'] = x_recall_m7ver8
+dict_recall['w2v2preVGSplus']['y'] = y_recall_m7ver8
+dict_recall['w2v2preVGSplus']['norm'] = r_v8
 
 dict_recall['VGSplus01'] = {}
 dict_recall['VGSplus01']['x'] = x_recall_m7base4

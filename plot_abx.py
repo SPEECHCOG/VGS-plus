@@ -250,7 +250,7 @@ for epoch in [5, 15, 25, 35, 45]:
         scores_m7ver8.append(s)
 
 m7ver8 = (np.reshape(scores_m7ver8, (6,8))).T
-
+kh
 ################################################################ Plotting all layers
 
 title = 'ABX-error for best layers '
