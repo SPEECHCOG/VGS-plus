@@ -61,7 +61,7 @@ m7base1 = (np.reshape(scores_m7base1, (7,8))).T
 scores_m7base3T = []
 model_name = 'model7base3T'
 layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-for epoch in [1,2,3,4,5,10,15,20,25, 35, 45]:
+for epoch in [1,2,3,4,5,10,15,25, 35, 45, 50]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -79,7 +79,7 @@ m7base3T = (np.reshape(scores_m7base3T, (11,8))).T
 scores_m7ver4T = []
 model_name = 'model7ver4'
 layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-for epoch in [1,2,3,4,5,15,25, 35, 45]:
+for epoch in [1,2,3,4,5,15,25, 35, 45,50]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -90,7 +90,7 @@ for epoch in [1,2,3,4,5,15,25, 35, 45]:
         scores_m7ver4T.append(s)
 
 
-m7ver4T = (np.reshape(scores_m7ver4T, (9,8))).T
+m7ver4T = (np.reshape(scores_m7ver4T, (10,8))).T
 
 ##################################################################
                         ### model7ver8T  ###
@@ -98,7 +98,7 @@ m7ver4T = (np.reshape(scores_m7ver4T, (9,8))).T
 scores_m7ver8T = []
 model_name = 'model7ver8'
 layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-for epoch in [1,2,3,4,5,15,25, 35, 45]:
+for epoch in [1,2,3,4,5,15,25, 35, 45,50]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -109,15 +109,15 @@ for epoch in [1,2,3,4,5,15,25, 35, 45]:
         scores_m7ver8T.append(s)
 
 
-m7ver8T = (np.reshape(scores_m7ver8T, (9,8))).T
-kh
+m7ver8T = (np.reshape(scores_m7ver8T, (10,8))).T
+
 ##################################################################
                         ### m7base4T  ###
 ################################################################## 
 scores_m7base4 = []
 model_name = 'model7base4T'
 layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-for epoch in [1,2,3,4,5,15,25,35,45]:
+for epoch in [1,2,3,4,5,15,25,35,45,50]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -127,7 +127,7 @@ for epoch in [1,2,3,4,5,15,25,35,45]:
         s = read_score (path)
         scores_m7base4.append(s)
 
-m7base4 = (np.reshape(scores_m7base4, (9,8))).T
+m7base4 = (np.reshape(scores_m7base4, (10,8))).T
 
 ##################################################################
                         ### m7base5T  ###
@@ -135,7 +135,7 @@ m7base4 = (np.reshape(scores_m7base4, (9,8))).T
 scores_m7base5 = []
 model_name = 'model7base5T'
 layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-for epoch in [1,2,3,4,5,15,25,35,45]:
+for epoch in [1,2,3,4,5,15,25,35,45,50]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -145,8 +145,8 @@ for epoch in [1,2,3,4,5,15,25,35,45]:
         s = read_score (path)
         scores_m7base5.append(s)
 
-m7base5 = (np.reshape(scores_m7base5, (9,8))).T
-
+m7base5 = (np.reshape(scores_m7base5, (10,8))).T
+kh
 # =============================================================================
 # ############################################# Normalizing and merging Lexcical
 # =============================================================================
@@ -156,30 +156,30 @@ y_abx_m7base1 = []
 y_abx_m7base1.extend(np.max(m7base1 , axis = 0)) #best layer performance
 y_abx_m7base1.insert(0, 1/89) 
 
-x_abx_m7base3 = [0.,1,2,3,4,5,10,15,20,25,35,45]
+x_abx_m7base3 = [0.,1,2,3,4,5,10,15,25,35,45,50]
 y_abx_m7base3 = []
 y_abx_m7base3.extend(np.max(m7base3T , axis = 0)) #best layer performance
 y_abx_m7base3.insert(0, 1/89) 
 
-x_abx_m7ver4 = [0.,1,2,3,4,5,15,25,35,45]
+x_abx_m7ver4 = [0.,1,2,3,4,5,15,25,35,45,50]
 y_abx_m7ver4 = []
 y_abx_m7ver4.extend(np.max(m7ver4T , axis = 0)) #best layer performance
 bestC_w2v2 = 0.294 
 y_abx_m7ver4.insert(0, bestC_w2v2)
 
-x_abx_m7ver8 = [0.,1,2,3,4,5,15,25,35,45]
+x_abx_m7ver8 = [0.,1,2,3,4,5,15,25,35,45,50]
 y_abx_m7ver8 = []
 y_abx_m7ver8.extend(np.max(m7ver8T , axis = 0)) #best layer performance
 bestC_VGSplus = 0.584
 y_abx_m7ver8.insert(0, bestC_VGSplus)
 
 
-x_abx_m7base4 = [0.,1,2,3,4,5,15,25,35,45]
+x_abx_m7base4 = [0.,1,2,3,4,5,15,25,35,45,50]
 y_abx_m7base4 = []
 y_abx_m7base4.extend(np.max(m7base4 , axis = 0)) #best layer performance
 y_abx_m7base4.insert(0, 1/89)
 
-x_abx_m7base5 = [0.,1,2,3,4,5,15,25,35,45]
+x_abx_m7base5 = [0.,1,2,3,4,5,15,25,35,45,50]
 y_abx_m7base5 = []
 y_abx_m7base5.extend(np.max(m7base5 , axis = 0)) #best layer performance
 y_abx_m7base5.insert(0, 1/89)
