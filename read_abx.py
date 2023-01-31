@@ -85,7 +85,7 @@ m7base1 = (np.reshape(scores_m7base1, (7,8))).T
 scores_m7base3T = []
 model_name = 'model7base3T'
 layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-for epoch in [1,2,3,4,5,10,15,20,25, 35, 45]:
+for epoch in [1,2,3,4,5,10,15,25, 35, 45, 55]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -115,7 +115,7 @@ for layer_name in layer_names:
     scores_m7ver4.append(s)
     
 model_name = 'model7ver4'
-for epoch in [1,2,3,4,5,15,25, 35, 45]:
+for epoch in [1,2,3,4,5,15,25, 35, 45, 50]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -125,7 +125,7 @@ for epoch in [1,2,3,4,5,15,25, 35, 45]:
         s = read_score (path)
         scores_m7ver4.append(s)
 
-m7ver4T = (np.reshape(scores_m7ver4, (10,8))).T
+m7ver4T = (np.reshape(scores_m7ver4, (11,8))).T
 
 ##################################################################
                         ### model7ver8  ###
@@ -144,7 +144,7 @@ for layer_name in layer_names:
     scores_m7ver8.append(s)
     
 model_name = 'model7ver8'
-for epoch in [1,2,3,4,5,15,25, 35, 45]:
+for epoch in [1,2,3,4,5,15,25, 35, 45, 50]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -154,7 +154,7 @@ for epoch in [1,2,3,4,5,15,25, 35, 45]:
         s = read_score (path)
         scores_m7ver8.append(s)
 
-m7ver8T = (np.reshape(scores_m7ver8, (10,8))).T
+m7ver8T = (np.reshape(scores_m7ver8, (11,8))).T
 
 ##################################################################
                         ### m7base4T  ###
@@ -162,7 +162,7 @@ m7ver8T = (np.reshape(scores_m7ver8, (10,8))).T
 scores_m7base4 = []
 model_name = 'model7base4T'
 layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-for epoch in [1,2,3,4,5,15,25,35,45]:
+for epoch in [1,2,3,4,5,15,25,35,45,50]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -172,7 +172,7 @@ for epoch in [1,2,3,4,5,15,25,35,45]:
         s = read_score (path)
         scores_m7base4.append(s)
 
-m7base4 = (np.reshape(scores_m7base4, (9,8))).T
+m7base4 = (np.reshape(scores_m7base4, (10,8))).T
 
 ##################################################################
                         ### m7base5T  ###
@@ -180,7 +180,7 @@ m7base4 = (np.reshape(scores_m7base4, (9,8))).T
 scores_m7base5 = []
 model_name = 'model7base5T'
 layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-for epoch in [1,2,3,4,5,15,25,35,45]:
+for epoch in [1,2,3,4,5,15,25,35,45,50]:
     print(epoch)
     for layer_name in layer_names:
         name = 'E' + str(epoch) + layer_name
@@ -190,8 +190,8 @@ for epoch in [1,2,3,4,5,15,25,35,45]:
         s = read_score (path)
         scores_m7base5.append(s)
 
-m7base5 = (np.reshape(scores_m7base5, (9,8))).T
-
+m7base5 = (np.reshape(scores_m7base5, (10,8))).T
+kh
 # =============================================================================
 # ############################################## Normalizing and merging ABX
 # =============================================================================
@@ -202,26 +202,26 @@ y_abx_m7base1.extend(np.min(m7base1 , axis = 0)) #best layer performance
 y_abx_m7base1.insert(0, 50)
 
 
-x_abx_m7base3 = [0.0,1,2,3,4,5,10,15,20,25,35,45]
+x_abx_m7base3 = [0.0,1,2,3,4,5,10,15,25,35,45,50]
 y_abx_m7base3 = []
 y_abx_m7base3.extend(np.min(m7base3T , axis = 0)) #best layer performance
 y_abx_m7base3.insert(0, 50)
 
-x_abx_m7ver4 = [0.0,1,2,3,4,5,15,25,35,45]
+x_abx_m7ver4 = [0.0,1,2,3,4,5,15,25,35,45,50]
 y_abx_m7ver4 = []
 y_abx_m7ver4.extend(np.min(m7ver4T , axis = 0)) #best layer performance
 
-x_abx_m7ver8 = [0.0,1,2,3,4,5,15,25,35,45]
+x_abx_m7ver8 = [0.0,1,2,3,4,5,15,25,35,45,50]
 y_abx_m7ver8 = []
 y_abx_m7ver8.extend(np.min(m7ver8T , axis = 0)) #best layer performance
 
 
-x_abx_m7base4 = [0.0,1,2,3,4,5,15,25,35,45]
+x_abx_m7base4 = [0.0,1,2,3,4,5,15,25,35,45,50]
 y_abx_m7base4 = []
 y_abx_m7base4.extend(np.min(m7base4 , axis = 0)) #best layer performance
 y_abx_m7base4.insert(0, 50)
 
-x_abx_m7base5 = [0.0,1,2,3,4,5,15,25,35,45]
+x_abx_m7base5 = [0.0,1,2,3,4,5,15,25,35,45,50]
 y_abx_m7base5 = []
 y_abx_m7base5.extend(np.min(m7base5 , axis = 0)) #best layer performance
 y_abx_m7base5.insert(0, 50)
@@ -260,7 +260,6 @@ plt.ylabel('Normalized ABX score',size=18)
 plt.grid()
 plt.legend(fontsize=12)
 plt.savefig(os.path.join(path_save, 'normalized-abx' + '.png'), format='png')
-
 
 ########################################### saving as mat file
 
