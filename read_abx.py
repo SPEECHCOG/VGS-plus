@@ -66,7 +66,7 @@ def read_lex_score (path):
 ################################################################## 
 scores_m7base1 = []
 model_name = 'model7base1T'
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
+layer_names = ['L0','L1','L2','L3','L4','L5','L6','L7','L8']
 for epoch in [5,10,15,20,25,35,45]:
     print(epoch)
     for layer_name in layer_names:
@@ -77,7 +77,7 @@ for epoch in [5,10,15,20,25,35,45]:
         s = read_score (path)
         scores_m7base1.append(s)
 
-m7base1 = (np.reshape(scores_m7base1, (7,8))).T
+m7base1 = (np.reshape(scores_m7base1, (7,9))).T
 
 ##################################################################
                         ### model7base3T  ###
@@ -102,7 +102,7 @@ m7base3T = (np.reshape(scores_m7base3T, (11,8))).T
                         ### model7ver4  ###
 ################################################################## 
 scores_m7ver4 = []
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
+layer_names = ['L0','L1','L2','L3','L4','L5','L6','L7','L8']
 # Pretrained with w2v2 (20 E)
 model_name = 'model7base1T'
 epoch = 20
@@ -125,7 +125,7 @@ for epoch in [1,2,3,4,5,15,25, 35, 45, 50]:
         s = read_score (path)
         scores_m7ver4.append(s)
 
-m7ver4T = (np.reshape(scores_m7ver4, (11,8))).T
+m7ver4T = (np.reshape(scores_m7ver4, (11,9))).T
 
 ##################################################################
                         ### model7ver8  ###
@@ -191,7 +191,7 @@ for epoch in [1,2,3,4,5,15,25,35,45,50]:
         scores_m7base5.append(s)
 
 m7base5 = (np.reshape(scores_m7base5, (10,8))).T
-kh
+
 # =============================================================================
 # ############################################## Normalizing and merging ABX
 # =============================================================================
@@ -308,5 +308,5 @@ dict_recall['VGSplus09'] = {}
 dict_recall['VGSplus09']['x'] = x_abx_m7base5
 dict_recall['VGSplus09']['y'] = y_abx_m7base5
 dict_recall['VGSplus09']['norm'] = abx_b5
-
-savemat(path_save + "abx.mat", dict_recall)
+kh
+savemat(path_save + "abx_l0.mat", dict_recall)
