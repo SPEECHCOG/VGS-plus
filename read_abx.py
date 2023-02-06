@@ -200,7 +200,7 @@ x_abx_m7base1 = [0.0,5,10,15,20,25,35,45]
 y_abx_m7base1 = []
 y_abx_m7base1.extend(np.min(m7base1 , axis = 0)) #best layer performance
 y_abx_m7base1.insert(0, 50)
-
+kh
 
 x_abx_m7base3 = [0.0,1,2,3,4,5,10,15,25,35,45,50]
 y_abx_m7base3 = []
