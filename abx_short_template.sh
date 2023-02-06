@@ -5,47 +5,91 @@ mkdir $OUTFOLDER
 MFOLDER="/worktmp/khorrami/current/FaST/experiments"/$NAME/"exp"
 
 
-M="E1_bundle.pth"
+M="E5_bundle.pth"
 
-OUTNAME="E1L0"
+OUTNAME="E5L10"
 OUTFILE=$OUTFOLDER/$OUTNAME
 source activate fastvgs
-python abx.py --mytarget_layer 0 --mytwd $MFOLDER/$M
+python abx.py --mytarget_layer 10 --mytwd $MFOLDER/$M
 conda activate zerospeech2021
 mkdir $OUTFILE
 zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
 rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
 
-M="E2_bundle.pth"
+for LAYERNAME in 11 12
+do
+    OUTNAME="E5L"$LAYERNAME
+    OUTFILE=$OUTFOLDER/$OUTNAME
+    conda activate fastvgs
+    python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
+    conda activate zerospeech2021
+    mkdir $OUTFILE
+    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+    rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
+done
 
-OUTNAME="E2L0"
-OUTFILE=$OUTFOLDER/$OUTNAME
-conda activate fastvgs
-python abx.py --mytarget_layer 0 --mytwd $MFOLDER/$M
-conda activate zerospeech2021
-mkdir $OUTFILE
-zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
-rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
+M="E15_bundle.pth"
+for LAYERNAME in 10 11 12
+do
+    OUTNAME="E15L"$LAYERNAME
+    OUTFILE=$OUTFOLDER/$OUTNAME
+    conda activate fastvgs
+    python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
+    conda activate zerospeech2021
+    mkdir $OUTFILE
+    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+    rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
+done
 
-M="E3_bundle.pth"
+M="E25_bundle.pth"
+for LAYERNAME in 10 11 12
+do
+    OUTNAME="E25L"$LAYERNAME
+    OUTFILE=$OUTFOLDER/$OUTNAME
+    conda activate fastvgs
+    python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
+    conda activate zerospeech2021
+    mkdir $OUTFILE
+    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+    rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
+done
 
-OUTNAME="E3L0"
-OUTFILE=$OUTFOLDER/$OUTNAME
-conda activate fastvgs
-python abx.py --mytarget_layer 0 --mytwd $MFOLDER/$M
-conda activate zerospeech2021
-mkdir $OUTFILE
-zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
-rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
+M="E35_bundle.pth"
+for LAYERNAME in 10 11 12
+do
+    OUTNAME="E35L"$LAYERNAME
+    OUTFILE=$OUTFOLDER/$OUTNAME
+    conda activate fastvgs
+    python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
+    conda activate zerospeech2021
+    mkdir $OUTFILE
+    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+    rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
+done
 
-M="E4_bundle.pth"
+M="E45_bundle.pth"
+for LAYERNAME in 10 11 12
+do
+    OUTNAME="E45L"$LAYERNAME
+    OUTFILE=$OUTFOLDER/$OUTNAME
+    conda activate fastvgs
+    python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
+    conda activate zerospeech2021
+    mkdir $OUTFILE
+    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+    rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
+done
 
-OUTNAME="E4L0"
-OUTFILE=$OUTFOLDER/$OUTNAME
-conda activate fastvgs
-python abx.py --mytarget_layer 0 --mytwd $MFOLDER/$M
-conda activate zerospeech2021
-mkdir $OUTFILE
-zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
-rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
+M="E50_bundle.pth"
+for LAYERNAME in 10 11 12
+do
+    OUTNAME="E50L"$LAYERNAME
+    OUTFILE=$OUTFOLDER/$OUTNAME
+    conda activate fastvgs
+    python abx.py --mytarget_layer $LAYERNAME --mytwd $MFOLDER/$M
+    conda activate zerospeech2021
+    mkdir $OUTFILE
+    zerospeech2021-evaluate /worktmp/khorrami/current/ZeroSpeech/data/  /worktmp/khorrami/current/ZeroSpeech/submission/ -o $OUTFILE -j12 --no-lexical --no-syntactic --no-semantic --force-cpu
+    rm -r /worktmp/khorrami/current/ZeroSpeech/submission/phonetic/dev-clean
+done
 
