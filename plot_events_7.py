@@ -11,10 +11,10 @@ import numpy as np
 path_source = '/worktmp2/hxkhkh/current/FaST/experiments/'
 path_save = '/worktmp2/hxkhkh/current/FaST/experiments/plots/eusipco/'
 
-path_event_7base1T = 'model7base1T/'
-path_event_7base2T = 'model7base2T/'
-path_event_7base3T = 'model7base3T/'
-path_event_7base3T_extra = 'model7base3T/exp-additional/'
+path_event_7base1T = 'model7base1T/exp'
+path_event_7base2T = 'model7base2T/exp'
+path_event_7base3 = 'model7base3/exp'
+
 
 path_event_7ver4 = 'model7ver4/exp/'
 path_event_7ver5 = 'model7ver5/exp/'
@@ -23,8 +23,8 @@ path_event_7ver7 = 'model7ver7/exp/'
 path_event_7ver8 = 'model7ver8/exp/'
 #path_event_7ver9 = 'model7ver9/exp/'
 
-path_event_7ver14 = 'model7ver14/exp/'
-path_event_7ver26 = 'model7ver26/exp/'
+# path_event_7ver14 = 'model7ver14/exp/'
+# path_event_7ver26 = 'model7ver26/exp/'
 
 c_1 = 'blue'
 c_2 = 'grey'
@@ -146,11 +146,8 @@ event_7base1T.Reload()
 event_7base2T =  EventAccumulator(os.path.join(path_source, path_event_7base2T))
 event_7base2T.Reload()
 
-event_7base3T =  EventAccumulator(os.path.join(path_source, path_event_7base3T))
+event_7base3T =  EventAccumulator(os.path.join(path_source, path_event_7base3))
 event_7base3T.Reload()
-
-event_7base3T_extra =  EventAccumulator(os.path.join(path_source, path_event_7base3T_extra))
-event_7base3T_extra.Reload()
 
 ############################################################################## Model 7 versions
 
@@ -171,23 +168,17 @@ event_7ver8 =  EventAccumulator(os.path.join(path_source, path_event_7ver8))
 event_7ver8.Reload()
 
 
-event_7ver14 =  EventAccumulator(os.path.join(path_source, path_event_7ver14))
-event_7ver14.Reload()
+# event_7ver14 =  EventAccumulator(os.path.join(path_source, path_event_7ver14))
+# event_7ver14.Reload()
 
-event_7ver26 =  EventAccumulator(os.path.join(path_source, path_event_7ver26))
-event_7ver26.Reload()
+# event_7ver26 =  EventAccumulator(os.path.join(path_source, path_event_7ver26))
+# event_7ver26.Reload()
 
 
 ################################################################# Recalls
 x_7base2T_recall, y_7base2T_recall = find_single_recall(event_7base2T, n_64)
 x_7base3T_recall, y_7base3T_recall = find_single_recall(event_7base3T, n_64)
-x_7base3T_recall_extra, y_7base3T_recall_extra = find_single_recall(event_7base3T_extra, n_64)
 
-x_7base3T_recall = x_7base3T_recall[0:-1]
-y_7base3T_recall = y_7base3T_recall [0:-1]
-for i in range(6):
-    x_7base3T_recall.append(55 + (i*5)) 
-    y_7base3T_recall.append(y_7base3T_recall_extra[i])
 
 x_7ver4_recall, y_7ver4_recall = find_single_recall(event_7ver4, n_64)    
 x_7ver6_recall, y_7ver6_recall = find_single_recall(event_7ver6, n_64)
@@ -197,8 +188,8 @@ x_7ver5_recall, y_7ver5_recall = find_single_recall(event_7ver5, n_64)
 x_7ver8_recall, y_7ver8_recall = find_single_recall(event_7ver8, n_64)
     
 
-x_7ver14_recall, y_7ver14_recall = find_single_recall(event_7ver14, n_64) 
-x_7ver26_recall, y_7ver26_recall = find_single_recall(event_7ver26, n_64) 
+# x_7ver14_recall, y_7ver14_recall = find_single_recall(event_7ver14, n_64) 
+# x_7ver26_recall, y_7ver26_recall = find_single_recall(event_7ver26, n_64) 
    
 x_recall_0 = 0
 y_recall_0 = 0.002
@@ -262,8 +253,8 @@ plt.subplot(2,1,2)
 plt.plot(x_7ver4_recall, y_7ver4_recall, c_3, label = label3)
 plt.plot(x_7ver6_recall, y_7ver6_recall, c_4, label = label4)
 
-plt.plot(x_7ver14_recall, y_7ver14_recall, c_6, label = label14)
-plt.plot(x_7ver26_recall, y_7ver26_recall, c_7, label = label26)
+# plt.plot(x_7ver14_recall, y_7ver14_recall, c_6, label = label14)
+# plt.plot(x_7ver26_recall, y_7ver26_recall, c_7, label = label26)
 
 plt.xlabel('epoch',size=18)
 plt.ylabel('recall@10',size=18)
@@ -271,8 +262,8 @@ plt.ylim(0,1)
 plt.grid()
 plt.legend(fontsize=12)
 plt.title(title)
-
-plt.savefig(os.path.join(path_save , 'model7_recall_versions' + '.png'), format = 'png')
+kh
+#plt.savefig(os.path.join(path_save , 'model7_recall_versions' + '.png'), format = 'png')
 
 ################################################################# VGS loss
 i = 500
