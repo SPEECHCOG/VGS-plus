@@ -38,6 +38,18 @@ c_8 = 'royalblue'
 n_32 = 18505
 n_64 = 9252
 
+label1 = 'W2V2'
+label2 = 'VGS'
+label3 = 'VGS+'
+label4 = 'VGS+ (Pre W2V2)'
+label5 = 'VGS+ (Pre VGS)'
+label6 = 'VGS (Pre W2V2)'
+label7 = 'W2V2 (Pre VGS)'
+label8 = 'W2V2 (Pre VGS+)'
+label14 = 'VGS+ (Pre w2v2-35E)'
+label26 = 'VGS (Pre w2v2-5E)'
+
+
 def find_average_train_load_timec(event):
     train_time = pd.DataFrame(event.Scalars('train_time'))['value']
     data_time = pd.DataFrame(event.Scalars('data_time'))['value']
@@ -216,16 +228,7 @@ y_7ver8_recall.insert(0, y_7base3T_recall [5])
     
 ############ plot recalls for version 4, 6
 
-label1 = 'w2v2'
-label2 = 'VGS'
-label3 = 'VGS+'
-label4 = 'VGS+ (pre w2v2)'
-label5 = 'VGS+ (pre VGS)'
-label6 = 'VGS (pre w2v2)'
-label7 = 'w2v2 (pre VGS)'
-label8 = 'w2v2 (pre VGS+)'
-label14 = 'VGS+ (pre w2v2-35E)'
-label26 = 'VGS (pre w2v2-5E)'
+
 
 fig = plt.figure(figsize=(7,10))
 
@@ -281,6 +284,7 @@ def smooth_losses (x_in, y_in):
     y_out = np.mean(y_out, axis = 1)
     return x_out , y_out
 
+x_7base1T_vgsloss, y_7base1T_vgsloss = find_single_vgsloss(event_7base1T, n_64 , i)
 x_7base2T_vgsloss, y_7base2T_vgsloss = find_single_vgsloss(event_7base2T, n_64 , i)
 x_7base3T_vgsloss, y_7base3T_vgsloss = find_single_vgsloss(event_7base3T, n_64, i)
 x_7ver4_vgsloss, y_7ver4_vgsloss = find_single_vgsloss(event_7ver4, n_64, i)
@@ -290,7 +294,7 @@ x_7ver7_vgsloss, y_7ver7_vgsloss = find_single_vgsloss(event_7ver7, n_64, i)
 x_7ver8_vgsloss, y_7ver8_vgsloss = find_single_vgsloss(event_7ver8, n_64, i)
 
 
-
+x_7base1T_vgsloss, y_7base1T_vgsloss = smooth_losses (x_7base1T_vgsloss, y_7base1T_vgsloss)
 x_7base2T_vgsloss, y_7base2T_vgsloss = smooth_losses (x_7base2T_vgsloss, y_7base2T_vgsloss)
 x_7base3T_vgsloss, y_7base3T_vgsloss = smooth_losses (x_7base3T_vgsloss, y_7base3T_vgsloss)
 x_7ver4_vgsloss, y_7ver4_vgsloss = smooth_losses(x_7ver4_vgsloss, y_7ver4_vgsloss )
@@ -302,6 +306,7 @@ x_7ver8_vgsloss, y_7ver8_vgsloss = smooth_losses(x_7ver8_vgsloss, y_7ver8_vgslos
 ################################################################# caption loss
 i = 500
 x_7base1T_caploss, y_7base1T_caploss = find_single_caploss(event_7base1T, n_64 , i)
+x_7base2T_caploss, y_7base2T_caploss = find_single_caploss(event_7base2T, n_64 , i)
 x_7base3T_caploss, y_7base3T_caploss = find_single_caploss(event_7base3T, n_64, i)
 
 x_7ver4_caploss, y_7ver4_caploss = find_single_caploss(event_7ver4, n_64, i)
@@ -311,6 +316,7 @@ x_7ver7_caploss, y_7ver7_caploss = find_single_caploss(event_7ver7, n_64, i)
 x_7ver8_caploss, y_7ver8_caploss = find_single_caploss(event_7ver8, n_64, i)
 
 x_7base1T_caploss, y_7base1T_caploss = smooth_losses (x_7base1T_caploss, y_7base1T_caploss)
+x_7base2T_caploss, y_7base2T_caploss = smooth_losses (x_7base2T_caploss, y_7base2T_caploss)
 x_7base3T_caploss, y_7base3T_caploss = smooth_losses (x_7base3T_caploss, y_7base3T_caploss)
 x_7ver4_caploss, y_7ver4_caploss = smooth_losses(x_7ver4_caploss, y_7ver4_caploss)
 x_7ver5_caploss, y_7ver5_caploss = smooth_losses(x_7ver5_caploss, y_7ver5_caploss)
@@ -318,60 +324,72 @@ x_7ver6_caploss, y_7ver6_caploss = smooth_losses(x_7ver6_caploss, y_7ver6_caplos
 x_7ver7_caploss, y_7ver7_caploss = smooth_losses(x_7ver7_caploss, y_7ver7_caploss)
 x_7ver8_caploss, y_7ver8_caploss = smooth_losses(x_7ver8_caploss, y_7ver8_caploss)
 kh
-################################################################# plotting losses for base models in single plot
-fig = plt.figure(figsize=(9,9))
-title = ' losses for the base models '
-ax = fig.add_subplot(2, 2, 1)#plt.subplot(2,2,1)
-plt.plot(x_7base2T_vgsloss, y_7base2T_vgsloss, c_2, label = 'vgs loss, VGS ')
-plt.plot(x_7base3T_vgsloss, y_7base3T_vgsloss, c_3, label = 'vgs loss, VGS+ ')
-plt.plot(x_7base1T_caploss, y_7base1T_caploss, c_1, label = 'caption loss, w2v2 ')
-plt.plot(x_7base3T_caploss, y_7base3T_caploss, c_3, label = 'caption loss, VGS+ ')
+#################################################################
+#################################################################
 
+#............. plotting losses for base models in single plot
+
+#################################################################
+################################################################# 
+fig = plt.figure(figsize=(7,21))
+fsize = 16
+ax = fig.add_subplot(3, 1, 1)#plt.subplot(2,2,1)
+plt.plot(x_7base1T_vgsloss+1, y_7base1T_vgsloss, c_1, label = 'AV, VGS ')
+plt.plot(x_7base2T_vgsloss+1, y_7base2T_vgsloss, c_2, label = 'AV, VGS ')
+plt.plot(x_7base3T_vgsloss+1, y_7base3T_vgsloss, c_3, label = 'AV, VGS+ ')
+plt.plot(x_7base1T_caploss+1, y_7base1T_caploss, c_1, linestyle='dashed', label = 'AUD, W2V2 ')
+#plt.plot(x_7base2T_caploss+1, y_7base2T_caploss, c_2, label = 'AUD, W2V2 ')
+plt.plot(x_7base3T_caploss+1, y_7base3T_caploss, c_3, linestyle='dashed', label = 'AUD, VGS+ ')
 ax.set_yscale('log')
-#plt.ylim(0,10.5)
-plt.xticks(ticks = np.arange(0,50,5) )
-#plt.yticks(ticks = np.arange(0,11) )
+plt.xticks(ticks = np.arange(0,75,10),size=fsize+2 )
+plt.yticks([0.1,1,10],['0.1','1','10'],size=fsize+2)
+#plt.xlabel('Epoch',size=fsize)
+plt.ylabel('Training loss',size=fsize+4)
 plt.grid()
-plt.legend(fontsize=12)
-plt.title(title)
-
-# 2,2,2 ..> recall
-
-title = ' vgs loss '
-ax = fig.add_subplot(2, 2, 3) #plt.subplot(2,2,3)
-plt.plot(x_7base3T_vgsloss, y_7base3T_vgsloss, c_3, label = 'VGS+')
-plt.plot(x_7ver4_vgsloss, y_7ver4_vgsloss, c_4, label = label4)
-plt.plot(x_7ver6_vgsloss, y_7ver6_vgsloss, c_6, label = label6)
-plt.plot(x_7ver5_vgsloss, y_7ver5_vgsloss, c_5, label = label5)
-plt.plot(x_7ver8_vgsloss, y_7ver8_vgsloss, c_8, label = label8)
+plt.legend(fontsize=fsize)
+#plt.savefig(os.path.join(path_save , 'losses_base' + '.png'), format = 'png')
+############################
+#fig = plt.figure(figsize=(7,7))
+ax = fig.add_subplot(3, 1, 2) #plt.subplot(2,2,3)
+plt.plot(x_7base1T_vgsloss+1, y_7base1T_vgsloss, c_1, label = 'W2V2 ')
+plt.plot(x_7base2T_vgsloss+1, y_7base2T_vgsloss, c_2, label = 'VGS ')
+plt.plot(x_7base3T_vgsloss+1, y_7base3T_vgsloss, c_3, label = 'VGS+')
+plt.plot(x_7ver4_vgsloss+1, y_7ver4_vgsloss, c_4, label = label4)
+plt.plot(x_7ver5_vgsloss+1, y_7ver5_vgsloss, c_5, label = label5)
+plt.plot(x_7ver6_vgsloss+1, y_7ver6_vgsloss, c_6, label = label6)
+plt.plot(x_7ver7_vgsloss+1, y_7ver7_vgsloss, c_7, label = label7)
+plt.plot(x_7ver8_vgsloss+1, y_7ver8_vgsloss, c_8, label = label8)
 ax.set_yscale('log')
-#plt.ylim(0,10.5)
-plt.xticks(ticks = np.arange(0,50,5) )
-#plt.yticks(ticks = np.arange(0,11) )
+plt.xticks(ticks = np.arange(0,75,10),size=fsize+2 )
+plt.yticks([0.1,1,10],['0.1','1','10'],size=fsize+2)
+#plt.xlabel('Epoch',size=fsize)
+plt.ylabel('Training loss_AV',size=fsize+4)
 plt.grid()
-plt.legend(fontsize=12)
-plt.xlabel('epoch',size=18)
-plt.title(title)
-
-title = ' caption loss '
-ax = fig.add_subplot(2, 2, 4)#plt.subplot(2,2,4)
-plt.plot(x_7base1T_caploss, y_7base1T_caploss, c_1, label = 'w2v2')
-plt.plot(x_7base3T_caploss, y_7base3T_caploss, c_3, label = 'VGS+')
-plt.plot(x_7ver4_caploss, y_7ver4_caploss, c_4, label = label4)
+plt.legend(fontsize=fsize)
+#plt.savefig(os.path.join(path_save , 'lossVG_versions' + '.png'), format = 'png')
+############################
+#fig = plt.figure(figsize=(7,7))
+ax = fig.add_subplot(3, 1, 3)#plt.subplot(2,2,4)
+plt.plot(x_7base1T_caploss+1, y_7base1T_caploss, c_1, label = 'W2V2')
+plt.plot(x_7base3T_caploss+1, y_7base3T_caploss, c_3, label = 'VGS+')
+plt.plot(x_7ver4_caploss+1, y_7ver4_caploss, c_4, label = label4)
 plt.plot(x_7ver5_caploss[1:], y_7ver5_caploss[1:], c_5, label = label5)
+plt.plot(x_7ver6_caploss[1:], y_7ver6_caploss[1:], c_6, label = label6)
 plt.plot(x_7ver7_caploss[1:], y_7ver7_caploss[1:], c_7, label = label7)
-plt.plot(x_7ver8_caploss, y_7ver8_caploss, c_8, label = label8)
+plt.plot(x_7ver8_caploss+1, y_7ver8_caploss, c_8, label = label8)
 ax.set_yscale('log')
-#plt.ylim(0,5.5)
-plt.xticks(ticks = np.arange(0,50,5) )
-#plt.yticks(ticks = np.arange(0,5) )
+plt.xticks(ticks = np.arange(0,75,10),size=fsize+2 )
+plt.yticks([1,5, 10],['1','5','10'],size=fsize+2)
+plt.xlabel('\nEpoch',size=fsize+4)
+plt.ylabel('Training loss_AUD',size=fsize+4)
 plt.grid()
-plt.legend(fontsize=12)
-plt.xlabel('epoch',size=18)
-plt.title(title)
+plt.legend(fontsize=fsize)
+#plt.savefig(os.path.join(path_save , 'lossAUD_versions' + '.png'), format = 'png')
+plt.savefig(os.path.join(path_save , 'loss-log' + '.pdf'), format = 'pdf', bbox_inches='tight')
 
-plt.savefig(os.path.join(path_save , 'model7_losses_logarithmic' + '.png'), format = 'png')
 kh
+#################################################################
+#################################################################
 ################################################################# plotting losses for base models separately
 label1 = 'w2v2'
 label2 = 'VGS'
