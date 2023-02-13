@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-path_input = "/worktmp2/hxkhkh/current/ZeroSpeech/output/"
+path_input = "/worktmp2/hxkhkh/current/ZeroSpeech/output/WC/"
 path_save = '/worktmp2/hxkhkh/current/FaST/experiments/plots/'
 import csv
 
@@ -29,25 +29,26 @@ def read_abx (scores, model_name,layer_names, epochs):
             s = read_score (path)
             scores.append(s)
     return scores
-    
+
+################################################################## 
+layer_names = ['L0','L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
+   
 ##################################################################
                         ### m7ver0  ###
 ################################################################## 
-scores = [50,50,50,50,50,50,50,50]
-model_name = 'model7ver0'
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-epochs = [1,2,3,4,5]
-scores = read_abx (scores,model_name,layer_names, epochs)
-ver0 = (np.reshape(scores, (len (epochs)+ 1,len (layer_names)))).T
-x_ver0 = epochs
-x_ver0.insert(0,0)
-z_ver0 = layer_names
+# scores = [50,50,50,50,50,50,50,50]
+# model_name = 'model7ver0'
+# epochs = [1,2,3,4,5]
+# scores = read_abx (scores,model_name,layer_names, epochs)
+# ver0 = (np.reshape(scores, (len (epochs)+ 1,len (layer_names)))).T
+# x_ver0 = epochs
+# x_ver0.insert(0,0)
+# z_ver0 = layer_names
 ##################################################################
                         ### m7base1T  ###
 ################################################################## 
-scores = [50,50,50,50,50,50,50,50]
+scores = [50,50,50,50,50,50,50,50,50,50,50,50]
 model_name = 'model7base1T'
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
 epochs = [5,15,25,35,45]
 scores = read_abx (scores,model_name,layer_names, epochs)
 base1 = (np.reshape(scores, (len (epochs) + 1,len (layer_names)))).T
@@ -57,10 +58,9 @@ z_base1 = layer_names
 ##################################################################
                         ### m7base2T  ###
 ################################################################## 
-scores = [50,50,50,50,50,50,50,50]
+scores = [50,50,50,50,50,50,50,50,50,50,50,50]
 model_name = 'model7base2T'
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-epochs = [5,15,25]
+epochs = [5,15,25,35,45,55,65,70]
 scores = read_abx (scores,model_name,layer_names, epochs)
 base2 = (np.reshape(scores, (len (epochs) + 1,len (layer_names)))).T
 x_base2 = epochs
@@ -69,10 +69,9 @@ z_base2 = layer_names
 ##################################################################
                         ### model7base3T  ###
 ################################################################## 
-scores = [50,50,50,50,50,50,50,50]
+scores = [50,50,50,50,50,50,50,50,50,50,50,50]
 model_name = 'model7base3T'
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
-epochs = [5,15,25,35,45,55,65]
+epochs = [5,15,25,35,45,55,65,70]
 scores = read_abx (scores,model_name,layer_names, epochs)
 base3 = (np.reshape(scores, (len (epochs) + 1,len (layer_names)))).T
 x_base3 = epochs
@@ -82,7 +81,6 @@ z_base3 = layer_names
                         ### model7ver4  ###
 ################################################################## 
 scores = []
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
 # Pretrained with w2v2 (20 E)
 model_name = 'model7base1T' 
 epochs = [20]
@@ -100,14 +98,13 @@ z_ver4 = layer_names
                         ### model7ver5  ###
 ################################################################## 
 scores = []
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
 # Pretrained with VGS (20 E)
 model_name = 'model7base2T'
-epochs = [20]
+epochs = [15]
 scores = read_abx (scores,model_name,layer_names, epochs)
    
 model_name = 'model7ver5'
-epochs = [5,15,25, 35, 45]
+epochs = [5,15,25, 35, 45,50]
 scores = read_abx (scores, model_name,layer_names, epochs)
 
 ver5 = (np.reshape(scores, (len (epochs)+1,len (layer_names)))).T
@@ -118,7 +115,6 @@ z_ver5 = layer_names
                         ### model7ver6  ###
 ################################################################## 
 scores = []
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
 
 # Pretrained with w2v2 (20 E)
 model_name = 'model7base1T'
@@ -126,7 +122,7 @@ epochs = [20]
 scores = read_abx (scores,model_name,layer_names, epochs)
 
 model_name = 'model7ver6'
-epochs = [5,15,25, 35, 45]
+epochs = [5,15,25, 35, 45,50]
 scores = read_abx (scores, model_name,layer_names, epochs)
 
 ver6 = (np.reshape(scores, (len (epochs)+1,len (layer_names)))).T
@@ -137,14 +133,13 @@ z_ver6 = layer_names
                         ### model7ver7  ###
 ##################################################################
 scores = []
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
 # Pretrained with VGS (20 E)
 model_name = 'model7base2T'
-epochs = [20]
+epochs = [15]
 scores = read_abx (scores,model_name,layer_names, epochs)
    
 model_name = 'model7ver7'
-epochs = [5, 15, 25, 35, 45]
+epochs = [5, 15, 25, 35, 45,50]
 scores = read_abx (scores,model_name,layer_names, epochs)
 
 ver7 = (np.reshape(scores, (len (epochs)+1,len (layer_names)))).T
@@ -155,15 +150,14 @@ z_ver7 = layer_names
                         ### model7ver8  ###
 ################################################################## 
 scores = []
-layer_names = ['L1','L2','L3','L4','L5','L6','L7','L8']
 # Pretrained with VGS+ (20 E)
 model_name = 'model7base3T'
-epochs = [20]
+epochs = [15]
 scores = read_abx (scores,model_name,layer_names, epochs)
 
 
 model_name = 'model7ver8'
-epochs = [5, 15, 25, 35, 45]
+epochs = [5, 15, 25, 35, 45,50]
 scores = read_abx (scores,model_name,layer_names, epochs)
 
 ver8 = (np.reshape(scores, (len (epochs)+1,len (layer_names)))).T
@@ -172,28 +166,29 @@ x_ver8.insert(0,0)
 z_ver8 = layer_names
 ################################################################  layers
 kh
-layers = [1,2,3,4,5,6,7,8]
-fig = plt.figure(figsize=(4,8))
+layers = [0,1,2,3,4,5,6,7,8,9,10,11]
+fig = plt.figure(figsize=(7,7))
+fsize = 14
+LW = 4
+plt.subplot(1,1,1) #ax = fig.add_subplot(1,1,1)
+plt.plot(layers, base1[:,-1], label='W2V2', lw=LW)
+plt.plot(layers, base3[:,-1], label='VGS+', lw=LW)
+plt.plot(layers, base2[:,-1], label='VGS', lw=LW)
 
-
-ax = fig.add_subplot(2,1,1)
-plt.plot(layers, base1[:,-1], label='w2v2')
-plt.plot(layers, base2[:,-1], label='VGS')
-plt.plot(layers, base3[:,-1], label='VGS+')
-plt.plot(layers, ver4[:,-1], label='VGS+ (Pre w2v2)')
-plt.plot(layers, ver5[:,-1], label='VGS+ (Pre VGS)')
-plt.plot(layers, ver6[:,-1], label='VGS (Pre w2v2)')
-plt.plot(layers, ver7[:,-1], label='w2v2 (Pre VGS)')
-plt.plot(layers, ver8[:,-1], label='w2v2 (Pre VGS+)')
+plt.plot(layers, ver4[:,-1], label='(W2V2, VGS+)', lw=LW)
+plt.plot(layers, ver5[:,-1], label='(VGS, VGS+)', lw=LW)
+plt.plot(layers, ver6[:,-1], label='(W2V2, VGS)', lw=LW)
+plt.plot(layers, ver7[:,-1], label='(VGS, W2V2)', lw=LW)
+plt.plot(layers, ver8[:,-1], label='(VGS+, W2V2)', lw=LW)
 plt.grid()
-plt.legend(fontsize=8) 
-plt.ylabel('ABX-error')
-plt.xlabel('layer index')
-ax.set_yscale('log')
-plt.xticks(layers,['1','2','3','4','5','6','7','8'])
-plt.yticks([5,6,7,8,9,10,50],['5','6','7','8','9','10','50'])
-#plt.savefig(os.path.join(path_save, 'abx_layers-log' + '.png'), format='png')
-
+plt.legend(fontsize=fsize) 
+plt.ylabel('ABX-error', size=fsize+2)
+plt.xlabel('layer index', size=fsize+2)
+plt.yscale('log') #ax.set_yscale('log')
+plt.xticks(layers,['1','2','3','4','5','6','7','8','9','10','11','12'], size=fsize+2)
+plt.yticks([5,6,7,8,9,10,20,30,40,50],['5','6','7','8','9','10','20','30','40','50'], size=fsize+2)
+plt.savefig(os.path.join(path_save, 'abx-layers-log' + '.pdf'), format='pdf', bbox_inches='tight')
+kh
 ################################################################  epochs, best score
 y_base1 = np.min(base1 , axis = 0) #best layer performance
 y_base2 = np.min(base2 , axis = 0)
@@ -205,10 +200,10 @@ y_ver7 = np.min(ver7 , axis = 0)
 y_ver8 = np.min(ver8 , axis = 0)
 
 #fig = plt.figure(figsize=(8,8))
-ax = fig.add_subplot(2,1,2)
+plt.subplot(1,1,1) #ax = fig.add_subplot(1,1,1)
 plt.plot(x_base1, y_base1, label='w2v2')
 plt.plot(x_base2, y_base2, label='VGS')
-plt.plot(x_base3[0:-2], y_base3[0:-2], label='VGS+')
+plt.plot(x_base3, y_base3, label='VGS+')
 plt.plot(x_ver4, y_ver4, label='VGS+ (Pre w2v2)')
 plt.plot(x_ver5, y_ver5, label='VGS+ (Pre VGS)')
 plt.plot(x_ver6, y_ver6, label='VGS (Pre w2v2)')
@@ -218,11 +213,12 @@ plt.grid()
 plt.legend(fontsize=8) 
 plt.ylabel('ABX-error')
 plt.xlabel('Epoch')
-ax.set_yscale('log')
-plt.xticks([0,5,15,25,35,45],['0', '5','15','25','35','45'])
-plt.yticks([5,6,7,8,9,10,20,50],['5','6','7','8','9','10','20','50'])
-#plt.savefig(os.path.join(path_save, 'abxBest_Epochs-log' + '.png'), format='png')
-plt.savefig(os.path.join(path_save, 'abx-log' + '.png'), format='png')
+plt.yscale('log') #ax.set_yscale('log')
+plt.ylim( [5,20] )
+plt.xticks([0,5,15,25,35,45,55, 65, 70],['0', '5','15','25','35','45','55','65','70'])
+plt.yticks([5,6,7,8,9,10,20],['5','6','7','8','9','10','20'])
+plt.savefig(os.path.join(path_save, 'abx-epochs-log' + '.png'), format='png')
+#plt.savefig(os.path.join(path_save, 'abx-log' + '.png'), format='png')
 ################################################################ Plotting all layers all epochs
 title = 'ABX-error for best layers '
 fig = plt.figure(figsize=(15, 20))

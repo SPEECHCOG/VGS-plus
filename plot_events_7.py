@@ -27,8 +27,8 @@ path_event_7ver8 = 'model7ver8/exp/'
 # path_event_7ver26 = 'model7ver26/exp/'
 
 c_1 = 'blue'
-c_2 = 'grey'
-c_3 = 'green'
+c_2 = 'green'
+c_3 = 'orange'
 c_4 = 'red'
 c_5 = 'brown'
 c_6 = 'darkorange'
@@ -41,13 +41,13 @@ n_64 = 9252
 label1 = 'W2V2'
 label2 = 'VGS'
 label3 = 'VGS+'
-label4 = 'VGS+ (Pre W2V2)'
-label5 = 'VGS+ (Pre VGS)'
-label6 = 'VGS (Pre W2V2)'
-label7 = 'W2V2 (Pre VGS)'
-label8 = 'W2V2 (Pre VGS+)'
-label14 = 'VGS+ (Pre w2v2-35E)'
-label26 = 'VGS (Pre w2v2-5E)'
+label4 = '(W2V2, VGS+)'
+label5 = '(VGS, VGS+)'
+label6 = '(W2V2, VGS)'
+label7 = '(VGS, W2V2)'
+label8 = '(VGS+, W2V2)'
+label14 = '(W2V2-35E, VGS+)'
+label26 = '(W2V2-5E, VGS)'
 
 
 def find_average_train_load_timec(event):
@@ -186,7 +186,7 @@ event_7ver8.Reload()
 # event_7ver26 =  EventAccumulator(os.path.join(path_source, path_event_7ver26))
 # event_7ver26.Reload()
 
-
+kh
 ################################################################# Recalls
 x_7base2T_recall, y_7base2T_recall = find_single_recall(event_7base2T, n_64)
 x_7base3T_recall, y_7base3T_recall = find_single_recall(event_7base3T, n_64)
@@ -331,6 +331,7 @@ kh
 
 #################################################################
 ################################################################# 
+x_pre = np.arange(-20,0)
 fig = plt.figure(figsize=(7,21))
 fsize = 16
 ax = fig.add_subplot(3, 1, 1)#plt.subplot(2,2,1)
@@ -388,6 +389,77 @@ plt.legend(fontsize=fsize)
 plt.savefig(os.path.join(path_save , 'loss-log' + '.pdf'), format = 'pdf', bbox_inches='tight')
 
 kh
+
+
+#################################################################
+#################################################################
+
+#............. plotting losses with pretrained ones
+
+#################################################################
+################################################################# 
+x_pre = np.arange(1,21)
+fig = plt.figure(figsize=(7,21))
+fsize = 16
+ax = fig.add_subplot(3, 1, 1)#plt.subplot(2,2,1)
+plt.plot(x_7base1T_vgsloss+1, y_7base1T_vgsloss, c_1, label = 'AV, VGS ')
+plt.plot(x_7base2T_vgsloss+1, y_7base2T_vgsloss, c_2, label = 'AV, VGS ')
+plt.plot(x_7base3T_vgsloss+1, y_7base3T_vgsloss, c_3, label = 'AV, VGS+ ')
+plt.plot(x_7base1T_caploss+1, y_7base1T_caploss, c_1, linestyle='dashed', label = 'AUD, W2V2 ')
+#plt.plot(x_7base2T_caploss+1, y_7base2T_caploss, c_2, label = 'AUD, W2V2 ')
+plt.plot(x_7base3T_caploss+1, y_7base3T_caploss, c_3, linestyle='dashed', label = 'AUD, VGS+ ')
+ax.set_yscale('log')
+plt.xticks(ticks = np.arange(0,75,10),size=fsize+2 )
+plt.yticks([0.1,1,10],['0.1','1','10'],size=fsize+2)
+#plt.xlabel('Epoch',size=fsize)
+plt.ylabel('Training loss',size=fsize+4)
+plt.grid()
+plt.legend(fontsize=fsize)
+#plt.savefig(os.path.join(path_save , 'losses_base' + '.png'), format = 'png')
+############################
+#fig = plt.figure(figsize=(7,7))
+x_pre = np.arange(1,21)
+fig = plt.figure(figsize=(7,14))
+fsize = 14
+LW = 4
+plt.subplot(2, 1, 1) #ax = fig.add_subplot(3, 1, 2) #plt.subplot(2,2,3)
+plt.plot(x_7base1T_vgsloss+1, y_7base1T_vgsloss, c_1, label = 'W2V2', lw=LW)
+plt.plot(x_7base2T_vgsloss+1, y_7base2T_vgsloss, c_2, label = 'VGS', lw=LW)
+plt.plot(x_7base3T_vgsloss+1, y_7base3T_vgsloss, c_3, label = 'VGS+', lw=LW)
+plt.plot(np.concatenate((x_pre, x_7ver4_vgsloss+21)), np.concatenate((y_7base1T_vgsloss[0:20], y_7ver4_vgsloss)), c_1, label = label4, linestyle='dashed', lw=LW-2)
+plt.plot(np.concatenate((x_pre, x_7ver5_vgsloss+21)), np.concatenate((y_7base2T_vgsloss[0:20], y_7ver5_vgsloss)), c_2, label = label5, linestyle='dashed', lw=LW-2)
+plt.plot(np.concatenate((x_pre, x_7ver6_vgsloss+21)), np.concatenate((y_7base1T_vgsloss[0:20], y_7ver6_vgsloss)), c_1, label = label6, linestyle='dotted', lw=LW)
+plt.plot(np.concatenate((x_pre, x_7ver7_vgsloss+21)), np.concatenate((y_7base2T_vgsloss[0:20], y_7ver7_vgsloss)), c_2, label = label7, linestyle='dotted', lw=LW)
+plt.plot(np.concatenate((x_pre,x_7ver8_vgsloss+21)), np.concatenate((y_7base3T_vgsloss[0:20], y_7ver8_vgsloss)), c_3, label = label8, linestyle='dashed', lw=LW-2)
+plt.yscale('log')#ax.set_yscale('log')
+plt.xticks(ticks = np.arange(0,75,10),size=fsize+2 )
+plt.yticks([0.1, 0.2, 0.5 , 1,10],['0.1','0.2', '0.5' ,'1','10'],size=fsize+2)
+#plt.xlabel('Epoch',size=fsize)
+plt.ylabel('Training loss_AV',size=fsize+2)
+#plt.ylim( [10**-1,1 + 10**1] )
+plt.grid()
+#plt.legend(fontsize=fsize-2)
+#plt.savefig(os.path.join(path_save , 'lossVG_versions' + '.png'), format = 'png')
+############################
+plt.subplot(2, 1, 2) #ax = fig.add_subplot(3, 1, 3)#plt.subplot(2,2,4)
+plt.plot(x_7base1T_caploss+1, y_7base1T_caploss, c_1, label = 'W2V2', lw=LW)
+plt.plot(x_7base2T_caploss+1, y_7base2T_caploss, c_2, label = 'VGS', lw=LW)
+plt.plot(x_7base3T_caploss+1, y_7base3T_caploss, c_3, label = 'VGS+', lw=LW)
+plt.plot(np.concatenate((x_pre, x_7ver4_caploss+21)), np.concatenate(( y_7base1T_caploss[0:20], y_7ver4_caploss)), c_1, label = label4, linestyle='dashed', lw=LW-2)
+plt.plot(np.concatenate((x_pre, x_7ver5_caploss+21)), np.concatenate(( y_7base2T_caploss[0:20], y_7ver5_caploss)), c_2, label = label5, linestyle='dashed', lw=LW-2)
+plt.plot(np.concatenate((x_pre, x_7ver6_caploss+21)), np.concatenate(( y_7base1T_caploss[0:20], y_7ver6_caploss)), c_1, label = label6, linestyle='dotted', lw=LW)
+plt.plot(np.concatenate((x_pre, x_7ver7_caploss+21)), np.concatenate(( y_7base2T_caploss[0:20], y_7ver7_caploss)), c_2, label = label7, linestyle='dotted', lw=LW)
+plt.plot(np.concatenate((x_pre, x_7ver8_caploss+21)), np.concatenate(( y_7base3T_caploss[0:20], y_7ver8_caploss)), c_3, label = label8, linestyle='dashed', lw=LW-2)
+plt.yscale('log')
+plt.xticks(ticks = np.arange(0,75,10),size=fsize+2 )
+plt.yticks([1,2,3,4,5,6,10],['1','2','3','4','5','','10'],size=fsize+2)
+plt.xlabel('\nEpoch',size=fsize+2)
+plt.ylabel('Training loss_AUD',size=fsize+2)
+plt.ylim( [0.9,11] )
+plt.grid()
+plt.legend(fontsize=fsize-2)
+#plt.savefig(os.path.join(path_save , 'lossAUD_versions' + '.png'), format = 'png')
+plt.savefig(os.path.join(path_save , 'loss-log-2r' + '.pdf'), format = 'pdf', bbox_inches='tight')
 #################################################################
 #################################################################
 ################################################################# plotting losses for base models separately
