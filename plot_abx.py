@@ -182,7 +182,7 @@ fig = plt.figure(figsize=(7,7))
 fsize = 14
 LW = 4
 plt.subplot(1,1,1) #ax = fig.add_subplot(1,1,1)
-plt.plot(layers, base1[:,-1], label='W2V2', lw=LW)
+plt.plot(layers, baseFB[:,-1], label='FB', lw=LW)
 plt.plot(layers, base1[:,-1], label='W2V2', lw=LW)
 plt.plot(layers, base3[:,-1], label='VGS+', lw=LW)
 plt.plot(layers, base2[:,-1], label='VGS', lw=LW)
@@ -232,6 +232,36 @@ plt.yticks([5,6,7,8,9,10,20],['5','6','7','8','9','10','20'], size=fsize+2)
 plt.savefig(os.path.join(path_save, 'abx-epochs-log' + '.pdf'), format='pdf', bbox_inches='tight')
 #plt.savefig(os.path.join(path_save, 'abx-log' + '.png'), format='png')
 
+################################################################ 
+################################################################ Single model
+################################################################
+layers = [0,1,2,3,4,5,6,7,8,9,10,11]
+epochs = [0,5,15,25,35,45,55,65,70]
+fig = plt.figure(figsize=(7,7))
+fsize = 14
+LW = 2
+plt.title('VGS',size=fsize+2)
+plt.plot(epochs, base2[0,:], label='L0', lw=LW)
+# plt.plot(epochs, base2[1,:], label='L1', lw=LW)
+#plt.plot(epochs, base2[2,:], label='L2', lw=LW)
+plt.plot(epochs, base2[3,:], label='L3', lw=LW)
+#plt.plot(epochs, base2[4,:], label='L4', lw=LW)
+# plt.plot(epochs, base2[5,:], label='L5', lw=LW)
+plt.plot(epochs, base2[6,:], label='L6', lw=LW)
+plt.plot(epochs, base2[7,:], label='L7', lw=LW)
+plt.plot(epochs, base2[8,:], label='L8',linestyle='dotted', lw=LW)
+plt.plot(epochs, base2[9,:], label='L9',linestyle='dotted', lw=LW)
+plt.plot(epochs, base2[10,:], label='L10',linestyle='dotted', lw=LW)
+plt.plot(epochs, base2[11,:], label='L11', linestyle='dotted', lw=LW)
+plt.grid()
+plt.legend(fontsize=fsize) 
+plt.ylabel('ABX-error', size=fsize+2)
+plt.xlabel('Epoch', size=fsize+2)
+plt.yscale('log')
+plt.ylim( [4.5,10] )
+plt.xticks([0,5,15,25,35,45,55, 65, 70],['0', '5','15','25','35','45','55','65','70'], size=fsize+2)
+plt.yticks([5,6,7,8,9,10],['5','6','7','8','9','10'], size=fsize+2)
+plt.savefig(os.path.join(path_save, 'abx-WC-VGS' + '.pdf'), format='pdf', bbox_inches='tight')
 ################################################################ Plotting all layers all epochs
 title = 'ABX-error for best layers '
 fig = plt.figure(figsize=(15, 20))
