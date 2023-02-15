@@ -45,6 +45,17 @@ layer_names = ['L0','L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
 # x_ver0.insert(0,0)
 # z_ver0 = layer_names
 ##################################################################
+                        ### m7FB  ###
+################################################################## 
+scores = []
+model_name = 'model7FB'
+epochs = [0]
+scores = read_abx (scores,model_name,layer_names, epochs)
+baseFB = (np.reshape(scores, (len (epochs),len (layer_names)))).T
+x_baseFB = epochs
+z_baseFB = layer_names
+
+##################################################################
                         ### m7base1T  ###
 ################################################################## 
 scores = [50,50,50,50,50,50,50,50,50,50,50,50]
@@ -70,7 +81,7 @@ z_base2 = layer_names
                         ### model7base3T  ###
 ################################################################## 
 scores = [50,50,50,50,50,50,50,50,50,50,50,50]
-model_name = 'model7base3T'
+model_name = 'model7base3'
 epochs = [5,15,25,35,45,55,65,70]
 scores = read_abx (scores,model_name,layer_names, epochs)
 base3 = (np.reshape(scores, (len (epochs) + 1,len (layer_names)))).T
@@ -151,7 +162,7 @@ z_ver7 = layer_names
 ################################################################## 
 scores = []
 # Pretrained with VGS+ (20 E)
-model_name = 'model7base3T'
+model_name = 'model7base3'
 epochs = [15]
 scores = read_abx (scores,model_name,layer_names, epochs)
 
@@ -172,6 +183,7 @@ fsize = 14
 LW = 4
 plt.subplot(1,1,1) #ax = fig.add_subplot(1,1,1)
 plt.plot(layers, base1[:,-1], label='W2V2', lw=LW)
+plt.plot(layers, base1[:,-1], label='W2V2', lw=LW)
 plt.plot(layers, base3[:,-1], label='VGS+', lw=LW)
 plt.plot(layers, base2[:,-1], label='VGS', lw=LW)
 
@@ -187,7 +199,7 @@ plt.xlabel('layer index', size=fsize+2)
 plt.yscale('log') #ax.set_yscale('log')
 plt.xticks(layers,['1','2','3','4','5','6','7','8','9','10','11','12'], size=fsize+2)
 plt.yticks([5,6,7,8,9,10,20,30,40,50],['5','6','7','8','9','10','20','30','40','50'], size=fsize+2)
-plt.savefig(os.path.join(path_save, 'abx-layers-log' + '.pdf'), format='pdf', bbox_inches='tight')
+#plt.savefig(os.path.join(path_save, 'abx-layers-log' + '.pdf'), format='pdf', bbox_inches='tight')
 kh
 ################################################################  epochs, best score
 y_base1 = np.min(base1 , axis = 0) #best layer performance
