@@ -1,4 +1,6 @@
 import os
+
+#python abx_fb.py --mytarget_layer 0 --mytwd "/worktmp/khorrami/current/FaST/model/wav2vec_small.pt"
 #############################################################################
 #twd = '/worktmp/khorrami/current/FaST/experiments/model19base3/9252_bundle.pth'
 #target_layer = 2
@@ -112,8 +114,13 @@ args.trim_mask = trimTF
 args.normalize = True
 args.encoder_attention_heads = 12
 
+print ('#################### here is args ###########')
+print(args.fb_w2v2_weights_fn)
 print ('###############################')
-print(args)
+args.fb_w2v2_weights_fn = "/worktmp/khorrami/current/FaST/model/wav2vec_small.pt"
+print ('###############################')
+print ('#################### here is args ###########')
+print(args.fb_w2v2_weights_fn)
 print ('###############################')
 
 ############################################## defining the model based on ARGS
@@ -124,8 +131,10 @@ conv1_trm1_trm3.eval()
 
 
 # loading Pre-trained weights
-
+print(mytwd)
 bundle = torch.load(mytwd)
+print(bundle)
+
 conv1_trm1_trm3.carefully_load_state_dict(bundle)
 #conv1_trm1_trm3.carefully_load_state_dict(bundle['dual_encoder'])
 ############################################################################# test
