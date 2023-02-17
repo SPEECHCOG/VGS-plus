@@ -417,12 +417,11 @@ plt.grid()
 plt.legend(fontsize=fsize)
 #plt.savefig(os.path.join(path_save , 'losses_base' + '.png'), format = 'png')
 ############################
-#fig = plt.figure(figsize=(7,7))
 x_pre = np.arange(1,21)
-fig = plt.figure(figsize=(7,14))
-fsize = 14
-LW = 4
-plt.subplot(2, 1, 1) #ax = fig.add_subplot(3, 1, 2) #plt.subplot(2,2,3)
+fig = plt.figure(figsize=(14,7))
+fsize = 16
+LW = 5
+plt.subplot(1,2,1) #ax = fig.add_subplot(3, 1, 2) #plt.subplot(2,2,3)
 plt.plot(x_7base1T_vgsloss+1, y_7base1T_vgsloss, c_1, label = 'W2V2', lw=LW)
 plt.plot(x_7base2T_vgsloss+1, y_7base2T_vgsloss, c_2, label = 'VGS', lw=LW)
 plt.plot(x_7base3T_vgsloss+1, y_7base3T_vgsloss, c_3, label = 'VGS+', lw=LW)
@@ -434,14 +433,12 @@ plt.plot(np.concatenate((x_pre,x_7ver8_vgsloss+21)), np.concatenate((y_7base3T_v
 plt.yscale('log')#ax.set_yscale('log')
 plt.xticks(ticks = np.arange(0,75,10),size=fsize+2 )
 plt.yticks([0.1, 0.2, 0.5 , 1,10],['0.1','0.2', '0.5' ,'1','10'],size=fsize+2)
-#plt.xlabel('Epoch',size=fsize)
-plt.ylabel('Training loss_AV',size=fsize+2)
+plt.xlabel('\nEpoch',size=fsize+2)
+plt.ylabel('Loss_AV',size=fsize+3)
 plt.ylim( [0.09,20] )
 plt.grid()
-#plt.legend(fontsize=fsize-2)
-#plt.savefig(os.path.join(path_save , 'lossVG_versions' + '.png'), format = 'png')
 ############################
-plt.subplot(2, 1, 2) #ax = fig.add_subplot(3, 1, 3)#plt.subplot(2,2,4)
+plt.subplot(1,2,2) #ax = fig.add_subplot(3, 1, 3)#plt.subplot(2,2,4)
 plt.plot(x_7base1T_caploss+1, y_7base1T_caploss, c_1, label = 'W2V2', lw=LW)
 plt.plot(x_7base2T_caploss+1, y_7base2T_caploss, c_2, label = 'VGS', lw=LW)
 plt.plot(x_7base3T_caploss+1, y_7base3T_caploss, c_3, label = 'VGS+', lw=LW)
@@ -454,12 +451,12 @@ plt.yscale('log')
 plt.xticks(ticks = np.arange(0,75,10),size=fsize+2 )
 plt.yticks([ 1,2,3,4,5,6,10],['1','2','3','4','5','','10'],size=fsize+2)
 plt.xlabel('\nEpoch',size=fsize+2)
-plt.ylabel('Training loss_AUD',size=fsize+2)
+plt.ylabel('Loss_AUD',size=fsize+3)
 plt.ylim( [0.9,12] )
 plt.grid()
-plt.legend(fontsize=fsize+2 , bbox_to_anchor=(1.45, 1.2)) # (1.4, 1.2)
+plt.legend(fontsize=fsize , bbox_to_anchor=(0.6, 0.45)) # (1.4, 1.2) (0.09, 1.5)(1., 1.)
 #plt.savefig(os.path.join(path_save , 'lossAUD_versions' + '.png'), format = 'png')
-plt.savefig(os.path.join(path_save , 'loss-log-2r' + '.pdf'), format = 'pdf', bbox_inches='tight')
+plt.savefig(os.path.join(path_save , 'loss-log-2c' + '.pdf'), format = 'pdf', bbox_inches='tight')
 #################################################################
 #################################################################
 ################################################################# plotting losses for base models separately
