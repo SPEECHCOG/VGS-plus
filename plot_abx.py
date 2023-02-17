@@ -268,8 +268,8 @@ plt.savefig(os.path.join(path_save, 'abx-epochs-log' + '.pdf'), format='pdf', bb
 
 layers = [0,1,2,3,4,5,6,7,8,9,10,11]
 fig = plt.figure(figsize=(14,7))
-fsize = 14
-LW = 4
+fsize = 16
+LW = 5
 plt.subplot(1,2,1) #ax = fig.add_subplot(1,1,1)
 #plt.plot(layers, baseFB[:,-1], label='FB', lw=LW)
 plt.plot(layers, base1[:,-1], c_1, label='W2V2', lw=LW)
@@ -285,7 +285,7 @@ plt.grid()
 #plt.legend(fontsize=fsize) 
 plt.ylim( [4,55] )
 plt.ylabel('ABX-error', size=fsize+2)
-plt.xlabel('layer index', size=fsize+2)
+plt.xlabel('Layer index', size=fsize+2)
 plt.yscale('log') #ax.set_yscale('log')
 plt.xticks(layers,['1','2','3','4','5','6','7','8','9','10','11','12'], size=fsize+2)
 plt.yticks([5,6,7,8,9,10,20,30,40,50],['5','6','7','8','9','10','20','30','40','50'], size=fsize+2)
@@ -314,7 +314,7 @@ plt.plot(x_ver6, y_ver6, c_1, label = label6, linestyle='dotted', lw=LW)
 plt.plot(x_ver7, y_ver7, c_2, label = label7, linestyle='dotted', lw=LW)
 plt.plot(x_ver8, y_ver8, c_3, label = label8, linestyle='dashed', lw=LW)
 plt.grid()
-plt.legend(fontsize=fsize+3 )#, bbox_to_anchor=(1.45, 1.2)) # (1.4, 1.2) 
+plt.legend(fontsize=fsize )#, bbox_to_anchor=(0.7, 0.4)) # (1.4, 1.2) 
 #plt.ylabel('ABX-error', size=fsize+2)
 plt.xlabel('Epoch', size=fsize+2)
 plt.yscale('log') #ax.set_yscale('log')
