@@ -21,7 +21,7 @@ path_event_7ver5 = 'model7ver5/exp/'
 path_event_7ver6 = 'model7ver6/exp/'
 path_event_7ver7 = 'model7ver7/exp/'
 path_event_7ver8 = 'model7ver8/exp/'
-#path_event_7ver9 = 'model7ver9/exp/'
+path_event_7ver9 = 'model7ver9/exp/'
 
 # path_event_7ver14 = 'model7ver14/exp/'
 # path_event_7ver26 = 'model7ver26/exp/'
@@ -46,6 +46,7 @@ label5 = '(VGS, VGS+)'
 label6 = '(W2V2, VGS)'
 label7 = '(VGS, W2V2)'
 label8 = '(VGS+, W2V2)'
+label9 = '(VGS+, VGS)'
 label14 = '(W2V2-35E, VGS+)'
 label26 = '(W2V2-5E, VGS)'
 
@@ -179,6 +180,8 @@ event_7ver7.Reload()
 event_7ver8 =  EventAccumulator(os.path.join(path_source, path_event_7ver8))
 event_7ver8.Reload()
 
+event_7ver9 =  EventAccumulator(os.path.join(path_source, path_event_7ver9))
+event_7ver9.Reload()
 
 # event_7ver14 =  EventAccumulator(os.path.join(path_source, path_event_7ver14))
 # event_7ver14.Reload()
@@ -198,7 +201,8 @@ x_7ver6_recall, y_7ver6_recall = find_single_recall(event_7ver6, n_64)
 x_7ver5_recall, y_7ver5_recall = find_single_recall(event_7ver5, n_64)
 
 x_7ver8_recall, y_7ver8_recall = find_single_recall(event_7ver8, n_64)
-    
+ 
+x_7ver9_recall, y_7ver9_recall = find_single_recall(event_7ver9, n_64)   
 
 # x_7ver14_recall, y_7ver14_recall = find_single_recall(event_7ver14, n_64) 
 # x_7ver26_recall, y_7ver26_recall = find_single_recall(event_7ver26, n_64) 
@@ -223,8 +227,9 @@ y_7ver5_recall.insert(0, y_7base2T_recall [4])
 
 x_7ver8_recall.insert(0, x_recall_0)
 y_7ver8_recall.insert(0, y_7base3T_recall [5])  
-# x_7ver4_recall.insert(0, x_recall_0)
-# y_7ver4_recall.insert(0, y_7base2T_recall [4])  
+
+x_7ver9_recall.insert(0, x_recall_0)
+y_7ver9_recall.insert(0, y_7base3T_recall [5]) 
     
 ############ plot recalls for version 4, 6
 
@@ -292,7 +297,7 @@ x_7ver5_vgsloss, y_7ver5_vgsloss = find_single_vgsloss(event_7ver5, n_64, i)
 x_7ver6_vgsloss, y_7ver6_vgsloss = find_single_vgsloss(event_7ver6, n_64, i)
 x_7ver7_vgsloss, y_7ver7_vgsloss = find_single_vgsloss(event_7ver7, n_64, i)
 x_7ver8_vgsloss, y_7ver8_vgsloss = find_single_vgsloss(event_7ver8, n_64, i)
-
+x_7ver9_vgsloss, y_7ver9_vgsloss = find_single_vgsloss(event_7ver9, n_64, i)
 
 x_7base1T_vgsloss, y_7base1T_vgsloss = smooth_losses (x_7base1T_vgsloss, y_7base1T_vgsloss)
 x_7base2T_vgsloss, y_7base2T_vgsloss = smooth_losses (x_7base2T_vgsloss, y_7base2T_vgsloss)
@@ -302,7 +307,7 @@ x_7ver5_vgsloss, y_7ver5_vgsloss = smooth_losses(x_7ver5_vgsloss, y_7ver5_vgslos
 x_7ver6_vgsloss, y_7ver6_vgsloss = smooth_losses(x_7ver6_vgsloss, y_7ver6_vgsloss )
 x_7ver7_vgsloss, y_7ver7_vgsloss = smooth_losses(x_7ver7_vgsloss, y_7ver7_vgsloss )
 x_7ver8_vgsloss, y_7ver8_vgsloss = smooth_losses(x_7ver8_vgsloss, y_7ver8_vgsloss )
-
+x_7ver9_vgsloss, y_7ver9_vgsloss = smooth_losses(x_7ver9_vgsloss, y_7ver9_vgsloss )
 ################################################################# caption loss
 i = 500
 x_7base1T_caploss, y_7base1T_caploss = find_single_caploss(event_7base1T, n_64 , i)
@@ -314,6 +319,7 @@ x_7ver5_caploss, y_7ver5_caploss = find_single_caploss(event_7ver5, n_64, i)
 x_7ver6_caploss, y_7ver6_caploss = find_single_caploss(event_7ver6, n_64, i)
 x_7ver7_caploss, y_7ver7_caploss = find_single_caploss(event_7ver7, n_64, i)
 x_7ver8_caploss, y_7ver8_caploss = find_single_caploss(event_7ver8, n_64, i)
+x_7ver9_caploss, y_7ver9_caploss = find_single_caploss(event_7ver9, n_64, i)
 
 x_7base1T_caploss, y_7base1T_caploss = smooth_losses (x_7base1T_caploss, y_7base1T_caploss)
 x_7base2T_caploss, y_7base2T_caploss = smooth_losses (x_7base2T_caploss, y_7base2T_caploss)
@@ -323,6 +329,7 @@ x_7ver5_caploss, y_7ver5_caploss = smooth_losses(x_7ver5_caploss, y_7ver5_caplos
 x_7ver6_caploss, y_7ver6_caploss = smooth_losses(x_7ver6_caploss, y_7ver6_caploss)
 x_7ver7_caploss, y_7ver7_caploss = smooth_losses(x_7ver7_caploss, y_7ver7_caploss)
 x_7ver8_caploss, y_7ver8_caploss = smooth_losses(x_7ver8_caploss, y_7ver8_caploss)
+x_7ver9_caploss, y_7ver9_caploss = smooth_losses(x_7ver9_caploss, y_7ver9_caploss)
 kh
 #################################################################
 #################################################################
@@ -426,10 +433,12 @@ plt.plot(x_7base1T_vgsloss+1, y_7base1T_vgsloss, c_1, label = 'W2V2', lw=LW)
 plt.plot(x_7base2T_vgsloss+1, y_7base2T_vgsloss, c_2, label = 'VGS', lw=LW)
 plt.plot(x_7base3T_vgsloss+1, y_7base3T_vgsloss, c_3, label = 'VGS+', lw=LW)
 plt.plot(np.concatenate((x_pre, x_7ver4_vgsloss+21)), np.concatenate((y_7base1T_vgsloss[0:20], y_7ver4_vgsloss)), c_1, label = label4, linestyle='dashed', lw=LW-2)
-plt.plot(np.concatenate((x_pre, x_7ver5_vgsloss+21)), np.concatenate((y_7base2T_vgsloss[0:20], y_7ver5_vgsloss)), c_2, label = label5, linestyle='dashed', lw=LW-2)
 plt.plot(np.concatenate((x_pre, x_7ver6_vgsloss+21)), np.concatenate((y_7base1T_vgsloss[0:20], y_7ver6_vgsloss)), c_1, label = label6, linestyle='dotted', lw=LW)
 plt.plot(np.concatenate((x_pre, x_7ver7_vgsloss+21)), np.concatenate((y_7base2T_vgsloss[0:20], y_7ver7_vgsloss)), c_2, label = label7, linestyle='dotted', lw=LW)
+plt.plot(np.concatenate((x_pre, x_7ver5_vgsloss+21)), np.concatenate((y_7base2T_vgsloss[0:20], y_7ver5_vgsloss)), c_2, label = label5, linestyle='dashed', lw=LW-2)
+
 plt.plot(np.concatenate((x_pre,x_7ver8_vgsloss+21)), np.concatenate((y_7base3T_vgsloss[0:20], y_7ver8_vgsloss)), c_3, label = label8, linestyle='dashed', lw=LW-2)
+plt.plot(np.concatenate((x_pre,x_7ver9_vgsloss+21)), np.concatenate((y_7base3T_vgsloss[0:20], y_7ver9_vgsloss)), c_3, label = label9, linestyle='dotted', lw=LW)
 plt.yscale('log')#ax.set_yscale('log')
 plt.xticks(ticks = np.arange(0,75,10),size=fsize+2 )
 plt.yticks([0.1, 0.2, 0.5 , 1,10],['0.1','0.2', '0.5' ,'1','10'],size=fsize+2)
@@ -443,10 +452,11 @@ plt.plot(x_7base1T_caploss+1, y_7base1T_caploss, c_1, label = 'W2V2', lw=LW)
 plt.plot(x_7base2T_caploss+1, y_7base2T_caploss, c_2, label = 'VGS', lw=LW)
 plt.plot(x_7base3T_caploss+1, y_7base3T_caploss, c_3, label = 'VGS+', lw=LW)
 plt.plot(np.concatenate((x_pre, x_7ver4_caploss+21)), np.concatenate(( y_7base1T_caploss[0:20], y_7ver4_caploss)), c_1, label = label4, linestyle='dashed', lw=LW-2)
-plt.plot(np.concatenate((x_pre, x_7ver5_caploss+21)), np.concatenate(( y_7base2T_caploss[0:20], y_7ver5_caploss)), c_2, label = label5, linestyle='dashed', lw=LW-2)
 plt.plot(np.concatenate((x_pre, x_7ver6_caploss+21)), np.concatenate(( y_7base1T_caploss[0:20], y_7ver6_caploss)), c_1, label = label6, linestyle='dotted', lw=LW)
+plt.plot(np.concatenate((x_pre, x_7ver5_caploss+21)), np.concatenate(( y_7base2T_caploss[0:20], y_7ver5_caploss)), c_2, label = label5, linestyle='dashed', lw=LW-2)
 plt.plot(np.concatenate((x_pre, x_7ver7_caploss+21)), np.concatenate(( y_7base2T_caploss[0:20], y_7ver7_caploss)), c_2, label = label7, linestyle='dotted', lw=LW)
 plt.plot(np.concatenate((x_pre, x_7ver8_caploss+21)), np.concatenate(( y_7base3T_caploss[0:20], y_7ver8_caploss)), c_3, label = label8, linestyle='dashed', lw=LW-2)
+plt.plot(np.concatenate((x_pre, x_7ver9_caploss+21)), np.concatenate(( y_7base3T_caploss[0:20], y_7ver9_caploss)), c_3, label = label9, linestyle='dotted', lw=LW)
 plt.yscale('log')
 plt.xticks(ticks = np.arange(0,75,10),size=fsize+2 )
 plt.yticks([ 1,2,3,4,5,6,10],['1','2','3','4','5','','10'],size=fsize+2)
@@ -454,8 +464,7 @@ plt.xlabel('\nEpoch',size=fsize+2)
 plt.ylabel('Loss_AUD',size=fsize+3)
 plt.ylim( [0.9,12] )
 plt.grid()
-plt.legend(fontsize=fsize , bbox_to_anchor=(0.6, 0.45)) # (1.4, 1.2) (0.09, 1.5)(1., 1.)
-#plt.savefig(os.path.join(path_save , 'lossAUD_versions' + '.png'), format = 'png')
+plt.legend(fontsize=fsize-1 , bbox_to_anchor=(0.7, 0.12)) # (1.4, 1.2) (0.09, 1.5)(1., 1.)
 plt.savefig(os.path.join(path_save , 'loss-log-2c' + '.pdf'), format = 'pdf', bbox_inches='tight')
 #################################################################
 #################################################################
