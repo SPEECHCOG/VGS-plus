@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-path_input = "/worktmp2/hxkhkh/current/ZeroSpeech/output/WC/"
+path_input = "/worktmp2/hxkhkh/current/ZeroSpeech/output/AC/"
 path_save = '/worktmp2/hxkhkh/current/FaST/experiments/plots/eusipco/'
 import csv
 
@@ -51,19 +51,22 @@ label5 = '(VGS, VGS+)'
 label6 = '(W2V2, VGS)'
 label7 = '(VGS, W2V2)'
 label8 = '(VGS+, W2V2)'
+label9 = '(VGS+, VGS)'
 label14 = '(W2V2-35E, VGS+)'
 label26 = '(W2V2-5E, VGS)'  
 ##################################################################
-                        ### m7ver0  ###
+                        ### test  ###
 ################################################################## 
-# scores = [50,50,50,50,50,50,50,50]
-# model_name = 'model7ver0'
-# epochs = [1,2,3,4,5]
-# scores = read_abx (scores,model_name,layer_names, epochs)
-# ver0 = (np.reshape(scores, (len (epochs)+ 1,len (layer_names)))).T
-# x_ver0 = epochs
-# x_ver0.insert(0,0)
-# z_ver0 = layer_names
+scores = []
+layer_names = ['L0','L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11']
+model_name = 'model7ver8' 
+epochs = [50]
+scores = read_abx (scores,model_name,layer_names, epochs)
+print('##################################################################')
+print('##################################################################')
+print(min(scores))
+print(np.argmin(scores) + 1)
+kh
 ##################################################################
                         ### m7FB  ###
 ################################################################## 
@@ -80,7 +83,7 @@ z_baseFB = layer_names
 ################################################################## 
 scores = [50,50,50,50,50,50,50,50,50,50,50,50]
 model_name = 'model7base1T'
-epochs = [5,15,25,35,45]
+epochs = [5,15,25,35,45,55,65,70]
 scores = read_abx (scores,model_name,layer_names, epochs)
 base1 = (np.reshape(scores, (len (epochs) + 1,len (layer_names)))).T
 x_base1 = epochs
@@ -195,6 +198,24 @@ ver8 = (np.reshape(scores, (len (epochs)+1,len (layer_names)))).T
 x_ver8 = epochs
 x_ver8.insert(0,0)
 z_ver8 = layer_names
+##################################################################
+                        ### model7ver9  ###
+################################################################## 
+scores = []
+# Pretrained with VGS+ (20 E)
+model_name = 'model7base3'
+epochs = [15]
+scores = read_abx (scores,model_name,layer_names, epochs)
+
+
+model_name = 'model7ver9'
+epochs = [5, 15, 25, 35, 45,50]
+scores = read_abx (scores,model_name,layer_names, epochs)
+
+ver9 = (np.reshape(scores, (len (epochs)+1,len (layer_names)))).T
+x_ver9 = epochs
+x_ver9.insert(0,0)
+z_ver9 = layer_names
 kh
 ################################################################  layers
 
@@ -277,10 +298,11 @@ plt.plot(layers, base2[:,-1], c_2, label='VGS', lw=LW)
 plt.plot(layers, base3[:,-1], c_3, label='VGS+', lw=LW)
 
 plt.plot(layers, ver4[:,-1],c_1, label = label4, linestyle='dashed', lw=LW)# label='(W2V2, VGS+)',
-plt.plot(layers, ver5[:,-1],c_2, label = label5, linestyle='dashed' , lw=LW) #label='(VGS, VGS+)'
 plt.plot(layers, ver6[:,-1],c_1, label = label6, linestyle='dotted' , lw=LW) #label='(W2V2, VGS)'
+plt.plot(layers, ver5[:,-1],c_2, label = label5, linestyle='dashed' , lw=LW) #label='(VGS, VGS+)'
 plt.plot(layers, ver7[:,-1],c_2, label = label7, linestyle='dotted' , lw=LW) # label='(VGS, W2V2)'
 plt.plot(layers, ver8[:,-1],c_3, label = label8, linestyle='dashed' , lw=LW) # label='(VGS+, W2V2)'
+plt.plot(layers, ver9[:,-1],c_3, label = label9, linestyle='dotted' , lw=LW) # label='(VGS+, W2V2)'
 plt.grid()
 #plt.legend(fontsize=fsize) 
 plt.ylim( [4,55] )
@@ -296,6 +318,7 @@ x_ver5 = [i+20 for i in x_ver5]
 x_ver6 = [i+20 for i in x_ver6]
 x_ver7 = [i+20 for i in x_ver7]
 x_ver8 = [i+20 for i in x_ver8]
+x_ver9 = [i+20 for i in x_ver9]
 y_base1 = np.min(base1 , axis = 0) #best layer performance
 y_base2 = np.min(base2 , axis = 0)
 y_base3 = np.min(base3 , axis = 0)
@@ -304,18 +327,19 @@ y_ver5 = np.min(ver5 , axis = 0)
 y_ver6 = np.min(ver6 , axis = 0)
 y_ver7 = np.min(ver7 , axis = 0)
 y_ver8 = np.min(ver8 , axis = 0)
+y_ver9 = np.min(ver9 , axis = 0)
 plt.subplot(1,2,2) #ax = fig.add_subplot(1,1,1)
 plt.plot(x_base1, y_base1,c_1, label='W2V2', lw=LW)
 plt.plot(x_base3, y_base3,c_3, label='VGS+', lw=LW)
 plt.plot(x_base2, y_base2,c_2, label='VGS', lw=LW)
 plt.plot(x_ver4 , y_ver4, c_1, label = label4, linestyle='dashed', lw=LW)
-plt.plot(x_ver5, y_ver5, c_2, label = label5, linestyle='dashed', lw=LW)
 plt.plot(x_ver6, y_ver6, c_1, label = label6, linestyle='dotted', lw=LW)
+plt.plot(x_ver5, y_ver5, c_2, label = label5, linestyle='dashed', lw=LW)
 plt.plot(x_ver7, y_ver7, c_2, label = label7, linestyle='dotted', lw=LW)
 plt.plot(x_ver8, y_ver8, c_3, label = label8, linestyle='dashed', lw=LW)
+plt.plot(x_ver9, y_ver9, c_3, label = label9, linestyle='dotted', lw=LW)
 plt.grid()
 plt.legend(fontsize=fsize )#, bbox_to_anchor=(0.7, 0.4)) # (1.4, 1.2) 
-#plt.ylabel('ABX-error', size=fsize+2)
 plt.xlabel('Epoch', size=fsize+2)
 plt.yscale('log') #ax.set_yscale('log')
 plt.ylim( [4,55] )
