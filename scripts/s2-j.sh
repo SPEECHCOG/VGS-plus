@@ -4,12 +4,12 @@ export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 data_root="../../../../data"
 fb_w2v2_weights_fn="../../../../model/wav2vec_small.pt"
-exp_dir="../../exp/"
+exp_dir="../../expS2/"
 libri_fn_root="../../../../datavf/ssl6M_root/"
 
 python \
 ../run_spokencoco.py \
---subset "all" \
+--subset "subset2" \
 --data_root ${data_root} \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
