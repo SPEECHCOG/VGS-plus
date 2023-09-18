@@ -32,6 +32,8 @@ class ImageCaptionDataset(Dataset):
             if args.subset == "all":
                 # for original data
                 print ('############# here is training on whole COCO data ###############')
+                print (args.subset)
+                print ('############# here is training on whole COCO data ###############')
                 audio_dataset_json_file = os.path.join(args.data_root, "coco_pyp/SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
             else:
                 # for subsets
