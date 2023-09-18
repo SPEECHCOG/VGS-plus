@@ -16,7 +16,8 @@ class ImageCaptionDataset(Dataset):
     @staticmethod
     def add_args(parser):
         parser.add_argument("--data_root", type=str, default="/data1/scratch/coco_pyp")
-        parser.add_argument("--raw_audio_base_path", type=str, default="/data1/scratch/coco_pyp/SpokenCOCO")
+        #parser.add_argument("--raw_audio_base_path", type=str, default="/data1/scratch/coco_pyp/SpokenCOCO")
+        parser.add_argument("--subset", type=str, default="all")
         parser.add_argument("--img_feat_len", type=int, help="num of img feats we will use", choices=list(range(1,37)), default=36)
         parser.add_argument("--audio_feat_len", type=float, help="maximal audio length", default=8.)
         parser.add_argument("--val_audio_feat_len", type=float, help="maximal audio length", default=10.)
@@ -28,7 +29,16 @@ class ImageCaptionDataset(Dataset):
         self.split = split
         self.audio_feat_len = args.audio_feat_len if "train" in split else args.val_audio_feat_len
         if split == "train":
-            audio_dataset_json_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
+            if args.subset == "all":
+                # for original data
+                print ('############# here is training on whole COCO data ###############')
+                audio_dataset_json_file = os.path.join(args.data_root, "coco_pyp/SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
+            else:
+                # for subsets
+                print ('############# here is training on the ' + args.subset + ' data ###############')
+                audio_dataset_json_file = '../../../../datavf/coco_pyp/subsets/SpokenCOCO_train_' + args.subset + '.json'
+                
+            #audio_dataset_json_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
         elif split == "val" or split == "dev":
             if self.args.test:
                 audio_dataset_json_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_test_unrolled_karpathy.json")
@@ -40,7 +50,7 @@ class ImageCaptionDataset(Dataset):
         val_img_dataset_h5py_file = os.path.join(args.data_root, "coco_img_feat/SpokenCOCO_val_imgfeat.hdf5")
         val_imgid2index_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_val_imgid2idex.json")
         val_imgid2ordered_indices_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_val_imgid2ordered_indices.pkl")
-        self.audio_base_path = args.raw_audio_base_path
+        self.audio_base_path = os.path.join(args.data_root, "coco_pyp/SpokenCOCO")#args.raw_audio_base_path
 
         with open(audio_dataset_json_file, 'r') as fp:
             data_json = json.load(fp)
