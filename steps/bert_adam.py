@@ -86,7 +86,6 @@ class BertAdam(Optimizer):
 
     def get_lr(self):
         lr = []
-        print(".................................................................we are inside optimizer adam class get lr function")
         for group in self.param_groups:
             for p in group['params']:
                 state = self.state[p]
@@ -118,7 +117,6 @@ class BertAdam(Optimizer):
             loss = closure()
 
         warned_for_t_total = False
-        print(".............we are inside optimizer adam class step function .............")
         for group in self.param_groups:
             for p in group['params']:
                 if p.grad is None:
