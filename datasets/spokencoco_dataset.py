@@ -32,7 +32,7 @@ class ImageCaptionDataset(Dataset):
             if args.subset == "all":
                 # for original data
                 print ('############# here is training on whole COCO data ###############')
-                audio_dataset_json_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
+                audio_dataset_json_file = os.path.join(args.data_root, "coco_pyp/SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
             else:
                 # for subsets
                 print ('############# here is training on the ' + args.subset + ' data ###############')
@@ -41,15 +41,17 @@ class ImageCaptionDataset(Dataset):
             #audio_dataset_json_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
         elif split == "val" or split == "dev":
             if self.args.test:
-                audio_dataset_json_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_test_unrolled_karpathy.json")
+                audio_dataset_json_file = os.path.join(args.data_root, "coco_pyp/SpokenCOCO/SpokenCOCO_test_unrolled_karpathy.json")
             else:
-                audio_dataset_json_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_val_unrolled_karpathy.json")
-        train_img_dataset_h5py_file = os.path.join(args.data_root, "coco_img_feat/SpokenCOCO_train_imgfeat.hdf5")
-        train_imgid2index_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_train_imgid2idex.json")
-        train_imgid2ordered_indices_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_train_imgid2ordered_indices.pkl")
-        val_img_dataset_h5py_file = os.path.join(args.data_root, "coco_img_feat/SpokenCOCO_val_imgfeat.hdf5")
-        val_imgid2index_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_val_imgid2idex.json")
-        val_imgid2ordered_indices_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_val_imgid2ordered_indices.pkl")
+                audio_dataset_json_file = os.path.join(args.data_root, "coco_pyp/SpokenCOCO/SpokenCOCO_val_unrolled_karpathy.json")
+        
+        train_img_dataset_h5py_file = os.path.join(args.data_root, "coco_pyp/coco_img_feat/SpokenCOCO_train_imgfeat.hdf5")
+        train_imgid2index_file = os.path.join(args.data_root, "coco_pyp/SpokenCOCO/SpokenCOCO_train_imgid2idex.json")
+        train_imgid2ordered_indices_file = os.path.join(args.data_root, "coco_pyp/SpokenCOCO/SpokenCOCO_train_imgid2ordered_indices.pkl")
+        val_img_dataset_h5py_file = os.path.join(args.data_root, "coco_pyp/coco_img_feat/SpokenCOCO_val_imgfeat.hdf5")
+        val_imgid2index_file = os.path.join(args.data_root, "coco_pyp/SpokenCOCO/SpokenCOCO_val_imgid2idex.json")
+        val_imgid2ordered_indices_file = os.path.join(args.data_root, "coco_pyp/SpokenCOCO/SpokenCOCO_val_imgid2ordered_indices.pkl")
+        
         self.audio_base_path = os.path.join(args.data_root, "coco_pyp/SpokenCOCO")#args.raw_audio_base_path
 
         with open(audio_dataset_json_file, 'r') as fp:
