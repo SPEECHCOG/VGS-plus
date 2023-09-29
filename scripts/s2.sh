@@ -6,20 +6,22 @@ data_root=$1
 fb_w2v2_weights_fn="../../../../model/wav2vec_small.pt"
 exp_dir="../../expS2/"
 libri_fn_root="../../../../datavf/ssl6M_root/"
+twd="../../twd/"
 
 python \
 ../run_spokencoco.py \
 --subset "subset2" \
 --data_root ${data_root} \
+--trained_weights_dir ${twd} \
 --fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
 --libri_fn_root ${libri_fn_root} \
 --batch_size 64 \
 --val_batch_size 64 \
 --val_cross_batch_size 64 \
---n_epochs 100 \
+--n_epochs 200 \
 --n_print_steps 40 \
---n_val_steps 200 \
+--n_val_steps 2000 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --normalize \
