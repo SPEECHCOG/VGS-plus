@@ -13,15 +13,14 @@ python \
 --subset "subset3" \
 --data_root ${data_root} \
 --trained_weights_dir ${twd} \
---fb_w2v2_weights_fn ${fb_w2v2_weights_fn} \
 --exp_dir ${exp_dir} \
 --libri_fn_root ${libri_fn_root} \
 --batch_size 64 \
 --val_batch_size 64 \
 --val_cross_batch_size 64 \
---n_epochs 200 \
+--n_epochs 100 \
 --n_print_steps 60 \
---n_val_steps 3000 \
+--n_val_steps 300 \
 --lr 0.0001 \
 --warmup_fraction 0.1 \
 --normalize \
