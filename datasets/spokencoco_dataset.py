@@ -17,6 +17,8 @@ class ImageCaptionDataset(Dataset):
     def add_args(parser):
         parser.add_argument("--data_root", type=str, default="/data1/scratch/coco_pyp")
         #parser.add_argument("--raw_audio_base_path", type=str, default="/data1/scratch/coco_pyp/SpokenCOCO")
+        parser.add_argument("--afiles", type=str, default="COCO")
+        parser.add_argument("--semtest_root", type=str, default="../../semtest/")
         parser.add_argument("--subset", type=str, default="all")
         parser.add_argument("--img_feat_len", type=int, help="num of img feats we will use", choices=list(range(1,37)), default=36)
         parser.add_argument("--audio_feat_len", type=float, help="maximal audio length", default=8.)
@@ -28,6 +30,9 @@ class ImageCaptionDataset(Dataset):
         self.args = args
         self.split = split
         self.audio_feat_len = args.audio_feat_len if "train" in split else args.val_audio_feat_len
+        
+        self.args.semtest_root = os.path.join(self.args.data_root, 'semtest')
+        
         if split == "train":
             if args.subset == "all":
                 # for original data
@@ -41,7 +46,7 @@ class ImageCaptionDataset(Dataset):
             #audio_dataset_json_file = os.path.join(args.data_root, "SpokenCOCO/SpokenCOCO_train_unrolled_karpathy.json")
         elif split == "val" or split == "dev":
             if self.args.test:
-                audio_dataset_json_file = "/worktmp2/hxkhkh/current/semtest/data.json"
+                audio_dataset_json_file = os.path.join(self.args.semtest_root , 'dataRCNN.json')
             else:
                 audio_dataset_json_file = os.path.join(args.data_root, "coco_pyp/SpokenCOCO/SpokenCOCO_val_unrolled_karpathy.json")
         
@@ -57,7 +62,15 @@ class ImageCaptionDataset(Dataset):
         with open(audio_dataset_json_file, 'r') as fp:
             data_json = json.load(fp)
         self.data = data_json['data']
-
+        
+        
+        ############################################## for semtest
+        if self.args.test:
+            self.audio_base_path = os.path.join(self.args.semtest_root, self.args.afiles )
+   
+        ##############################################
+        
+        
         self.val_img_data = h5py.File(val_img_dataset_h5py_file, 'r')
         with open(val_imgid2index_file, 'r') as fp:
             self.val_img_id2index = json.load(fp)    
@@ -69,6 +82,8 @@ class ImageCaptionDataset(Dataset):
             self.train_img_id2index = json.load(fp)    
         with open(train_imgid2ordered_indices_file, 'rb') as f:
             self.train_img_id2ordered_indices = pickle.load(f)
+        
+
 
     def _LoadAudio(self, path):
         x, sr = sf.read(path, dtype = 'float32')
