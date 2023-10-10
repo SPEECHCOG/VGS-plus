@@ -380,7 +380,7 @@ class Trainer:
         print_model_info(dual_encoder , print_model = False)
         print_model_info(cross_encoder, print_model = False)
         if self.args.trained_weights_dir != None:
-            bundle = torch.load(os.path.join(self.args.trained_weights_dir, "best_bundle.pth"))
+            bundle = torch.load(os.path.join(self.args.trained_weights_dir, "best_bundle.pth")) 
             dual_encoder.carefully_load_state_dict(bundle['dual_encoder'])
             #cross_encoder.carefully_load_state_dict(bundle['cross_encoder'])
             indices = None
@@ -389,7 +389,7 @@ class Trainer:
             # logger.info("loaded parameters and data indices from epoch %d, global step %d" % (self.progress['epoch'], self.progress['num_updates']))
             logger.info(f"Load trained weights from {self.args.trained_weights_dir}")
         elif self.args.validate:
-            bundle = torch.load(os.path.join(self.args.exp_dir, "best_bundle.pth"))
+            bundle = torch.load(os.path.join(self.args.exp_dir, "bundle.pth")) #khazar: change this later to best_bundle
             dual_encoder.carefully_load_state_dict(bundle['dual_encoder'])
             #cross_encoder.carefully_load_state_dict(bundle['cross_encoder'])
             indices = None
