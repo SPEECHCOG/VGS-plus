@@ -37,13 +37,14 @@ parser.add_argument("--Sname", help="file name of the similarity matrix")
 parser.add_argument("--root", help="machine root")
 args = parser.parse_args()
 
+args.semtest_root = os.path.join(args.root, 'semtest')
+
+
 #%% args from script
 
-root = args.root
-#..............................................................................
-data_root = os.path.join(root, 'FaST/data')
-fb_w2v2_weights_fn = os.path.join(root,'FaST/model/wav2vec_small.pt')
-libri_fn_root = os.path.join(root,'FaST/datavf/libri_fn_root/')
+data_root = os.path.join(args.root, 'FaST/data')
+fb_w2v2_weights_fn = os.path.join(args.root,'FaST/model/wav2vec_small.pt')
+libri_fn_root = os.path.join(args.root,'FaST/datavf/libri_fn_root/')
 
 args.data_root=data_root
 args.fb_w2v2_weights_fn=fb_w2v2_weights_fn
