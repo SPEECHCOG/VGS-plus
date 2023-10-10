@@ -16,16 +16,6 @@ from logging import getLogger
 import logging
 
 
-
-logger = getLogger(__name__)
-# khazar added below ....
-logger.setLevel(logging.DEBUG)
-logging.basicConfig()
-# .......................
-
-logger.info("I am process %s, running on %s: starting (%s)" % (
-        os.getpid(), os.uname()[1], time.asctime()))
-
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--resume", action="store_true", dest="resume", help="load from exp_dir if True")
 parser.add_argument("--validate", action="store_true", default=False, help="temp, if call trainer_variants rather than trainer")
@@ -42,10 +32,14 @@ spokencoco_dataset.ImageCaptionDataset.add_args(parser)
 
 libri_dataset.LibriDataset.add_args(parser)
 
+# my custom args
+parser.add_argument("--Sname", help="file name of the similarity matrix")
+parser.add_argument("--root", help="machine root")
 args = parser.parse_args()
 
-root = args.root
+#%% args from script
 
+root = args.root
 #..............................................................................
 data_root = os.path.join(root, 'FaST/data')
 fb_w2v2_weights_fn = os.path.join(root,'FaST/model/wav2vec_small.pt')
