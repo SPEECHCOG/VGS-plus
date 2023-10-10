@@ -44,25 +44,16 @@ libri_dataset.LibriDataset.add_args(parser)
 
 args = parser.parse_args()
 
-#%% args from script
-save_name_S = "S2b_aL_vB"
-
-exp_dir = '/worktmp2/hxkhkh/current/FaST/experiments/vfplus/exp/'
-
-
+root = args.root
 
 #..............................................................................
-data_root = '/worktmp2/hxkhkh/current/FaST/data'
-#raw_audio_base_path = ''
-fb_w2v2_weights_fn = '/worktmp2/hxkhkh/current/FaST/model/wav2vec_small.pt'
-libri_fn_root = '/worktmp2/hxkhkh/current/FaST/datavf/libri_fn_root/'
+data_root = os.path.join(root, 'FaST/data')
+fb_w2v2_weights_fn = os.path.join(root,'FaST/model/wav2vec_small.pt')
+libri_fn_root = os.path.join(root,'FaST/datavf/libri_fn_root/')
 
 args.data_root=data_root
-#args.raw_audio_base_path =  raw_audio_base_path
 args.fb_w2v2_weights_fn=fb_w2v2_weights_fn
-args.exp_dir=exp_dir
 args.libri_fn_root=libri_fn_root
-
     
 args.batch_size= 4
 args.val_batch_size= 8
@@ -85,47 +76,27 @@ args.layer_use= 7
     
 #%%
 
-os.makedirs(args.exp_dir, exist_ok=True)
-
-if args.resume or args.validate:
-    resume = args.resume
-    assert(bool(args.exp_dir))
-    with open("%s/args.pkl" % args.exp_dir, "rb") as f:
-        old_args = pickle.load(f)
-    new_args = vars(args)
-    old_args = vars(old_args)
-    for key in new_args:
-        if key not in old_args or old_args[key] != new_args[key]:
-            old_args[key] = new_args[key]
-    args = argparse.Namespace(**old_args)
-    args.resume = resume
-else:
-    print("\nexp_dir: %s" % args.exp_dir)
-    with open("%s/args.pkl" % args.exp_dir, "wb") as f:
-        pickle.dump(args, f)
 args.places = False
 args.flickr8k = False
 args.validate = True
 args.test = True
 #%%
- 
-device = 'cpu'
-#device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 my_trainer = trainer.Trainer(args)
 batch, s = my_trainer.validate_khazar()
 
-audio = batch['audio'].cpu().detach().numpy()
-atm = batch['audio_attention_mask'].cpu().detach().numpy()
-al = batch['audio_length'].cpu().detach().numpy()
-images = batch ['images'].cpu().detach().numpy()
-img_id = batch ['img_id']
-fn = batch['fn']
+# audio = batch['audio'].cpu().detach().numpy()
+# atm = batch['audio_attention_mask'].cpu().detach().numpy()
+# al = batch['audio_length'].cpu().detach().numpy()
+# images = batch ['images'].cpu().detach().numpy()
+# img_id = batch ['img_id']
+# fn = batch['fn']
 
 s_np = s.cpu().detach().numpy()
 
-save_path = "/worktmp2/hxkhkh/current/semtest/Smatrix"
+save_path = os.path.join(args.root,"semtest", "Smatrix")
 
-np.save( os.path.join(save_path, save_name_S) , s_np)
+np.save( os.path.join(save_path, args.Sname) , s_np)
 
 #%%
 
