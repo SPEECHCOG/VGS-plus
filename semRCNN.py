@@ -89,7 +89,7 @@ batch, s = my_trainer.validate_khazar()
 
 s_np = s.cpu().detach().numpy()
 
-save_path = os.path.join(args.root,"semtest", "Smatrix")
+save_path = os.path.join(args.root,"semtest", "S")
 
 np.save( os.path.join(save_path, args.Sname) , s_np)
 
