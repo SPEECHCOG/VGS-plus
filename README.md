@@ -4,6 +4,11 @@ This repository contains the instructions and scripts to replicate experiments r
 
 Khorrami, Cruz Blandon & Räsänen: Computational Insights to Acquisition of Phonemes, Words, and Word Meanings in Early Language: Sequential or Parallel Acquisition? Proc. CogSci-2023, Sydney, Australia. (https://escholarship.org/uc/item/79t028n8)
 
+# Project Description
+
+This project aims to model an infant statistical language learner where the learner agent is utilizing two mechanisms including unsupervised speech pattern discovery and association of co-ocurring speech and visually perceived scene.
+Accordingly, the model is an unsupervised speech representation learning artificial neural network that is trained using on unlabelled speech and audiovisual data. The learning mechanism include a wav2vec 2.0 model for unsupervised speech learning and Transformer-based visually grounded speech model for audio-visual associative learning. The two mechanism are applied individually and in combination exploring various possible learning scenarios. After training, language capabilities of the model are evaluated in terms of semantic audiovisual mapping using speech and visual embeddings as well as phonemic and lexical category recognition using activation patterns of hidden layers of the trained model.
+
 # Model Source
 
 This project's model is based on the work from the following repository:
